@@ -1,28 +1,23 @@
-import { Location } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoaderService } from '../../services/loader.service';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-top-bar',
   templateUrl: './top-bar.component.html',
-  styleUrls: ['./top-bar.component.css']
+  styleUrls: ['./top-bar.component.scss']
 })
-export class TopBarComponent implements OnInit {
+export class TopBarComponent {
 
-  @Input() titulo: string;
+  @Input()
+  titulo: string = '';
 
   constructor(
     private loaderService: LoaderService,
-    private location: Location,
     private router: Router
   ) { }
 
-  ngOnInit() {
-  }
-
   voltar() {
-    //this.location.back();
     this.router.navigate(['/home']);
   }
 

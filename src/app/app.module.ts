@@ -27,9 +27,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
+import { TopBarComponent } from './shared/top-bar/top-bar.component';
 
 const routes: Routes = [
   /*
@@ -50,13 +52,13 @@ const routes: Routes = [
     component: CargaComponent
   },
   {
-    path: 'planilha',
-    component: PlanilhaComponent
-  },
-  {
     path: 'extrato',
     component: ExtratoComponent
   },*/
+  {
+    path: 'planilha',
+    component: PlanilhaComponent
+  },
   {
     path: '',
     redirectTo: 'principal',
@@ -70,10 +72,12 @@ const routes: Routes = [
     AppComponent,
     SelectPlanilhaComponent,
     PrincipalComponent,
-    LinkPlanilhaComponent
+    LinkPlanilhaComponent,
+    PlanilhaComponent,
+    TopBarComponent
   ],
   imports: [
-    RouterModule.forRoot(routes, { useHash: true }),
+    RouterModule.forRoot(routes, { useHash: false }),
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
