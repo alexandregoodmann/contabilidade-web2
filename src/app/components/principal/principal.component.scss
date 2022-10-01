@@ -11,3 +11,14 @@
     padding-right: 5px;
     margin-right: 10px;
 }
+
+.mat-icon {
+    -webkit-user-select: none;
+    user-select: none;
+    background-repeat: no-repeat;
+    display: inline-block;
+    fill: currentColor;
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+}

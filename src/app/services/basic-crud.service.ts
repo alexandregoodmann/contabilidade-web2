@@ -2,15 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-export class BasicCrudService<T> {
+export abstract class BasicCrudService<T> {
 
-  private _url;
-  private _http: HttpClient;
-
-  constructor(url: string, http: HttpClient) {
-    this._url = url;
-    this._http = http;
-  }
+  constructor(
+    private _http: HttpClient,
+    protected _url: string
+  ) { }
 
   create(obj: T): Observable<T> {
     return this._http.post<T>(this._url, obj, httpOptions).pipe(

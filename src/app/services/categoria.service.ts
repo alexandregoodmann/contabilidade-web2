@@ -10,7 +10,8 @@ import { BasicCrudService } from './basic-crud.service';
 export class CategoriaService extends BasicCrudService<Categoria> {
 
   constructor(private http: HttpClient) {
-    super(`${environment.url}/categorias`, http);
+    super(http, `${environment.url}/categorias`);
   }
+
 
 }

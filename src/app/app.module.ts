@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -75,6 +76,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { useHash: true }),
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     //MATERIAL
     MatCardModule,
     MatGridListModule,
@@ -107,10 +109,7 @@ const routes: Routes = [
   ],
   providers: [],
   bootstrap: [
-    AppComponent,
-    PrincipalComponent,
-    SelectPlanilhaComponent,
-    LinkPlanilhaComponent
+    AppComponent
   ]
 })
 export class AppModule { }
