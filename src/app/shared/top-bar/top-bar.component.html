@@ -1,0 +1,9 @@
+<mat-toolbar>
+    <button mat-icon-button class="example-icon" (click)="voltar()" type="button">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="titulo">{{titulo}}</span>
+</mat-toolbar>
+<div *ngIf="loader.isLoading | async">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>

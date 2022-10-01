@@ -1,0 +1,28 @@
+.content-panel {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: white;
+}
+
+.col-ano {
+    padding-top: 5px;
+    padding-left: 7px;
+    display: flex;
+
+    label {
+        padding-top: 3px;
+    }
+}
+
+.col-mes {
+    margin-right: 2px;
+    margin-bottom: 4px;
+    padding: 2px;
+    font-size: 14px;
+}
+
+.mat-expansion-panel-header {
+    height: 80px !important;
+    background-color: rgb(221, 221, 221) !important;
+    padding-left: 10px !important;
+}

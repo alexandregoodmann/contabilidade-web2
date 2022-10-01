@@ -1,0 +1,39 @@
+<div style="margin: 10px;">
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="expanded" (opened)="expanded = true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <div class="banner-botton">
+                        <mat-icon class="banner-icon">calendar_month</mat-icon>
+                    </div>
+                    <div style="padding-top: 10px; padding-left: 10px;">
+                        <app-link-planilha></app-link-planilha>
+                    </div>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-divider></mat-divider>
+
+            <div class="content-panel" *ngFor="let ano of planilhasAno; let i = index">
+                <table>
+                    <tr>
+                        <td class="col-ano">
+                            <label>{{ano.ano}}</label>
+                            <mat-icon>chevron_right</mat-icon>
+                        </td>
+                        <td style="width: 100%;">
+                            <div class="w3-row">
+                                <span class="w3-col s3 col-mes" *ngFor="let mes of ano.planilhas"
+                                    (click)="setPlanilhaMes(mes)">
+                                    {{mes.descricao}}
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <mat-divider *ngIf="i < (planilhasAno.length - 1)"></mat-divider>
+            </div>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
