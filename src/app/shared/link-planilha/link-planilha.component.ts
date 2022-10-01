@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Planilha } from '../../model/planilha';
+import { Planilha } from 'src/app/models/planilha';
 import { PlanilhaService } from '../../services/planilha.service';
 
 @Component({
@@ -11,7 +11,7 @@ export class LinkPlanilhaComponent implements OnInit {
 
   constructor(private planilhaService: PlanilhaService) { }
 
-  planilha: Planilha;
+  planilha!: Planilha;
 
   ngOnInit() {
     this.planilhaService.planilhaSelecionada.subscribe(data => {

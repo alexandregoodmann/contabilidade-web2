@@ -1,0 +1,14 @@
+<div *ngIf="planilhasAno && planilhasAno.length > 0">
+    <app-select-planilha></app-select-planilha>
+</div>
+
+<div class="container">
+    <div *ngFor="let banner of banners" class="banner">
+        <a [href]="banner.href">
+            <div class="banner-botton">
+                <mat-icon class="banner-icon">{{banner.icon}}</mat-icon>
+            </div>
+            <span>{{banner.label}}</span>
+        </a>
+    </div>
+</div>

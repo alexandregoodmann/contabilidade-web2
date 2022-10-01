@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Planilha } from '../../model/planilha';
-import { PlanilhasAno } from '../../model/PlanilhasAno';
+import { Planilha } from 'src/app/models/planilha';
+import { PlanilhasAno } from 'src/app/models/planilhasano';
 import { PlanilhaService } from '../../services/planilha.service';
 
 @Component({
