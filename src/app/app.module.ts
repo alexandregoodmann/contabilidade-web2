@@ -30,6 +30,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
+import { ContaComponent } from './components/conta/conta.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
@@ -38,10 +39,6 @@ import { TopBarComponent } from './shared/top-bar/top-bar.component';
 
 const routes: Routes = [
   /*
-  {
-    path: 'conta',
-    component: ContaComponent
-  },
   {
     path: 'lancamento',
     component: LancamentoComponent,
@@ -54,6 +51,10 @@ const routes: Routes = [
     path: 'extrato',
     component: ExtratoComponent
   },*/
+  {
+    path: 'conta',
+    component: ContaComponent
+  },
   {
     path: 'categoria',
     component: CategoriaComponent
@@ -78,7 +79,8 @@ const routes: Routes = [
     LinkPlanilhaComponent,
     PlanilhaComponent,
     TopBarComponent,
-    CategoriaComponent
+    CategoriaComponent,
+    ContaComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
