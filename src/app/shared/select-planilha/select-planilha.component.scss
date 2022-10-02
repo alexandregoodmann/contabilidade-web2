@@ -26,3 +26,14 @@
     background-color: rgb(221, 221, 221) !important;
     padding-left: 10px !important;
 }
+
+.mat-icon {
+    -webkit-user-select: none;
+    user-select: none;
+    background-repeat: no-repeat;
+    display: inline-block;
+    fill: currentColor;
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+}
