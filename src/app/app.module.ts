@@ -1,5 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -77,15 +79,17 @@ const routes: Routes = [
     TopBarComponent
   ],
   imports: [
-    RouterModule.forRoot(routes, { useHash: false }),
+    RouterModule.forRoot(routes, { useHash: true }),
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     //MATERIAL
     MatCardModule,
     MatGridListModule,
     MatFormFieldModule,
-    //MatInputModule,
+    MatIconModule,
+    MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
     //MatNativeDateModule,

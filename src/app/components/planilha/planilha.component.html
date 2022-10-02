@@ -1,6 +1,4 @@
 <app-top-bar titulo="Planilha"></app-top-bar>
-<!--
-
 
 <div class="form">
     <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
@@ -14,10 +12,10 @@
             <mat-label>Selecione o Mês</mat-label>
             <mat-select formControlName="descricao">
                 <mat-option *ngFor="let item of meses" [value]="item">{{item}}</mat-option>
-            </mat-select> 
+            </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="group?.invalid">Salvar</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="group.invalid">Salvar</button>
 
     </form>
 </div>
@@ -39,5 +37,3 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="edit(row)"></tr>
     </table>
 </div>
-
--->

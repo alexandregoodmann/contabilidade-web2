@@ -20,9 +20,9 @@ export class PrincipalComponent implements OnInit {
   planilhasAno!: PlanilhasAno[];
   banners: Menu[] = [];
   menu: Menu[] = [
-    { href: 'planilha', icon: 'tab', label: 'Planilha' },
-    { href: '/#/conta', icon: 'credit_card', label: 'Conta' },
+    { href: '/#/planilha', icon: 'tab', label: 'Planilha' },
     { href: '/#/categoria', icon: 'dashboard_customize', label: 'Categoria' },
+    { href: '/#/conta', icon: 'credit_card', label: 'Conta' },
     { href: '/#/lancamento', icon: 'add_card', label: 'Lançamento' },
     { href: '/#/extrato', icon: 'account_balance', label: 'Extrato' },
     { href: '/#/carga', icon: 'file_upload', label: 'Carga de Arquivo' }
