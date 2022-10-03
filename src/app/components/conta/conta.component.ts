@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 import { Conta } from 'src/app/models/conta';
 import { ContaService } from 'src/app/services/conta.service';
@@ -11,13 +11,7 @@ import { ContaService } from 'src/app/services/conta.service';
 })
 export class ContaComponent implements OnInit {
 
-  group = this.fb.group({
-    banco: [null, [Validators.required]],
-    descricao: [null, [Validators.required]],
-    tipo: [null, [Validators.required]],
-    carga: [null]
-  });
-
+  group!: FormGroup;
   contas!: Conta[];
   cargas = cargasArquivo;
   tipos = tiposConta;
@@ -29,6 +23,13 @@ export class ContaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.group = this.fb.group({
+      id: [null],
+      banco: [null, [Validators.required]],
+      descricao: [null, [Validators.required]],
+      tipo: [null, [Validators.required]],
+      carga: [null]
+    });
     this.findAll();
   }
 
@@ -42,34 +43,28 @@ export class ContaComponent implements OnInit {
     this.group.get('carga')?.setValue(chip.value);
   }
 
+  edit(conta: Conta) {
+    this.group.patchValue(conta);
+  }
+
   salvar() {
 
     let model = new Conta(this.group.value);
-    this.contaService.create(model).subscribe({
-      complete: () => {
-        this.findAll();
-      }
-    });
 
-    /*
-    if (this.conta == undefined) {
-      let conta: Conta = this.group.value as unknown as Conta;
-      if (conta.carga != undefined)
-        conta?.carga = (conta.carga as string).toUpperCase();
-    } else {
-
-      let model = this.group.value;
-      model.id = this.conta.id;
-
-      if (model.carga != undefined)
-        model.carga = (model.carga as string).toUpperCase();
-
-      this.contaService.update(this.group.value).subscribe(() => { }, () => { }, () => {
-        this.conta = undefined;
-        this.group.reset();
-        this.findAll();
+    if (this.group.get('id')?.value != null) {
+      this.contaService.create(model).subscribe({
+        complete: () => {
+          this.findAll();
+        }
       });
-    }*/
+    } else {
+      this.contaService.update(model).subscribe({
+        complete: () => {
+          this.findAll();
+        }
+      });
+    }
+
   }
 
   delete(id: number) {
