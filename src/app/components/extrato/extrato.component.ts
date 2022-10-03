@@ -24,8 +24,6 @@ export class ExtratoComponent implements OnInit {
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
 
-  //@ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-
   constructor(
     private planilhaService: PlanilhaService,
     private lancamentoService: LancamentoService,
@@ -46,6 +44,8 @@ export class ExtratoComponent implements OnInit {
 
   private findExtrato() {
     this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
+
+
       this.extrato = data as Extrato[];
       this.extrato.forEach(conta => {
         if (conta.tipo?.toString() == 'CC' || conta.tipo?.toString() == 'CARTEIRA') {
@@ -130,5 +130,5 @@ export class ExtratoComponent implements OnInit {
       this.expandidos.set(conta.id, true);
     }
   }
-}
 
+}

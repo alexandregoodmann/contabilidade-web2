@@ -31,6 +31,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
+import { NgChartsModule } from 'ng2-charts';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
 import { CargaComponent } from './components/carga/carga.component';
@@ -44,6 +45,8 @@ import { InterceptorService } from './services/interceptor.service';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
+import { ChartBarComponent } from './shared/chart-bar/chart-bar.component';
+import { ChartPieComponent } from './shared/chart-pie/chart-pie.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -92,7 +95,9 @@ const routes: Routes = [
     ContaComponent,
     LancamentoComponent,
     ExtratoComponent,
-    CargaComponent
+    CargaComponent,
+    ChartBarComponent,
+    ChartPieComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
@@ -101,6 +106,7 @@ const routes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     NgxCurrencyModule,
+    NgChartsModule,
     //MATERIAL
     MatDatepickerModule,
     MatNativeDateModule,
