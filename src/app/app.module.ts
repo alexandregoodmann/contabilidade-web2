@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -28,9 +29,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
+import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
 import { ContaComponent } from './components/conta/conta.component';
+import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
@@ -40,10 +43,6 @@ import { TopBarComponent } from './shared/top-bar/top-bar.component';
 const routes: Routes = [
   /*
   {
-    path: 'lancamento',
-    component: LancamentoComponent,
-  },
-  {
     path: 'carga',
     component: CargaComponent
   },
@@ -51,6 +50,10 @@ const routes: Routes = [
     path: 'extrato',
     component: ExtratoComponent
   },*/
+  {
+    path: 'lancamento',
+    component: LancamentoComponent,
+  },
   {
     path: 'conta',
     component: ContaComponent
@@ -80,7 +83,8 @@ const routes: Routes = [
     PlanilhaComponent,
     TopBarComponent,
     CategoriaComponent,
-    ContaComponent
+    ContaComponent,
+    LancamentoComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
@@ -88,14 +92,16 @@ const routes: Routes = [
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    NgxCurrencyModule,
     //MATERIAL
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatCardModule,
     MatGridListModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    MatDatepickerModule,
     //MatNativeDateModule,
     MatButtonModule,
     MatIconModule,
