@@ -11,6 +11,7 @@ import { CategoriaService } from 'src/app/services/categoria.service';
 import { ContaService } from 'src/app/services/conta.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-lancamento',
@@ -103,11 +104,10 @@ export class LancamentoComponent implements OnInit {
   }
 
   apagar() {
-    /*
-    this.lancamentoService.delete(this.lancamento.id.toString()).subscribe(() => { }, () => { }, () => {
-      this.snackBar.open('Lançamento apagado', null, { duration: environment.tempoSnackBar });
+    this.lancamentoService.delete(this.lancamento.id).subscribe(() => { }, () => { }, () => {
+      this.snackBar.open('Lançamento apagado', undefined, { duration: environment.tempoSnackBar });
       this.router.navigate(['/extrato'],);
-    });*/
+    });
   }
 
   setConta(chip: MatChip) {
