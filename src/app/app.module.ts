@@ -33,6 +33,7 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
 import { ContaComponent } from './components/conta/conta.component';
+import { ExtratoComponent } from './components/extrato/extrato.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
@@ -46,10 +47,11 @@ const routes: Routes = [
     path: 'carga',
     component: CargaComponent
   },
+  */
   {
     path: 'extrato',
     component: ExtratoComponent
-  },*/
+  },
   {
     path: 'lancamento',
     component: LancamentoComponent,
@@ -84,7 +86,8 @@ const routes: Routes = [
     TopBarComponent,
     CategoriaComponent,
     ContaComponent,
-    LancamentoComponent
+    LancamentoComponent,
+    ExtratoComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
