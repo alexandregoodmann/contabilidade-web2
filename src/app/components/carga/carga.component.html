@@ -1,0 +1,34 @@
+<app-top-bar titulo="Carga C6"></app-top-bar>
+
+<div class="form">
+
+    <div class="select-container">
+        <app-link-planilha></app-link-planilha>
+    </div>
+
+    <form #form [formGroup]="group" autocomplete="off">
+
+        <div class="chips-container">
+            <label class="mini-label" style="margin-left: 10px;">Selecione a conta</label>
+            <mat-chip-list #chipList selectable formControlName="conta">
+                <mat-chip #c="matChip" (click)="setConta(c)" *ngFor="let conta of contas" [value]="conta">
+                    {{conta.descricao}}
+                </mat-chip>
+            </mat-chip-list>
+        </div>
+
+        <div class="w3-display-container" style="margin-bottom: 20px;">
+            <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+            <div class="file-upload">
+                <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+                {{fileName || "Selecione um arquivo para carga"}}
+            </div>
+        </div>
+
+        <button mat-raised-button color="primary" type="button" (click)="confirmarCarga(form)"
+            [disabled]="group.invalid">Enviar</button>
+
+    </form>
+</div>

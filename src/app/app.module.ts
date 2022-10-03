@@ -1,5 +1,7 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import localePt from '@angular/common/locales/pt';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -7,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -31,23 +33,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
+import { CargaComponent } from './components/carga/carga.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
+import { InterceptorService } from './services/interceptor.service';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
 
+registerLocaleData(localePt, 'pt-BR');
+
 const routes: Routes = [
-  /*
   {
     path: 'carga',
     component: CargaComponent
   },
-  */
   {
     path: 'extrato',
     component: ExtratoComponent
@@ -87,7 +91,8 @@ const routes: Routes = [
     CategoriaComponent,
     ContaComponent,
     LancamentoComponent,
-    ExtratoComponent
+    ExtratoComponent,
+    CargaComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
@@ -128,7 +133,12 @@ const routes: Routes = [
     MatDividerModule,
     MatListModule
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+  ],
+
   bootstrap: [
     AppComponent
   ]
