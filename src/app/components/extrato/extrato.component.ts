@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ChartData } from 'chart.js';
+import { AnalisePlanilha } from 'src/app/models/analiseplanilha';
 import { Categoria } from 'src/app/models/categoria';
 import { Extrato } from 'src/app/models/extrato';
 import { Lancamento } from 'src/app/models/lancamento';
@@ -14,6 +16,9 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
   styleUrls: ['./extrato.component.scss']
 })
 export class ExtratoComponent implements OnInit {
+
+  public pieChartData!: ChartData<'pie', number[], string | string[]>;
+  public barChartData!: ChartData<'bar'>;
 
   displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'valor', 'concluido'];
   extrato!: Extrato[];
@@ -35,17 +40,23 @@ export class ExtratoComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
     });
-
     if (this.planilhaSelecionada.id != undefined) {
       this.findExtrato();
     }
     this.categoriaService.findAll().subscribe(data => { this.categorias = data });
+
+    this.planilhaService.getAnalisePlanilha(this.planilhaSelecionada.id).subscribe(data => {
+      let analise = data as AnalisePlanilha[];
+      let labels: string[] = analise.map(n => n.descricao);
+      let datasets: any[] = [{ data: analise.map(n => n.valor) }];
+      //charts
+      this.pieChartData = { labels: labels, datasets: datasets };
+      this.barChartData = { labels: labels, datasets: datasets };
+    });
   }
 
   private findExtrato() {
     this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
-
-
       this.extrato = data as Extrato[];
       this.extrato.forEach(conta => {
         if (conta.tipo?.toString() == 'CC' || conta.tipo?.toString() == 'CARTEIRA') {

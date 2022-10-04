@@ -101,9 +101,12 @@
 </mat-accordion>
 
 <div class="content-table">
-    <app-chart-bar></app-chart-bar>
+    <app-chart-bar [datasource]="barChartData"></app-chart-bar>
 </div>
+<!--
 
-<div class="content-table">
-    <app-chart-pie></app-chart-pie>
-</div>
+    <div style="width: 60%; padding-top: 30px">
+        <app-chart-pie [datasource]="pieChartData"></app-chart-pie>
+    </div>
+    
+-->
