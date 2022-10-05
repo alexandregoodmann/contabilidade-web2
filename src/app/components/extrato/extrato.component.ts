@@ -37,14 +37,18 @@ export class ExtratoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
-    });
-    if (this.planilhaSelecionada.id != undefined) {
       this.findExtrato();
-    }
+      this.dadosGraficos();
+    });
+
     this.categoriaService.findAll().subscribe(data => { this.categorias = data });
 
+  }
+
+  private dadosGraficos() {
     this.planilhaService.getAnalisePlanilha(this.planilhaSelecionada.id).subscribe(data => {
       let analise = data as AnalisePlanilha[];
       let labels: string[] = analise.map(n => n.descricao);
