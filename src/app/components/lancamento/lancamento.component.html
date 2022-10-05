@@ -20,10 +20,9 @@
         <div class="chips-container">
             <label class="mini-label" style="margin-left: 10px;">Selecione a Categoria</label>
             <mat-chip-list #chipList multiple formControlName="categoria">
-                <mat-chip #c="matChip" (click)="setCategoria(c)" *ngFor="let item of categorias"
-                    [value]="item.id">
+                <mat-chip #c="matChip" (click)="setCategoria(c)" *ngFor="let item of categorias" [value]="item.id">
                     {{item.descricao}}
-                </mat-chip> 
+                </mat-chip>
             </mat-chip-list>
         </div>
 
@@ -48,6 +47,9 @@
         <div class="w3-row" style="margin-bottom: 40px;">
             <div class="w3-col s6">
                 <mat-slide-toggle formControlName="concluido">Concluído</mat-slide-toggle>
+            </div>
+            <div class="w3-col s6">
+                <mat-slide-toggle formControlName="fixo">Fixo</mat-slide-toggle>
             </div>
         </div>
 

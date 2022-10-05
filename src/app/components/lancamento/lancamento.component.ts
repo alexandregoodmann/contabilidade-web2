@@ -53,6 +53,7 @@ export class LancamentoComponent implements OnInit {
       data: [null, [Validators.required]],
       descricao: [null, [Validators.required]],
       valor: [null, [Validators.required]],
+      fixo: [null],
       concluido: [null]
     });
 
@@ -73,6 +74,7 @@ export class LancamentoComponent implements OnInit {
           if (lancamento.categoria != undefined) {
             this.group?.get('categoria')?.setValue(lancamento.categoria.id);
           }
+          this.group?.get('fixo')?.setValue(lancamento.fixo);
           this.group?.get('concluido')?.setValue(lancamento.concluido);
         });
       }
@@ -93,6 +95,7 @@ export class LancamentoComponent implements OnInit {
       this.lancamento.conta = model.conta;
       this.lancamento.data = model.data;
       this.lancamento.concluido = model.concluido;
+      this.lancamento.fixo = model.fixo;
       this.lancamento.descricao = model.descricao;
       this.lancamentoService.update(this.lancamento).subscribe(() => { }, () => { }, () => {
         this.router.navigate(['/extrato']);

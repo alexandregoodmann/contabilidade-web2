@@ -12,5 +12,6 @@ export class Lancamento {
     valor!: number;
     data!: Date;
     concluido!: boolean;
+    fixo!: boolean;
     marcado!: boolean;
 }
