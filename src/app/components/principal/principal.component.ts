@@ -45,7 +45,12 @@ export class PrincipalComponent implements OnInit {
         this.openSnackBar('Você precisa cadastrar uma Planilha');
       } else {
         this.planilhaService.setPlanilhasAno(this.planilhasAno);
-        this.planilhaService.initPlanilha(this.planilhasAno);
+
+        this.planilhaService.planilhaSelecionada.subscribe(data => {
+          if (data.id == undefined)
+            this.planilhaService.initPlanilha(this.planilhasAno);
+        });
+
         this.getContas();
         this.getCategorias();
       }

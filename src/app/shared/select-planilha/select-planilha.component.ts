@@ -32,22 +32,7 @@ export class SelectPlanilhaComponent implements OnInit {
 
     this.planilhaService.planilhaSelecionada.subscribe(data => {
       this.planilhaSelecionada = data;
-      /*
-      this.group.get('ano').setValue(this.planilhaSelecionada.ano);
-      this.group.get('mes').setValue(this.planilhaSelecionada);
-      */
     });
-  }
-
-  get meses() {
-    let ret;
-    this.planilhasAno.forEach(a => {
-      /*
-      if (a.ano == this.group.get('ano').value) {
-        ret = a.planilhas;
-      }*/
-    });
-    return ret;
   }
 
   setPlanilhaMes(mes: Planilha) {
