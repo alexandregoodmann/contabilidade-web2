@@ -2,15 +2,19 @@
 <app-select-planilha></app-select-planilha>
 
 <div class="w3-row" style="margin-top: 15px; margin-left: 15px;">
-    <div class="select-container w3-col s6">
-        <!--
-
-            <app-link-planilha></app-link-planilha>
-        -->
+    <div class="select-container w3-col s4">
     </div>
-    <div class="select-container w3-col s6" style="text-align: right; padding-right: 50px;">
-        <label class="mini-label">Saldo total</label>
-        R$ {{saldo | number: '1.2-2'}}
+    <div class="select-container w3-col s4" style="text-align: right; padding-right: 24px;">
+        <label class="mini-label">Saldo Atual</label>
+        <span style="font-size: 15px;">
+            R$ {{saldoAtual | number: '1.2-2'}}
+        </span>
+    </div>
+    <div class="select-container w3-col s4" style="text-align: right; padding-right: 50px;">
+        <label class="mini-label">Saldo Previsto</label>
+        <span style="font-size: 15px;">
+            R$ {{saldoPrevisto| number: '1.2-2'}}
+        </span>
     </div>
 </div>
 
@@ -24,7 +28,10 @@
             </mat-panel-title>
             <mat-panel-description>
                 <span class="header right">
-                    R$ {{conta.total | number: '1.2-2'}}
+                    R$ {{conta.saldoEfetivado | number: '1.2-2'}}
+                </span>
+                <span class="header right">
+                    R$ {{conta.saldoPrevisto | number: '1.2-2'}}
                 </span>
             </mat-panel-description>
         </mat-expansion-panel-header>

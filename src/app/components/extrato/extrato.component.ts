@@ -23,7 +23,8 @@ export class ExtratoComponent implements OnInit {
   displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'valor', 'concluido'];
   extrato!: Extrato[];
   order: number = 1;
-  saldo: number = 0;
+  saldoPrevisto: number = 0;
+  saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   marcados: Lancamento[] = [];
   categorias!: Categoria[];
@@ -62,9 +63,12 @@ export class ExtratoComponent implements OnInit {
   private findExtrato() {
     this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
       this.extrato = data as Extrato[];
+      this.saldoPrevisto = 0;
+      this.saldoAtual = 0;
       this.extrato.forEach(conta => {
         if (conta.tipo?.toString() == 'CC' || conta.tipo?.toString() == 'CARTEIRA') {
-          this.saldo = this.saldo + conta.total;
+          this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
+          this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
         }
       });
     });
