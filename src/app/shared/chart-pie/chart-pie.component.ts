@@ -1,6 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
-import { ChartData, ChartEvent, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-chart-pie',
@@ -9,18 +7,28 @@ import { BaseChartDirective } from 'ng2-charts';
 })
 export class ChartPieComponent {
 
-  @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
-
   @Input()
-  datasource!: ChartData<'pie', number[], string | string[]>;
+  datasource!: PieDatasource[];
 
-  // events
-  public chartClicked({ event, active }: { event: ChartEvent, active: {}[] }): void {
-    console.log(event, active);
+  onSelect(data: any): void {
+    //console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   }
 
-  public chartHovered({ event, active }: { event: ChartEvent, active: {}[] }): void {
-    // console.log(event, active);
+  onActivate(data: any): void {
+    //console.log('Activate', JSON.parse(JSON.stringify(data)));
   }
 
+  onDeactivate(data: any): void {
+    //console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  }
+
+}
+
+export class PieDatasource {
+  name: string;
+  value: number;
+  constructor(name: string, value: number) {
+    this.name = name;
+    this.value = value;
+  }
 }

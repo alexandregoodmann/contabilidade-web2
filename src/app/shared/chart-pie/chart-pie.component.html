@@ -1,4 +1,11 @@
-<div class="chart">
-    <canvas baseChart [data]="datasource" type="pie">
-    </canvas>
-</div>
+<ngx-charts-pie-chart 
+    [results]="datasource" 
+    [gradient]="false" 
+    [legend]="false" 
+    [labels]="true"
+    [doughnut]="true"
+    [arcWidth]="0.4"
+    (select)="onSelect($event)" 
+    (activate)="onActivate($event)"
+    (deactivate)="onDeactivate($event)">
+</ngx-charts-pie-chart>

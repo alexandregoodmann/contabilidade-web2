@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChartData } from 'chart.js';
 import { AnalisePlanilha } from 'src/app/models/analiseplanilha';
 import { Categoria } from 'src/app/models/categoria';
 import { Extrato } from 'src/app/models/extrato';
@@ -9,6 +8,7 @@ import { Planilha } from 'src/app/models/planilha';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { PieDatasource } from 'src/app/shared/chart-pie/chart-pie.component';
 
 @Component({
   selector: 'app-extrato',
@@ -16,9 +16,6 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
   styleUrls: ['./extrato.component.scss']
 })
 export class ExtratoComponent implements OnInit {
-
-  public pieChartData!: ChartData<'pie', number[], string | string[]>;
-  public barChartData!: ChartData<'bar'>;
 
   displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'valor', 'concluido'];
   extrato!: Extrato[];
@@ -29,6 +26,7 @@ export class ExtratoComponent implements OnInit {
   marcados: Lancamento[] = [];
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
+  piedatasource!: PieDatasource[];
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -38,25 +36,21 @@ export class ExtratoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
       this.findExtrato();
       this.dadosGraficos();
     });
-
     this.categoriaService.findAll().subscribe(data => { this.categorias = data });
-
   }
 
   private dadosGraficos() {
     this.planilhaService.getAnalisePlanilha(this.planilhaSelecionada.id).subscribe(data => {
       let analise = data as AnalisePlanilha[];
-      let labels: string[] = analise.map(n => n.descricao);
-      let datasets: any[] = [{ data: analise.map(n => n.valor) }];
-      //charts
-      this.pieChartData = { labels: labels, datasets: datasets };
-      this.barChartData = { labels: labels, datasets: datasets };
+      this.piedatasource = new Array<PieDatasource>();
+      analise.forEach(a => {
+        this.piedatasource.push(new PieDatasource(a.descricao, a.valor));
+      });
     });
   }
 
@@ -66,10 +60,8 @@ export class ExtratoComponent implements OnInit {
       this.saldoPrevisto = 0;
       this.saldoAtual = 0;
       this.extrato.forEach(conta => {
-        //if (conta.tipo?.toString() == 'CC' || conta.tipo?.toString() == 'CARTEIRA') {
-          this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
-          this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
-        //}
+        this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
+        this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
       });
     });
   }
