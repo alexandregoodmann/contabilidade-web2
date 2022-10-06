@@ -14,7 +14,7 @@ export class CategoriaComponent implements OnInit {
   categoria?: Categoria;
   group!: FormGroup;
   categorias!: Array<Categoria>;
-  displayedColumns: string[] = ['descricao', 'delete'];
+  displayedColumns: string[] = ['descricao', 'analisar', 'delete'];
 
   constructor(
     private fb: FormBuilder,
@@ -24,7 +24,8 @@ export class CategoriaComponent implements OnInit {
 
   ngOnInit() {
     this.group = this.fb.group({
-      descricao: [null, [Validators.required]]
+      descricao: [null, [Validators.required]],
+      analisar: [null]
     });
     this.findAll();
   }

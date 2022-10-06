@@ -8,6 +8,10 @@
         <mat-error>Informe a categoria</mat-error>
     </mat-form-field>
 
+    <div style="margin-top: 10px;margin-bottom: 20px;">
+        <mat-slide-toggle formControlName="analisar">Analisar</mat-slide-toggle>
+    </div>
+
     <div class="w3-display-container" style="height: 40px;">
         <div class="w3-display-left">
             <button mat-raised-button color="primary" type="submit" [disabled]="group.invalid">Salvar</button>
@@ -22,6 +26,11 @@
         <ng-container matColumnDef="descricao">
             <th mat-header-cell *matHeaderCellDef> Descrição </th>
             <td mat-cell *matCellDef="let item"> {{item.descricao}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="analisar">
+            <th mat-header-cell *matHeaderCellDef> Analisar </th>
+            <td mat-cell *matCellDef="let item"> <span *ngIf="item.analisar">SIM</span> </td>
         </ng-container>
 
         <ng-container matColumnDef="delete">
