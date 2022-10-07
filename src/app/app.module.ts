@@ -31,6 +31,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
+import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
 import { CargaComponent } from './components/carga/carga.component';
@@ -41,11 +42,10 @@ import { LancamentoComponent } from './components/lancamento/lancamento.componen
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { InterceptorService } from './services/interceptor.service';
+import { ChartPieComponent } from './shared/chart-pie/chart-pie.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { ChartPieComponent } from './shared/chart-pie/chart-pie.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -104,7 +104,7 @@ const routes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     NgxCurrencyModule,
-    NgxChartsModule,
+    GoogleChartsModule,
     //MATERIAL
     MatDatepickerModule,
     MatNativeDateModule,

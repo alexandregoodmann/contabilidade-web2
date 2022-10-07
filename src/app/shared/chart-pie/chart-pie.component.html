@@ -1,11 +1,7 @@
-<ngx-charts-pie-chart 
-    [results]="datasource" 
-    [gradient]="false" 
-    [legend]="false" 
-    [labels]="true"
-    [doughnut]="true"
-    [arcWidth]="0.4"
-    (select)="onSelect($event)" 
-    (activate)="onActivate($event)"
-    (deactivate)="onDeactivate($event)">
-</ngx-charts-pie-chart>
+<google-chart #chart
+   [type]="type"
+   [data]="datasource"
+   [options]="options"
+   [width]="700"
+   [height]="400">
+</google-chart>

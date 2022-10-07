@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ChartType, Row } from 'angular-google-charts';
 
 @Component({
   selector: 'app-chart-pie',
@@ -8,7 +9,7 @@ import { Component, Input } from '@angular/core';
 export class ChartPieComponent {
 
   @Input()
-  datasource!: PieDatasource[];
+  datasource!: Row[];
 
   onSelect(data: any): void {
     //console.log('Item clicked', JSON.parse(JSON.stringify(data)));
@@ -22,13 +23,14 @@ export class ChartPieComponent {
     //console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 
-}
-
-export class PieDatasource {
-  name: string;
-  value: number;
-  constructor(name: string, value: number) {
-    this.name = name;
-    this.value = value;
-  }
+  type: ChartType = ChartType.PieChart;
+  options = {
+    pieHole: 0.5,
+    is3D: true,
+    pieSliceText: 'none',
+    legend: {
+      position: 'labeled',
+      maxLines: 3
+    }
+  };
 }

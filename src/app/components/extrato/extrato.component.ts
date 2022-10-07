@@ -1,5 +1,8 @@
+import { CurrencyPipe, formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Row } from 'angular-google-charts';
+import { CurrencyMaskDirective } from 'ngx-currency';
 import { AnalisePlanilha } from 'src/app/models/analiseplanilha';
 import { Categoria } from 'src/app/models/categoria';
 import { Extrato } from 'src/app/models/extrato';
@@ -8,7 +11,6 @@ import { Planilha } from 'src/app/models/planilha';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
-import { PieDatasource } from 'src/app/shared/chart-pie/chart-pie.component';
 
 @Component({
   selector: 'app-extrato',
@@ -26,7 +28,7 @@ export class ExtratoComponent implements OnInit {
   marcados: Lancamento[] = [];
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
-  piedatasource!: PieDatasource[];
+  piedatasource: Row[] = [];
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -45,11 +47,18 @@ export class ExtratoComponent implements OnInit {
   }
 
   private dadosGraficos() {
+    this.piedatasource = [];
     this.planilhaService.getAnalisePlanilha(this.planilhaSelecionada.id).subscribe(data => {
       let analise = data as AnalisePlanilha[];
-      this.piedatasource = new Array<PieDatasource>();
+
+      const total = analise.reduce((t, o) => {
+        return t + o.valor
+      }, 0);
+
       analise.forEach(a => {
-        this.piedatasource.push(new PieDatasource(a.descricao, a.valor));
+        let label: string = a.descricao + ': ' + formatCurrency(a.valor, 'pt-BR', 'R$');
+        let valor: number = ((a.valor / total) * 100);
+        this.piedatasource.push([label, valor]);
       });
     });
   }

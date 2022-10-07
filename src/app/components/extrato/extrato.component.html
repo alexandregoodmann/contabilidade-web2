@@ -111,6 +111,6 @@
     </mat-expansion-panel>
 </mat-accordion>
 
-<div class="content-table" *ngIf="piedatasource != undefined">
+<div style="margin-top: 20px;" *ngIf="piedatasource.length > 0">
     <app-chart-pie [datasource]="piedatasource"></app-chart-pie>
 </div>
