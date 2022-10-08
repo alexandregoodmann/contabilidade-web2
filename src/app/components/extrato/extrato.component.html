@@ -111,6 +111,11 @@
     </mat-expansion-panel>
 </mat-accordion>
 
-<div style="margin-top: 20px;" *ngIf="piedatasource.length > 0">
-    <app-chart-pie [datasource]="piedatasource"></app-chart-pie>
+<div class="w3-row" style="margin-top: 20px;">
+    <div class="w3-col s12" *ngIf="piedatasource.length > 0">
+        <app-chart-pie [datasource]="piedatasource"></app-chart-pie>
+    </div>
+    <div class="w3-col s12" style="padding: 40px;">
+        <app-chart-bar [datasource]="bardatasource" [width]="600" [columns]="barChartColumns"></app-chart-bar>
+    </div>
 </div>

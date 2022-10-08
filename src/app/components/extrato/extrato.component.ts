@@ -1,8 +1,7 @@
-import { CurrencyPipe, formatCurrency } from '@angular/common';
+import { formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Row } from 'angular-google-charts';
-import { CurrencyMaskDirective } from 'ngx-currency';
 import { AnalisePlanilha } from 'src/app/models/analiseplanilha';
 import { Categoria } from 'src/app/models/categoria';
 import { Extrato } from 'src/app/models/extrato';
@@ -29,6 +28,8 @@ export class ExtratoComponent implements OnInit {
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
   piedatasource: Row[] = [];
+  bardatasource: Row[] = [];
+  barChartColumns = ['', 'Saldo Atual', 'Saldo Previsto'];
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -41,12 +42,20 @@ export class ExtratoComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
       this.findExtrato();
-      this.dadosGraficos();
+      this.buildPieDataSource();
     });
     this.categoriaService.findAll().subscribe(data => { this.categorias = data });
   }
 
-  private dadosGraficos() {
+  private buildBarDataSource() {
+    this.bardatasource = [];
+    this.extrato.forEach(e => {
+      if (e.tipo.toString() != 'CARTAO')
+        this.bardatasource.push([e.descricao, e.saldoEfetivado, e.saldoPrevisto])
+    });
+  }
+
+  private buildPieDataSource() {
     this.piedatasource = [];
     this.planilhaService.getAnalisePlanilha(this.planilhaSelecionada.id).subscribe(data => {
       let analise = data as AnalisePlanilha[];
@@ -72,6 +81,7 @@ export class ExtratoComponent implements OnInit {
         this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
         this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
       });
+      this.buildBarDataSource();
     });
   }
 

@@ -46,6 +46,7 @@ import { ChartPieComponent } from './shared/chart-pie/chart-pie.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
+import { ChartBarComponent } from './shared/chart-bar/chart-bar.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -95,7 +96,8 @@ const routes: Routes = [
     LancamentoComponent,
     ExtratoComponent,
     CargaComponent,
-    ChartPieComponent
+    ChartPieComponent,
+    ChartBarComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),

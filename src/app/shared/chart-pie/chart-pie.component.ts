@@ -8,8 +8,18 @@ import { ChartType, Row } from 'angular-google-charts';
 })
 export class ChartPieComponent {
 
-  @Input()
-  datasource!: Row[];
+  @Input() datasource!: Row[];
+  type: ChartType = ChartType.PieChart;
+
+  options = {
+    pieHole: 0.5,
+    is3D: true,
+    pieSliceText: 'none',
+    legend: {
+      position: 'labeled',
+      maxLines: 3
+    }
+  };
 
   onSelect(data: any): void {
     //console.log('Item clicked', JSON.parse(JSON.stringify(data)));
@@ -23,14 +33,4 @@ export class ChartPieComponent {
     //console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 
-  type: ChartType = ChartType.PieChart;
-  options = {
-    pieHole: 0.5,
-    is3D: true,
-    pieSliceText: 'none',
-    legend: {
-      position: 'labeled',
-      maxLines: 3
-    }
-  };
 }
