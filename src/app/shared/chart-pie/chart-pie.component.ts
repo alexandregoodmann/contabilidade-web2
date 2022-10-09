@@ -9,6 +9,9 @@ import { ChartType, Row } from 'angular-google-charts';
 export class ChartPieComponent {
 
   @Input() datasource!: Row[];
+  @Input() width!: number;
+  @Input() height!: number;
+
   type: ChartType = ChartType.PieChart;
 
   options = {

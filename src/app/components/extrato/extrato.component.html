@@ -74,7 +74,7 @@
 
             <ng-container matColumnDef="concluido">
                 <th mat-header-cell *matHeaderCellDef>
-                    <button mat-icon-button [disabled]="marcados.length == 0" [matMenuTriggerFor]="menu">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" [disabled]="marcados.length == 0">
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
@@ -111,11 +111,12 @@
     </mat-expansion-panel>
 </mat-accordion>
 
-<div class="w3-row" style="margin-top: 20px;">
-    <div class="w3-col s12" *ngIf="piedatasource.length > 0">
-        <app-chart-pie [datasource]="piedatasource"></app-chart-pie>
+<div class="graficos" style="margin-top: 10px;">
+    <div *ngIf="piedatasource.length > 0">
+        <app-chart-pie [datasource]="piedatasource" [width]="600" [height]="250"></app-chart-pie>
     </div>
-    <div class="w3-col s12" style="padding: 40px;">
-        <app-chart-bar [datasource]="bardatasource" [width]="600" [columns]="barChartColumns"></app-chart-bar>
+    <div style="padding-left: 30px; padding-right: 30px; margin-bottom: 20px;">
+        <app-chart-bar [datasource]="bardatasource" [width]="400" [height]="150" [columns]="barChartColumns">
+        </app-chart-bar>
     </div>
 </div>

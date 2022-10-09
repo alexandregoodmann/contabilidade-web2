@@ -10,16 +10,17 @@ export class ChartBarComponent {
 
   @Input() datasource!: Row[];
   @Input() width!: number;
+  @Input() height!: number;
   @Input() columns!: string[];
 
   type: ChartType = ChartType.Bar;
   options = {
-    bars: 'horizontal',
+    bars: 'vertical',
     annotations: {
       alwaysOutside: false
     },
     legend: {
-      position: 'top'
+      position: 'none'
     }
   };
 
