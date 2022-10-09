@@ -41,13 +41,13 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     return this.http.get(`${environment.url}/planilhas/${idPlanilha}/extrato`);
   }
 
-	getAnalisePlanilha(id:number) {
-		return this.http.get(`${environment.url}/planilhas/${id}/analise`);
-	}
+  getAnalisePlanilha(id: number) {
+    return this.http.get(`${environment.url}/planilhas/${id}/analise`);
+  }
 
-  getAnaliseAno(ano:number) {
-		return this.http.get(`${environment.url}/planilhas/${ano}/analiseano`);
-	}
+  getAnaliseAno(ano: number) {
+    return this.http.get(`${environment.url}/planilhas/${ano}/analiseano`);
+  }
 
   initPlanilha(planilhas: PlanilhasAno[]): void {
     let retorno!: Planilha;

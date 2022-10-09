@@ -8,12 +8,13 @@ import { ChartType, Row } from 'angular-google-charts';
 })
 export class ChartBarComponent {
 
+  @Input() columns!: string[];
   @Input() datasource!: Row[];
   @Input() width!: number;
   @Input() height!: number;
-  @Input() columns!: string[];
 
   type: ChartType = ChartType.Bar;
+ 
   options = {
     bars: 'vertical',
     annotations: {
