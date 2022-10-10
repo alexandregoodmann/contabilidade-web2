@@ -67,7 +67,7 @@ export class LancamentoComponent implements OnInit {
       let idLancamento: number = param.get('idLancamento') as unknown as number;
       if (idLancamento != undefined) {
         this.lancamentoService.findById(idLancamento).subscribe(lancamento => {
-          this.lancamento = lancamento;
+          this.lancamento = lancamento as Lancamento;
           this.group?.patchValue(lancamento);
           this.group?.get('data')?.setValue(new Date(lancamento.data));
           this.group?.get('conta')?.setValue(lancamento.conta.id);

@@ -15,6 +15,7 @@ export class ChartPieComponent {
   type: ChartType = ChartType.PieChart;
 
   options = {
+    title: 'Gastos agrupados em categorias',
     pieHole: 0.5,
     is3D: true,
     pieSliceText: 'none',

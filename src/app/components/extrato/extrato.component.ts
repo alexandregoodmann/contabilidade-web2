@@ -1,10 +1,10 @@
 import { formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Row } from 'angular-google-charts';
-import { AnalisePlanilha } from 'src/app/models/analiseplanilha';
+import { ChartType, Row } from 'angular-google-charts';
+import { AnalisePlanilha, ChartDefinition } from 'src/app/models/analiseplanilha';
 import { Categoria } from 'src/app/models/categoria';
-import { Extrato } from 'src/app/models/extrato';
+import { Extrato, LancamentoDTO } from 'src/app/models/extrato';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { CategoriaService } from 'src/app/services/categoria.service';
@@ -24,12 +24,11 @@ export class ExtratoComponent implements OnInit {
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
-  marcados: Lancamento[] = [];
+  marcados: LancamentoDTO[] = [];
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
   piedatasource: Row[] = [];
-  bardatasource: Row[] = [];
-  barChartColumns = ['', 'Saldo Atual', 'Saldo Previsto'];
+  graficoSaldos!: ChartDefinition;
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -45,14 +44,6 @@ export class ExtratoComponent implements OnInit {
       this.buildPieDataSource();
     });
     this.categoriaService.findAll().subscribe(data => { this.categorias = data });
-  }
-
-  private buildBarDataSource() {
-    this.bardatasource = [];
-    this.extrato.forEach(e => {
-      if (e.tipo.toString() != 'CARTAO')
-        this.bardatasource.push([e.descricao, e.saldoEfetivado, e.saldoPrevisto])
-    });
   }
 
   private buildPieDataSource() {
@@ -81,7 +72,7 @@ export class ExtratoComponent implements OnInit {
         this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
         this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
       });
-      this.buildBarDataSource();
+      this.buildGraficoSaldos();
     });
   }
 
@@ -89,7 +80,7 @@ export class ExtratoComponent implements OnInit {
     this.router.navigate(['/lancamento'], { queryParams: { idLancamento: idLancamento } });
   }
 
-  sortBy(indexConta: number, lancamentos: Lancamento[], coluna: string) {
+  sortBy(indexConta: number, lancamentos: LancamentoDTO[], coluna: string) {
     let ret = this.order;
     lancamentos.sort(function (x: any, y: any) {
       x[coluna] = (x[coluna] == null) ? '' : x[coluna];
@@ -106,7 +97,7 @@ export class ExtratoComponent implements OnInit {
     this.order = this.order * (-1);
   }
 
-  marcar(event: any, item: Lancamento) {
+  marcar(event: any, item: LancamentoDTO) {
     if (event.checked) {
       item.marcado = true;
       this.marcados.push(item);
@@ -117,7 +108,7 @@ export class ExtratoComponent implements OnInit {
     }
   }
 
-  marcarTodos(event: any, lancamentos: Lancamento[]) {
+  marcarTodos(event: any, lancamentos: LancamentoDTO[]) {
     this.marcados = [];
     if (event.checked) {
       lancamentos.forEach(l => { l.marcado = true });
@@ -161,4 +152,32 @@ export class ExtratoComponent implements OnInit {
     }
   }
 
+  buildGraficoSaldos() {
+
+    let entradas = 0;
+    let gastos = 0;
+    this.extrato?.forEach(e => {
+      e.lancamentos.forEach(l => {
+        if (l.valor > 0 && l.categoria != 'Saldo Anterior' && l.concluido) {
+          entradas = entradas + l.valor;
+        } else if (l.valor < 0 && l.concluido && l.analisar) {
+          gastos = gastos + l.valor
+        }
+      });
+    });
+
+    this.graficoSaldos = new ChartDefinition();
+    this.graficoSaldos.type = ChartType.Bar;
+    this.graficoSaldos.datasource = [
+      ["Entradas", entradas],
+      ["Gastos", gastos * (-1)]
+    ];
+    this.graficoSaldos.options = {
+      width: 500,
+      height: 100,
+      legend: { position: 'none' },
+      bars: 'horizontal',
+      bar: { groupWidth: "90%" }
+    };
+  }
 }

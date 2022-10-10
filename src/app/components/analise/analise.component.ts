@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartType, Row } from 'angular-google-charts';
-import { AnalisePlanilha } from 'src/app/models/analiseplanilha';
+import { AnalisePlanilha, AnaliseSaldoAno, ChartDefinition } from 'src/app/models/analiseplanilha';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { Constants } from 'src/app/shared/Constants';
 
@@ -46,29 +46,24 @@ export class AnaliseComponent implements OnInit {
   }
 
   buildGraficoSaldoAtual() {
+
+    this.planilhaService.getAnaliseSaldoAno(2022).subscribe(data => {
+      let analise = data as AnaliseSaldoAno[];
+      this.charSaldo.datasource = [];
+      analise.forEach(a => {
+        this.charSaldo.datasource.push([a.mes, a.entrada, a.saida, a.saldo]);
+      });
+    });
+
     this.charSaldo = new ChartDefinition();
     this.charSaldo.type = ChartType.AreaChart;
     this.charSaldo.width = 700;
     this.charSaldo.height = 350;
-    this.charSaldo.columns = ['Mês', 'Saída', 'Entrada'];
-    this.charSaldo.datasource = [
-      ['Agosto', 1000, 1100],
-      ['Setembro', 1170, 2330],
-      ['Outubro', 660, 500]
-    ];
+    this.charSaldo.columns = ['Mês', 'Entrada', 'Saída', 'Saldo'];
     this.charSaldo.options = {
       title: 'Total de entradas e saídas por mês',
       vAxis: { minValue: 0 }
     };
   }
 
-}
-
-export class ChartDefinition {
-  columns!: string[];
-  datasource!: Row[];
-  type!: ChartType;
-  width!: number;
-  height!: number;
-  options!: any;
 }
