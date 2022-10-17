@@ -1,5 +1,7 @@
 <app-top-bar titulo="Análise"></app-top-bar>
 
+<app-select-planilha></app-select-planilha>
+
 <div *ngIf="datasource.length > 0" style="padding: 40px;">
     <app-chart-line [columns]="columns" [datasource]="datasource"></app-chart-line>
 </div>
