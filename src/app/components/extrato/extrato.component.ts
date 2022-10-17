@@ -5,7 +5,6 @@ import { ChartType, Row } from 'angular-google-charts';
 import { AnalisePlanilha, ChartDefinition } from 'src/app/models/analiseplanilha';
 import { Categoria } from 'src/app/models/categoria';
 import { Extrato, LancamentoDTO } from 'src/app/models/extrato';
-import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
@@ -69,8 +68,10 @@ export class ExtratoComponent implements OnInit {
       this.saldoPrevisto = 0;
       this.saldoAtual = 0;
       this.extrato.forEach(conta => {
-        this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
-        this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
+        if (conta.tipo.toString() != 'CARTAO') {
+          this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
+          this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
+        }
       });
       this.buildGraficoSaldos();
     });
