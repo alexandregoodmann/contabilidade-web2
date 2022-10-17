@@ -29,28 +29,12 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     this.planilhaSelecionadaB.next(planilha);
   }
 
-  getPlanilha(ano: number, mes: number) {
-    return this.http.get<Planilha>(`${environment.url}/planilhas/${ano}/${mes}`);
-  }
-
   getMapa() {
     return this.http.get<Array<PlanilhasAno>>(`${environment.url}/planilhas/mapa`);
   }
 
   getExtrato(idPlanilha: number) {
     return this.http.get(`${environment.url}/planilhas/${idPlanilha}/extrato`);
-  }
-
-  getAnalisePlanilha(id: number) {
-    return this.http.get(`${environment.url}/planilhas/${id}/analise`);
-  }
-
-  getAnaliseAno(ano: number) {
-    return this.http.get(`${environment.url}/planilhas/${ano}/analiseano`);
-  }
-
-  getAnaliseSaldoAno(ano: number) {
-    return this.http.get(`${environment.url}/planilhas/${ano}/saldo`);
   }
 
   initPlanilha(planilhas: PlanilhasAno[]): void {

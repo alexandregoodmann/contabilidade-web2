@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartType, Row } from 'angular-google-charts';
-import { AnalisePlanilha, AnaliseSaldoAno, ChartDefinition } from 'src/app/models/analiseplanilha';
+import { AnaliseDTO } from 'src/app/models/analiseDTO';
+import { Planilha } from 'src/app/models/planilha';
+import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
-import { Constants } from 'src/app/shared/Constants';
 
 @Component({
   selector: 'app-analise',
@@ -11,59 +11,35 @@ import { Constants } from 'src/app/shared/Constants';
 })
 export class AnaliseComponent implements OnInit {
 
-  charSaldo!: ChartDefinition;
-  columns: string[] = [];
-  datasource: Row[] = [];
+  colunas: string[] = ['data', 'banco', 'categoria', 'descricao', 'valor'];
+  bancos!: string[];
+  categorias!: string[];
+  datasource!: AnaliseDTO[];
 
-  constructor(private planilhaService: PlanilhaService) { }
+  planilhaSelecionada: Planilha = new Planilha();
+
+  constructor(
+    private analiseService: AnaliseService,
+    private planilhaService: PlanilhaService
+  ) { }
 
   ngOnInit(): void {
-
-    this.buildGraficoSaldoAtual();
-
-    this.planilhaService.getAnaliseAno(2022).subscribe(data => {
-
-      let analise = data as AnalisePlanilha[];
-      let meses = new Set<number>(analise.map(o => o.mes));
-      let categorias = new Set<string>(analise.map(o => o.descricao));
-      this.columns.push('Mês');
-      categorias.forEach(c => { this.columns.push(c) });
-
-      meses.forEach(mes => {
-        let row = [];
-        row.push(Constants.listaMeses[mes - 1]);
-        categorias.forEach(categ => {
-          let obj = analise.filter(o => o.mes == mes && o.descricao == categ);
-          if (obj.length > 0) {
-            row.push(obj[0].valor);
-          } else {
-            row.push(0);
-          }
-        });
-        this.datasource.push(row);
-      });
+    this.planilhaService.planilhaSelecionada.subscribe(data => {
+      this.planilhaSelecionada = data;
+      this.getAnalise();
     });
+
   }
 
-  buildGraficoSaldoAtual() {
+  getAnalise() {
+    this.analiseService.getAnaliseAno(this.planilhaSelecionada.ano).subscribe(data => {
+      this.datasource = data as AnaliseDTO[];
+      this.bancos = [...new Set(this.datasource.map(n => n.banco))];
+      this.categorias = [...new Set(this.datasource.map(n => n.categoria))];
+      console.log('bancos', this.bancos);
+      console.log('categorias', this.categorias);
 
-    this.planilhaService.getAnaliseSaldoAno(2022).subscribe(data => {
-      let analise = data as AnaliseSaldoAno[];
-      this.charSaldo.datasource = [];
-      analise.forEach(a => {
-        this.charSaldo.datasource.push([a.mes, a.entrada, a.saida, a.saldo]);
-      });
     });
-
-    this.charSaldo = new ChartDefinition();
-    this.charSaldo.type = ChartType.AreaChart;
-    this.charSaldo.width = 700;
-    this.charSaldo.height = 350;
-    this.charSaldo.columns = ['Mês', 'Entrada', 'Saída', 'Saldo'];
-    this.charSaldo.options = {
-      title: 'Total de entradas e saídas por mês',
-      vAxis: { minValue: 0 }
-    };
   }
 
 }

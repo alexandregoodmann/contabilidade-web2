@@ -1,8 +1,5 @@
-import { formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChartType, Row } from 'angular-google-charts';
-import { AnalisePlanilha, ChartDefinition } from 'src/app/models/analiseplanilha';
 import { Categoria } from 'src/app/models/categoria';
 import { Extrato, LancamentoDTO } from 'src/app/models/extrato';
 import { Planilha } from 'src/app/models/planilha';
@@ -26,8 +23,6 @@ export class ExtratoComponent implements OnInit {
   marcados: LancamentoDTO[] = [];
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
-  piedatasource: Row[] = [];
-  graficoSaldos!: ChartDefinition;
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -40,26 +35,8 @@ export class ExtratoComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
       this.findExtrato();
-      this.buildPieDataSource();
     });
     this.categoriaService.findAll().subscribe(data => { this.categorias = data });
-  }
-
-  private buildPieDataSource() {
-    this.piedatasource = [];
-    this.planilhaService.getAnalisePlanilha(this.planilhaSelecionada.id).subscribe(data => {
-      let analise = data as AnalisePlanilha[];
-
-      const total = analise.reduce((t, o) => {
-        return t + o.valor
-      }, 0);
-
-      analise.forEach(a => {
-        let label: string = a.descricao + ': ' + formatCurrency(a.valor, 'pt-BR', 'R$');
-        let valor: number = ((a.valor / total) * 100);
-        this.piedatasource.push([label, valor]);
-      });
-    });
   }
 
   private findExtrato() {
@@ -73,7 +50,6 @@ export class ExtratoComponent implements OnInit {
           this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
         }
       });
-      this.buildGraficoSaldos();
     });
   }
 
@@ -153,32 +129,4 @@ export class ExtratoComponent implements OnInit {
     }
   }
 
-  buildGraficoSaldos() {
-
-    let entradas = 0;
-    let gastos = 0;
-    this.extrato?.forEach(e => {
-      e.lancamentos.forEach(l => {
-        if (l.valor > 0 && l.categoria != 'Saldo Anterior' && l.concluido) {
-          entradas = entradas + l.valor;
-        } else if (l.valor < 0 && l.concluido && l.analisar) {
-          gastos = gastos + l.valor
-        }
-      });
-    });
-
-    this.graficoSaldos = new ChartDefinition();
-    this.graficoSaldos.type = ChartType.Bar;
-    this.graficoSaldos.datasource = [
-      ["Entradas", entradas],
-      ["Gastos", gastos * (-1)]
-    ];
-    this.graficoSaldos.options = {
-      width: 500,
-      height: 100,
-      legend: { position: 'none' },
-      bars: 'horizontal',
-      bar: { groupWidth: "90%" }
-    };
-  }
 }
