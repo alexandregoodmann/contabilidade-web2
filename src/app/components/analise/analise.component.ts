@@ -21,6 +21,8 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   datasource!: AnaliseDTO[];
   pie!: ChartDefinition;
   bar!: ChartDefinition;
+  line!: ChartDefinition;
+  area!: ChartDefinition;
   chartDatasource!: any[];
   saldoAtual!: number;
   totalGastos!: number;
@@ -40,6 +42,8 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
         this.buildChartDatasource();
         this.buildPieChart();
         this.buildBarChart();
+        this.buildLineChart();
+        this.buildAreaChart();
         this.calculaSaldoAtual();
       });
     });
@@ -89,7 +93,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   private buildPieChart() {
     this.pie = new ChartDefinition();
     this.pie.type = ChartType.PieChart;
-    this.pie.width = 600;
+    this.pie.width = 700;
     this.pie.height = 400;
     this.pie.columns = ['Categoria', 'Total'];
     this.pie.datasource = this.chartDatasource;
@@ -119,4 +123,53 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     };
   }
 
+  private buildLineChart() {
+    this.line = new ChartDefinition();
+    this.line.type = ChartType.Line;
+    this.line.columns = ['Day', 'Guardians of the Galaxy', 'The Avengers', 'Transformers: Age of Extinction'];
+    this.line.datasource = [
+      [1, 37.8, 80.8, 41.8],
+      [2, 30.9, 69.5, 32.4],
+      [3, 25.4, 57, 25.7],
+      [4, 11.7, 18.8, 10.5],
+      [5, 11.9, 17.6, 10.4],
+      [6, 8.8, 13.6, 7.7],
+      [7, 7.6, 12.3, 9.6],
+      [8, 12.3, 29.2, 10.6],
+      [9, 16.9, 42.9, 14.8],
+      [10, 12.8, 30.9, 11.6],
+      [11, 5.3, 7.9, 4.7],
+      [12, 6.6, 8.4, 5.2],
+      [13, 4.8, 6.3, 3.6],
+      [14, 4.2, 6.2, 3.4]
+    ]
+    this.line.options = {
+      chart: {
+        title: 'Box Office Earnings in First Two Weeks of Opening',
+        subtitle: 'in millions of dollars (USD)'
+      },
+      width: 700,
+      height: 400
+    };
+  }
+
+  private buildAreaChart() {
+    this.area = new ChartDefinition();
+    this.area.type = ChartType.AreaChart;
+    this.area.columns = ['Year', 'Sales', 'Expenses'];
+    this.area.datasource = [
+      ['2013', 1000, 400],
+      ['2014', 1170, 460],
+      ['2015', 660, 1120],
+      ['2016', 1030, 540]
+    ]
+    this.area.options = {
+      title: 'Company Performance',
+      hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
+      vAxis: { minValue: 0 },
+      width: 600,
+      height: 280
+
+    };
+  }
 }

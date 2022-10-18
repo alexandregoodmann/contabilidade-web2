@@ -2,54 +2,36 @@
 
 <app-select-planilha></app-select-planilha>
 
-<div class="table-container">
-
-    <table mat-table [dataSource]="datasource" class="mat-elevation-z8" matSort>
-
-        <ng-container matColumnDef="data">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
-            <td mat-cell *matCellDef="let item">{{item.data | date:'dd/MM'}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="banco">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Banco</th>
-            <td mat-cell *matCellDef="let item"> {{item.banco}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="categoria">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
-            <td mat-cell *matCellDef="let item"> {{item.categoria}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="descricao">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
-            <td mat-cell *matCellDef="let item"> {{item.descricao}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="valor">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
-            <td mat-cell *matCellDef="let item" style="text-align: right;"
-                [ngStyle]="{'color':item.valor < 0 ? 'red' : 'black' }"> {{item.valor | number: '1.2-2'}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="colunas"></tr>
-        <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
-    </table>
-</div>
-
 <div class="w3-row">
-    <div class="w3-col m5" *ngIf="pie != undefined && pie.columns.length > 0">
-        <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource" [options]="pie.options"
-            [width]="pie.width" [height]="pie.height">
-        </google-chart>
+    <div class="w3-col m5 table-container">
+        <table mat-table [dataSource]="datasource" class="mat-elevation-z8" matSort>
+            <ng-container matColumnDef="data">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+                <td mat-cell *matCellDef="let item">{{item.data | date:'dd/MM'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="banco">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Banco</th>
+                <td mat-cell *matCellDef="let item"> {{item.banco}} </td>
+            </ng-container>
+            <ng-container matColumnDef="categoria">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+                <td mat-cell *matCellDef="let item"> {{item.categoria}} </td>
+            </ng-container>
+            <ng-container matColumnDef="descricao">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+                <td mat-cell *matCellDef="let item"> {{item.descricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="valor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+                <td mat-cell *matCellDef="let item" style="text-align: right;"
+                    [ngStyle]="{'color':item.valor < 0 ? 'red' : 'black' }"> {{item.valor | number: '1.2-2'}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+            <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+        </table>
     </div>
-    <div class="w3-col m5" *ngIf="bar != undefined && bar.columns.length > 0">
-        <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource" [options]="bar.options"
-            [height]="bar.height">
-        </google-chart>
-    </div>
-    <div class="w3-col m2" *ngIf="datasource != undefined && datasource.length > 0">
-        <table width="100%">
+    <div class="w3-col m2 table-container" *ngIf="datasource != undefined && datasource.length > 0">
+        <table>
             <tr>
                 <td>Saldo Atual</td>
                 <td>R$ {{saldoAtual| number: '1.2-2'}}</td>
@@ -62,8 +44,29 @@
                 <td>Gastos Fixos</td>
                 <td>R$ {{gastosFixo| number: '1.2-2'}}</td>
             </tr>
-
         </table>
     </div>
+    <div class="w3-col m5 table-container">
+        <google-chart #chart [type]="area.type" [columns]="area.columns" [data]="area.datasource"
+            [options]="area.options" [width]="area.width" [height]="area.height">
+        </google-chart>
+    </div>
+</div>
 
+<div class="w3-row">
+    <div class="w3-col m4" *ngIf="pie != undefined && pie.columns.length > 0">
+        <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource" [options]="pie.options"
+            [width]="pie.width" [height]="pie.height">
+        </google-chart>
+    </div>
+    <div class="w3-col m4" *ngIf="bar != undefined && bar.columns.length > 0">
+        <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource" [options]="bar.options"
+            [height]="bar.height">
+        </google-chart>
+    </div>
+    <div class="w3-col m4">
+        <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
+            [options]="line.options" [height]="line.height">
+        </google-chart>
+    </div>
 </div>
