@@ -18,9 +18,13 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   colunas: string[] = ['data', 'banco', 'categoria', 'descricao', 'valor'];
-  datasource: AnaliseDTO[] = [];
-  planilhaSelecionada: Planilha = new Planilha();
+  datasource!: AnaliseDTO[];
   pie!: ChartDefinition;
+  bar!: ChartDefinition;
+  chartDatasource!: any[];
+  saldoAtual!: number;
+  totalGastos!: number;
+  gastosFixo!: number;
 
   constructor(
     private analiseService: AnaliseService,
@@ -30,9 +34,14 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(data => {
-      this.planilhaSelecionada = data;
-      this.getAnalise();
-      this.buildPieChart();
+      const planilha: Planilha = data as Planilha;
+      this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
+        this.datasource = data as AnaliseDTO[];
+        this.buildChartDatasource();
+        this.buildPieChart();
+        this.buildBarChart();
+        this.calculaSaldoAtual();
+      });
     });
   }
 
@@ -42,16 +51,17 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getAnalise() {
-    this.analiseService.getAnaliseAnoMes(this.planilhaSelecionada.ano, this.planilhaSelecionada.mes).subscribe(data => {
-      this.datasource = data as AnaliseDTO[];
-      this.buildPieChart();
-    });
+  private calculaSaldoAtual() {
+    this.saldoAtual = 0;
+    this.gastosFixo = 0;
+    this.datasource.filter(o => o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.saldoAtual = this.saldoAtual + valor });
+    this.datasource.filter(o => o.fixo && o.valor < 0).map(n => n.valor).forEach(valor => this.gastosFixo = this.gastosFixo + valor);
   }
 
-  buildPieChart() {
+  private buildChartDatasource() {
 
-    this.pie = new ChartDefinition();
+    this.chartDatasource = [];
+    this.totalGastos = 0;
 
     const analisar = this.datasource.filter(o => o.analisar);
     let mapaCategorias = new Map<string, number>();
@@ -62,15 +72,27 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
       });
       mapaCategorias.set(categoria, valor * (-1))
     });
+    mapaCategorias.forEach((v, k) => {
+      this.chartDatasource.push([k, v]);
+      this.totalGastos = this.totalGastos + v;
+    });
+    const data = this.chartDatasource.sort(function (a, b) {
+      if (a[1] > b[1])
+        return -1;
+      if (a[1] < b[1])
+        return 1
+      return 0;
+    });
+    this.chartDatasource = Array.from(data);
+  }
 
+  private buildPieChart() {
+    this.pie = new ChartDefinition();
     this.pie.type = ChartType.PieChart;
-    this.pie.width = 700;
+    this.pie.width = 600;
     this.pie.height = 400;
     this.pie.columns = ['Categoria', 'Total'];
-    mapaCategorias.forEach((v, k) => {
-      this.pie.datasource.push([k, v]);
-    });
-
+    this.pie.datasource = this.chartDatasource;
     this.pie.options = {
       title: 'Gastos por Categoria',
       is3D: true,
@@ -81,6 +103,20 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
         maxLines: 3
       }
     };
-
   }
+
+  private buildBarChart() {
+    this.bar = new ChartDefinition();
+    this.bar.type = ChartType.BarChart;
+    this.bar.columns = ['Categoria', 'Total'];
+    this.bar.datasource = this.chartDatasource;
+    this.bar.options = {
+      title: 'Gastos por Categoria',
+      width: 600,
+      height: 400,
+      bar: { groupWidth: "70%" },
+      legend: { position: "none" },
+    };
+  }
+
 }

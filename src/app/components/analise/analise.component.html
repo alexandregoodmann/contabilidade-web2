@@ -37,8 +37,33 @@
     </table>
 </div>
 
-<div *ngIf="pie.columns.length > 0">
-    <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource" [options]="pie.options"
-        [width]="pie.width" [height]="pie.height">
-    </google-chart>
+<div class="w3-row">
+    <div class="w3-col m5" *ngIf="pie != undefined && pie.columns.length > 0">
+        <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource" [options]="pie.options"
+            [width]="pie.width" [height]="pie.height">
+        </google-chart>
+    </div>
+    <div class="w3-col m5" *ngIf="bar != undefined && bar.columns.length > 0">
+        <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource" [options]="bar.options"
+            [height]="bar.height">
+        </google-chart>
+    </div>
+    <div class="w3-col m2" *ngIf="datasource != undefined && datasource.length > 0">
+        <table width="100%">
+            <tr>
+                <td>Saldo Atual</td>
+                <td>R$ {{saldoAtual| number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td>Total de Gastos</td>
+                <td>R$ {{totalGastos| number: '1.2-2'}}</td>
+            </tr>
+            <tr>
+                <td>Gastos Fixos</td>
+                <td>R$ {{gastosFixo| number: '1.2-2'}}</td>
+            </tr>
+
+        </table>
+    </div>
+
 </div>
