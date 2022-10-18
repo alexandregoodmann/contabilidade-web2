@@ -12,4 +12,9 @@ export class AnaliseService {
   getAnaliseAno(ano: number) {
     return this.http.get(`${environment.url}/analise/${ano}`);
   }
+
+  getAnaliseAnoMes(ano: number, mes: number) {
+    return this.http.get(`${environment.url}/analise/${ano}/${mes}`);
+  }
+
 }

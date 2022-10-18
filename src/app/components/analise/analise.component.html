@@ -37,24 +37,8 @@
     </table>
 </div>
 
-<!--
-
-<div *ngIf="datasource.length > 0" style="padding: 40px;">
-    <app-chart-line [columns]="columns" [datasource]="datasource"></app-chart-line>
-</div>
-
-<div>
-    <google-chart 
-        #chart 
-        [type]="charSaldo.type" 
-        [columns]="charSaldo.columns"
-        [data]="charSaldo.datasource" 
-        [options]="charSaldo.options"
-        [width]="charSaldo.width" 
-        [height]="charSaldo.height"
-        [title]="charSaldo.options.title"
-        >
+<div *ngIf="pie.columns.length > 0">
+    <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource" [options]="pie.options"
+        [width]="pie.width" [height]="pie.height">
     </google-chart>
 </div>
-
--->

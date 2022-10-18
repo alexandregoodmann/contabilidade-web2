@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
+import { ChartType } from 'angular-google-charts';
 import { AnaliseDTO } from 'src/app/models/analiseDTO';
+import { ChartDefinition } from 'src/app/models/ChartDefinition';
 import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
@@ -16,10 +18,9 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   colunas: string[] = ['data', 'banco', 'categoria', 'descricao', 'valor'];
-  bancos!: string[];
-  categorias!: string[];
-  datasource!: AnaliseDTO[];
+  datasource: AnaliseDTO[] = [];
   planilhaSelecionada: Planilha = new Planilha();
+  pie!: ChartDefinition;
 
   constructor(
     private analiseService: AnaliseService,
@@ -31,6 +32,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.planilhaService.planilhaSelecionada.subscribe(data => {
       this.planilhaSelecionada = data;
       this.getAnalise();
+      this.buildPieChart();
     });
   }
 
@@ -41,11 +43,44 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   }
 
   getAnalise() {
-    this.analiseService.getAnaliseAno(this.planilhaSelecionada.ano).subscribe(data => {
+    this.analiseService.getAnaliseAnoMes(this.planilhaSelecionada.ano, this.planilhaSelecionada.mes).subscribe(data => {
       this.datasource = data as AnaliseDTO[];
-      this.bancos = [...new Set(this.datasource.map(n => n.banco))];
-      this.categorias = [...new Set(this.datasource.map(n => n.categoria))];
+      this.buildPieChart();
     });
   }
 
+  buildPieChart() {
+
+    this.pie = new ChartDefinition();
+
+    const analisar = this.datasource.filter(o => o.analisar);
+    let mapaCategorias = new Map<string, number>();
+    [...new Set(analisar.map(n => n.categoria))].forEach(categoria => {
+      let valor = 0;
+      analisar.filter(o => o.categoria == categoria).forEach(obj => {
+        valor = valor + obj.valor;
+      });
+      mapaCategorias.set(categoria, valor * (-1))
+    });
+
+    this.pie.type = ChartType.PieChart;
+    this.pie.width = 700;
+    this.pie.height = 400;
+    this.pie.columns = ['Categoria', 'Total'];
+    mapaCategorias.forEach((v, k) => {
+      this.pie.datasource.push([k, v]);
+    });
+
+    this.pie.options = {
+      title: 'Gastos por Categoria',
+      is3D: true,
+      pieHole: 0.5,
+      pieSliceText: 'none',
+      legend: {
+        position: 'labeled',
+        maxLines: 3
+      }
+    };
+
+  }
 }

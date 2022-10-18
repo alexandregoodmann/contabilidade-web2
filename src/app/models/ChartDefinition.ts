@@ -1,8 +1,8 @@
 import { ChartType } from "angular-google-charts";
 
 export class ChartDefinition {
-    columns!: any[];
-    datasource!: any[];
+    columns: string[] = [];
+    datasource: any[] = [];
     type!: ChartType;
     width!: number;
     height!: number;
