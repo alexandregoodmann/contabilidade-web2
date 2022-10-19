@@ -19,7 +19,8 @@
             </div>
         </div>
         <div class="table-container">
-            <table mat-table [dataSource]="datasource" class="mat-elevation-z8" matSort>
+            <button mat-button (click)="tableDatasource = datasource">Limpar Filtro</button>
+            <table mat-table [dataSource]="tableDatasource" class="mat-elevation-z8" matSort>
                 <ng-container matColumnDef="data">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
                     <td mat-cell *matCellDef="let item">{{item.data | date:'dd/MM'}} </td>
@@ -36,6 +37,12 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
                     <td mat-cell *matCellDef="let item"> {{item.descricao}} </td>
                 </ng-container>
+                <ng-container matColumnDef="fixo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fixo</th>
+                    <td mat-cell *matCellDef="let item">
+                        <span *ngIf="item.fixo">Sim</span>
+                    </td>
+                </ng-container>
                 <ng-container matColumnDef="valor">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
                     <td mat-cell *matCellDef="let item" style="text-align: right;"
@@ -50,12 +57,13 @@
         <div class="w3-row">
             <div class="w3-col m3" *ngIf="bar != undefined && bar.columns.length > 0">
                 <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource"
-                    [options]="bar.options" [height]="bar.height">
+                    [options]="bar.options" [height]="bar.height" (select)="onSelectCategoria($event)">
                 </google-chart>
             </div>
             <div class="w3-col m5" *ngIf="pie != undefined && pie.columns.length > 0">
                 <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource"
-                    [options]="pie.options" [width]="pie.width" [height]="pie.height">
+                    [options]="pie.options" [width]="pie.width" [height]="pie.height"
+                    (select)="onSelectCategoria($event)">
                 </google-chart>
             </div>
             <div class="w3-col m4" *ngIf="barGastoFixo != undefined && barGastoFixo.columns.length > 0">
@@ -65,8 +73,10 @@
             </div>
         </div>
         <div class="w3-row">
-            <div class="w3-col m6">
-                <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
+            <!--
+
+                <div class="w3-col m6">
+                    <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
                     [options]="line.options" [height]="line.height">
                 </google-chart>
             </div>
@@ -75,6 +85,7 @@
                     [options]="area.options" [width]="area.width" [height]="area.height">
                 </google-chart>
             </div>
+        -->
         </div>
     </div>
 </div>

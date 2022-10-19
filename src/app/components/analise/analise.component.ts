@@ -17,7 +17,8 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  colunas: string[] = ['data', 'banco', 'categoria', 'descricao', 'valor'];
+  colunas: string[] = ['data', 'banco', 'categoria', 'descricao', 'fixo', 'valor'];
+  tableDatasource!: AnaliseDTO[];
   datasource!: AnaliseDTO[];
   pie!: ChartDefinition;
   bar!: ChartDefinition;
@@ -41,6 +42,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
       this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
 
         this.datasource = data as AnaliseDTO[];
+        this.tableDatasource = data as AnaliseDTO[];
 
         //constroi graficos
         this.buildChartDatasource();
@@ -57,13 +59,14 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
         //calcula total de gastos
         this.totalGastos = 0;
         this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.totalGastos = this.totalGastos + valor })
+        this.totalGastos = this.totalGastos * (-1);
       });
     });
   }
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe((sort) => {
-      this.datasource = this.utilService.sortCollection(sort, this.datasource);
+      this.tableDatasource = this.utilService.sortCollection(sort, this.tableDatasource);
     });
   }
 
@@ -79,7 +82,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.bar.columns = ['Categoria', 'Total'];
     this.bar.datasource = this.chartDatasource;
     this.bar.options = {
-      title: 'Gastos por Categoria',
+      title: 'Gastos por categoria',
       width: 375,
       height: 300,
       bar: { groupWidth: "70%" },
@@ -103,7 +106,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.barGastoFixo.datasource = grupo;
 
     this.barGastoFixo.options = {
-      title: 'Gastos Fixo',
+      title: 'Gastos fixos',
       width: 375,
       height: 300,
       bar: { groupWidth: "70%" },
@@ -177,4 +180,12 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
 
     };
   }
+
+  onSelectCategoria(e: any) {
+    const i = e.selection[0].row;
+    const categoria = this.bar.datasource[i][0];
+    this.tableDatasource = this.datasource;
+    this.tableDatasource = this.tableDatasource.filter(o => o.categoria == categoria);
+  }
+
 }
