@@ -39,14 +39,24 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.planilhaService.planilhaSelecionada.subscribe(data => {
       const planilha: Planilha = data as Planilha;
       this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
+
         this.datasource = data as AnaliseDTO[];
+
+        //constroi graficos
         this.buildChartDatasource();
         this.pieChart();
         this.barChart();
         this.barGastoFixoChart();
         this.lineChart();
         this.areaChart();
-        this.calculaSaldoAtual();
+
+        //calcula saldo atual
+        this.saldoAtual = 0;
+        this.datasource.filter(o => o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.saldoAtual = this.saldoAtual + valor });
+
+        //calcula total de gastos
+        this.totalGastos = 0;
+        this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.totalGastos = this.totalGastos + valor })
       });
     });
   }
@@ -55,13 +65,6 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.sort.sortChange.subscribe((sort) => {
       this.datasource = this.utilService.sortCollection(sort, this.datasource);
     });
-  }
-
-  private calculaSaldoAtual() {
-    this.saldoAtual = 0;
-    this.gastosFixo = 0;
-    this.datasource.filter(o => o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.saldoAtual = this.saldoAtual + valor });
-    this.datasource.filter(o => o.fixo && o.valor < 0).map(n => n.valor).forEach(valor => this.gastosFixo = this.gastosFixo + valor);
   }
 
   private buildChartDatasource() {
@@ -90,7 +93,14 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.barGastoFixo.columns = ['Categoria', 'Total'];
 
     const fixos = this.datasource.filter(o => o.analisar && o.fixo);
-    this.barGastoFixo.datasource = this.analiseService.agruparCategoria(fixos);
+    const grupo = this.analiseService.agruparCategoria(fixos)
+
+    this.gastosFixo = 0;
+    grupo.forEach(e => {
+      this.gastosFixo = this.gastosFixo + (e[1] as number);
+    });
+
+    this.barGastoFixo.datasource = grupo;
 
     this.barGastoFixo.options = {
       title: 'Gastos Fixo',

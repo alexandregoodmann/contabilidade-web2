@@ -4,20 +4,20 @@
 
 <div class="w3-row">
     <div class="w3-col m4">
-        <table>
-            <tr>
-                <td>Saldo Atual</td>
-                <td>R$ {{saldoAtual| number: '1.2-2'}}</td>
-            </tr>
-            <tr>
-                <td>Total de Gastos</td>
-                <td>R$ {{totalGastos| number: '1.2-2'}}</td>
-            </tr>
-            <tr>
-                <td>Gastos Fixos</td>
-                <td>R$ {{gastosFixo| number: '1.2-2'}}</td>
-            </tr>
-        </table>
+        <div class="quadro-container">
+            <div class="quadro">
+                <span class="label-valor">Saldo Atual</span>
+                <span class="valor">R$ {{saldoAtual| number: '1.2-2'}}</span>
+            </div>
+            <div class="quadro">
+                <span class="label-valor">Total de gastos</span>
+                <span class="valor">R$ {{totalGastos| number: '1.2-2'}}</span>
+            </div>
+            <div class="quadro">
+                <span class="label-valor">Gastos Fixos</span>
+                <span class="valor">R$ {{gastosFixo| number: '1.2-2'}}</span>
+            </div>
+        </div>
         <div class="table-container">
             <table mat-table [dataSource]="datasource" class="mat-elevation-z8" matSort>
                 <ng-container matColumnDef="data">
@@ -59,8 +59,8 @@
                 </google-chart>
             </div>
             <div class="w3-col m4" *ngIf="barGastoFixo != undefined && barGastoFixo.columns.length > 0">
-                <google-chart #chart [type]="barGastoFixo.type" [columns]="barGastoFixo.columns" [data]="barGastoFixo.datasource"
-                    [options]="barGastoFixo.options" [height]="barGastoFixo.height">
+                <google-chart #chart [type]="barGastoFixo.type" [columns]="barGastoFixo.columns"
+                    [data]="barGastoFixo.datasource" [options]="barGastoFixo.options" [height]="barGastoFixo.height">
                 </google-chart>
             </div>
         </div>
