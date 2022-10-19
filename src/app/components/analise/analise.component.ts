@@ -25,7 +25,8 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   bar!: ChartDefinition;
   barGastoFixo!: ChartDefinition;
   line!: ChartDefinition;
-  area!: ChartDefinition;
+  chartProjecaoGastos!: ChartDefinition;
+  chartProjecaoSaldo!: ChartDefinition;
   chartDatasource!: any[];
   saldoAtual!: number;
   totalGastos!: number;
@@ -52,7 +53,8 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
         this.barChart();
         this.barGastoFixoChart();
         this.lineChart();
-        this.areaChart();
+        this.projecaoGastos();
+        this.projecaoSaldo();
 
         //calcula saldo atual
         this.saldoAtual = 0;
@@ -164,7 +166,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
       chart: {
         title: 'Projeção de categorias',
       },
-      width: 500,
+      width: 350,
       height: 250
     };
   }
@@ -179,31 +181,56 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     return total;
   }
 
-  private areaChart() {
+  private projecaoGastos() {
     let matriz: number[][] = [];
     const lancamentos = this.datasource.filter(o => o.tipo != 'CARTAO');
     const meses = [...new Set(lancamentos.map(n => n.planilha))];
     meses.forEach(mes => {
-      let linha: any[] = [mes, 0, 0, 0];
+      let linha: any[] = [mes, 0, 0];
       const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
-      //saldo
-      linha[1] = this.somar(lancamentosMes.map(n => n.valor));
       //gasto
-      linha[2] = this.somar(lancamentosMes.filter(o => o.valor < 0).map(n => n.valor));
+      linha[1] = this.somar(lancamentosMes.filter(o => o.valor < 0).map(n => n.valor));
       //fixo
-      linha[3] = this.somar(lancamentosMes.filter(o => o.valor < 0 && o.fixo == true).map(n => n.valor));
+      linha[2] = this.somar(lancamentosMes.filter(o => o.valor < 0 && o.fixo == true).map(n => n.valor));
       matriz.push(linha);
     });
 
-    this.area = new ChartDefinition();
-    this.area.type = ChartType.AreaChart;
-    this.area.columns = ['', 'Saldo', 'Gastos', 'Fixos'];
-    this.area.datasource = matriz;
-    this.area.options = {
+    this.chartProjecaoGastos = new ChartDefinition();
+    this.chartProjecaoGastos.type = ChartType.AreaChart;
+    this.chartProjecaoGastos.columns = ['', 'Gastos', 'Fixos'];
+    this.chartProjecaoGastos.datasource = matriz.reverse();
+    this.chartProjecaoGastos.options = {
       title: 'Projeção de Rendimentos',
       vAxis: { minValue: 0 },
-      width: 700,
-      height: 500,
+      width: 350,
+      height: 250,
+      legend: {
+        position: 'top'
+      }
+    };
+  }
+
+  private projecaoSaldo() {
+    let matriz: number[][] = [];
+    const lancamentos = this.datasource.filter(o => o.tipo != 'CARTAO');
+    const meses = [...new Set(lancamentos.map(n => n.planilha))];
+    meses.forEach(mes => {
+      let linha: any[] = [mes, 0];
+      const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
+      //saldo
+      linha[1] = this.somar(lancamentosMes.map(n => n.valor));
+      matriz.push(linha);
+    });
+
+    this.chartProjecaoSaldo = new ChartDefinition();
+    this.chartProjecaoSaldo.type = ChartType.AreaChart;
+    this.chartProjecaoSaldo.columns = ['', 'Saldo'];
+    this.chartProjecaoSaldo.datasource = matriz.reverse();
+    this.chartProjecaoSaldo.options = {
+      title: 'Projeção de Rendimentos',
+      vAxis: { minValue: 0 },
+      width: 350,
+      height: 250,
       legend: {
         position: 'top'
       }

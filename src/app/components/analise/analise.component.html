@@ -73,14 +73,21 @@
             </div>
         </div>
         <div class="w3-row">
-            <div class="w3-col m6">
-                <google-chart #chart [type]="line.type"  [columns]="line.columns" [data]="line.datasource"
+            <div class="w3-col m4">
+                <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
                     [options]="line.options" [height]="line.height">
                 </google-chart>
             </div>
-            <div class="w3-col m6">
-                <google-chart #chart [type]="area.type" [columns]="area.columns" [data]="area.datasource"
-                    [options]="area.options" [width]="area.width" [height]="area.height">
+            <div class="w3-col m4">
+                <google-chart #chart [type]="chartProjecaoGastos.type" [columns]="chartProjecaoGastos.columns"
+                    [data]="chartProjecaoGastos.datasource" [options]="chartProjecaoGastos.options"
+                    [width]="chartProjecaoGastos.width" [height]="chartProjecaoGastos.height">
+                </google-chart>
+            </div>
+            <div class="w3-col m4">
+                <google-chart #chart [type]="chartProjecaoSaldo.type" [columns]="chartProjecaoSaldo.columns"
+                    [data]="chartProjecaoSaldo.datasource" [options]="chartProjecaoSaldo.options"
+                    [width]="chartProjecaoSaldo.width" [height]="chartProjecaoSaldo.height">
                 </google-chart>
             </div>
         </div>
