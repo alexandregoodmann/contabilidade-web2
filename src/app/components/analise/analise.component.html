@@ -53,43 +53,34 @@
             </table>
         </div>
     </div>
-    <div class="w3-col m8">
-        <div class="w3-row">
-            <div class="w3-col m3" *ngIf="bar != undefined && bar.columns.length > 0">
-                <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource"
-                    [options]="bar.options" [height]="bar.height" (select)="onSelectCategoria($event)">
-                </google-chart>
-            </div>
-            <div class="w3-col m5" *ngIf="pie != undefined && pie.columns.length > 0">
-                <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource"
-                    [options]="pie.options" [width]="pie.width" [height]="pie.height"
-                    (select)="onSelectCategoria($event)">
-                </google-chart>
-            </div>
-            <div class="w3-col m4" *ngIf="barGastoFixo != undefined && barGastoFixo.columns.length > 0">
-                <google-chart #chart [type]="barGastoFixo.type" [columns]="barGastoFixo.columns"
-                    [data]="barGastoFixo.datasource" [options]="barGastoFixo.options" [height]="barGastoFixo.height">
-                </google-chart>
-            </div>
+    <div class="w3-col m4">
+        <div *ngIf="bar != undefined && bar.columns.length > 0">
+            <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource"
+                [options]="bar.options" [height]="bar.height" (select)="onSelectCategoria($event)">
+            </google-chart>
         </div>
-        <div class="w3-row">
-            <div class="w3-col m4">
-                <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
-                    [options]="line.options" [height]="line.height">
-                </google-chart>
-            </div>
-            <div class="w3-col m4">
-                <google-chart #chart [type]="chartProjecaoGastos.type" [columns]="chartProjecaoGastos.columns"
-                    [data]="chartProjecaoGastos.datasource" [options]="chartProjecaoGastos.options"
-                    [width]="chartProjecaoGastos.width" [height]="chartProjecaoGastos.height">
-                </google-chart>
-            </div>
-            <div class="w3-col m4">
-                <google-chart #chart [type]="chartProjecaoSaldo.type" [columns]="chartProjecaoSaldo.columns"
-                    [data]="chartProjecaoSaldo.datasource" [options]="chartProjecaoSaldo.options"
-                    [width]="chartProjecaoSaldo.width" [height]="chartProjecaoSaldo.height">
-                </google-chart>
-            </div>
+        <div *ngIf="pie != undefined && pie.columns.length > 0">
+            <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource"
+                [options]="pie.options" [width]="pie.width" [height]="pie.height" (select)="onSelectCategoria($event)">
+            </google-chart>
         </div>
+        <div *ngIf="barGastoFixo != undefined && barGastoFixo.columns.length > 0">
+            <google-chart #chart [type]="barGastoFixo.type" [columns]="barGastoFixo.columns"
+                [data]="barGastoFixo.datasource" [options]="barGastoFixo.options" [height]="barGastoFixo.height">
+            </google-chart>
+        </div>
+    </div>
+    <div class="w3-col m4">
+        <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
+            [options]="line.options" [height]="line.height">
+        </google-chart>
+        <google-chart #chart [type]="chartProjecaoGastos.type" [columns]="chartProjecaoGastos.columns"
+            [data]="chartProjecaoGastos.datasource" [options]="chartProjecaoGastos.options"
+            [width]="chartProjecaoGastos.width" [height]="chartProjecaoGastos.height">
+        </google-chart>
+        <google-chart #chart [type]="chartProjecaoSaldo.type" [columns]="chartProjecaoSaldo.columns"
+            [data]="chartProjecaoSaldo.datasource" [options]="chartProjecaoSaldo.options"
+            [width]="chartProjecaoSaldo.width" [height]="chartProjecaoSaldo.height">
+        </google-chart>
     </div>
 </div>

@@ -93,7 +93,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.bar.options = {
       title: 'Gastos por categoria',
       width: 350,
-      height: 300,
+      height: 250,
       bar: { groupWidth: "70%" },
       legend: { position: "none" },
     };
@@ -112,7 +112,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.barGastoFixo.options = {
       title: 'Gastos fixos',
       width: 350,
-      height: 300,
+      height: 250,
       bar: { groupWidth: "70%" },
       legend: { position: "none" },
     };
@@ -122,7 +122,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.pie = new ChartDefinition();
     this.pie.type = ChartType.PieChart;
     this.pie.width = 550;
-    this.pie.height = 300;
+    this.pie.height = 250;
     this.pie.columns = ['Categoria', 'Total'];
     this.pie.datasource = this.chartDatasource;
     this.pie.options = {
@@ -166,8 +166,8 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
       chart: {
         title: 'Projeção de categorias',
       },
-      width: 350,
-      height: 250
+      width: 500,
+      height: 300
     };
   }
 
@@ -200,12 +200,12 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.chartProjecaoGastos.columns = ['', 'Gastos', 'Fixos'];
     this.chartProjecaoGastos.datasource = matriz.reverse();
     this.chartProjecaoGastos.options = {
-      title: 'Projeção de Rendimentos',
+      title: 'Projeção de gastos',
       vAxis: { minValue: 0 },
-      width: 350,
-      height: 250,
+      width: 600,
+      height: 200,
       legend: {
-        position: 'top'
+        position: 'in'
       }
     };
   }
@@ -227,12 +227,12 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.chartProjecaoSaldo.columns = ['', 'Saldo'];
     this.chartProjecaoSaldo.datasource = matriz.reverse();
     this.chartProjecaoSaldo.options = {
-      title: 'Projeção de Rendimentos',
+      title: 'Projeção de saldos',
       vAxis: { minValue: 0 },
-      width: 350,
-      height: 250,
+      width: 600,
+      height: 200,
       legend: {
-        position: 'top'
+        position: 'none'
       }
     };
   }
