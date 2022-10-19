@@ -21,6 +21,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   datasource!: AnaliseDTO[];
   pie!: ChartDefinition;
   bar!: ChartDefinition;
+  barGastoFixo!: ChartDefinition;
   line!: ChartDefinition;
   area!: ChartDefinition;
   chartDatasource!: any[];
@@ -40,10 +41,11 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
       this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
         this.datasource = data as AnaliseDTO[];
         this.buildChartDatasource();
-        this.buildPieChart();
-        this.buildBarChart();
-        this.buildLineChart();
-        this.buildAreaChart();
+        this.pieChart();
+        this.barChart();
+        this.barGastoFixoChart();
+        this.lineChart();
+        this.areaChart();
         this.calculaSaldoAtual();
       });
     });
@@ -63,67 +65,60 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   }
 
   private buildChartDatasource() {
-
     this.chartDatasource = [];
-    this.totalGastos = 0;
-
     const analisar = this.datasource.filter(o => o.analisar);
-    let mapaCategorias = new Map<string, number>();
-    [...new Set(analisar.map(n => n.categoria))].forEach(categoria => {
-      let valor = 0;
-      analisar.filter(o => o.categoria == categoria).forEach(obj => {
-        valor = valor + obj.valor;
-      });
-      mapaCategorias.set(categoria, valor * (-1))
-    });
-    mapaCategorias.forEach((v, k) => {
-      this.chartDatasource.push([k, v]);
-      this.totalGastos = this.totalGastos + v;
-    });
-    const data = this.chartDatasource.sort(function (a, b) {
-      if (a[1] > b[1])
-        return -1;
-      if (a[1] < b[1])
-        return 1
-      return 0;
-    });
-    this.chartDatasource = Array.from(data);
+    this.chartDatasource = Array.from(this.analiseService.agruparCategoria(analisar));
   }
 
-  private buildPieChart() {
-    this.pie = new ChartDefinition();
-    this.pie.type = ChartType.PieChart;
-    this.pie.width = 700;
-    this.pie.height = 400;
-    this.pie.columns = ['Categoria', 'Total'];
-    this.pie.datasource = this.chartDatasource;
-    this.pie.options = {
-      title: 'Gastos por Categoria',
-      is3D: true,
-      pieHole: 0.5,
-      pieSliceText: 'none',
-      legend: {
-        position: 'labeled',
-        maxLines: 3
-      }
-    };
-  }
-
-  private buildBarChart() {
+  private barChart() {
     this.bar = new ChartDefinition();
     this.bar.type = ChartType.BarChart;
     this.bar.columns = ['Categoria', 'Total'];
     this.bar.datasource = this.chartDatasource;
     this.bar.options = {
       title: 'Gastos por Categoria',
-      width: 600,
-      height: 400,
+      width: 375,
+      height: 300,
       bar: { groupWidth: "70%" },
       legend: { position: "none" },
     };
   }
 
-  private buildLineChart() {
+  private barGastoFixoChart() {
+    this.barGastoFixo = new ChartDefinition();
+    this.barGastoFixo.type = ChartType.BarChart;
+    this.barGastoFixo.columns = ['Categoria', 'Total'];
+
+    const fixos = this.datasource.filter(o => o.analisar && o.fixo);
+    this.barGastoFixo.datasource = this.analiseService.agruparCategoria(fixos);
+
+    this.barGastoFixo.options = {
+      title: 'Gastos Fixo',
+      width: 375,
+      height: 300,
+      bar: { groupWidth: "70%" },
+      legend: { position: "none" },
+    };
+  }
+
+  private pieChart() {
+    this.pie = new ChartDefinition();
+    this.pie.type = ChartType.PieChart;
+    this.pie.width = 550;
+    this.pie.height = 300;
+    this.pie.columns = ['Categoria', 'Total'];
+    this.pie.datasource = this.chartDatasource;
+    this.pie.options = {
+      is3D: true,
+      pieSliceText: 'none',
+      legend: {
+        position: 'labeled',
+        maxLines: 1
+      }
+    };
+  }
+
+  private lineChart() {
     this.line = new ChartDefinition();
     this.line.type = ChartType.Line;
     this.line.columns = ['Day', 'Guardians of the Galaxy', 'The Avengers', 'Transformers: Age of Extinction'];
@@ -153,7 +148,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     };
   }
 
-  private buildAreaChart() {
+  private areaChart() {
     this.area = new ChartDefinition();
     this.area.type = ChartType.AreaChart;
     this.area.columns = ['Year', 'Sales', 'Expenses'];
