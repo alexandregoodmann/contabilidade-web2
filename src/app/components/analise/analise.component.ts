@@ -3,10 +3,10 @@ import { MatSort } from '@angular/material/sort';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
-import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
+import { Constants } from 'src/app/shared/Constants';
 
 @Component({
   selector: 'app-analise',
@@ -20,6 +20,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   colunas: string[] = ['data', 'banco', 'categoria', 'descricao', 'fixo', 'valor'];
   tableDatasource!: AnaliseDTO[];
   datasource!: AnaliseDTO[];
+  datasourceMes!: AnaliseDTO[];
   pie!: ChartDefinition;
   bar!: ChartDefinition;
   barGastoFixo!: ChartDefinition;
@@ -37,12 +38,13 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.planilhaService.planilhaSelecionada.subscribe(data => {
-      const planilha: Planilha = data as Planilha;
-      this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
 
-        this.datasource = data as AnaliseDTO[];
-        this.tableDatasource = data as AnaliseDTO[];
+    this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+      this.analiseService.getAnaliseAno(planilha.ano).subscribe(data => {
+
+        this.datasource = data;
+        this.datasourceMes = data.filter(o => o.mes == planilha.mes);
+        this.tableDatasource = this.datasourceMes;
 
         //constroi graficos
         this.buildChartDatasource();
@@ -54,12 +56,17 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
 
         //calcula saldo atual
         this.saldoAtual = 0;
-        this.datasource.filter(o => o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.saldoAtual = this.saldoAtual + valor });
+        this.datasourceMes.filter(o => o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.saldoAtual = this.saldoAtual + valor });
 
         //calcula total de gastos
         this.totalGastos = 0;
-        this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.totalGastos = this.totalGastos + valor })
+        this.datasourceMes.filter(o => o.valor < 0 && o.tipo != 'CARTAO').map(n => n.valor).forEach(valor => { this.totalGastos = this.totalGastos + valor })
         this.totalGastos = this.totalGastos * (-1);
+
+        //calcula gasto fixo
+        this.gastosFixo = 0;
+        this.datasourceMes.filter(o => o.valor < 0 && o.tipo != 'CARTAO' && o.fixo).map(n => n.valor).forEach(valor => { this.gastosFixo = this.gastosFixo + valor })
+        this.gastosFixo = this.gastosFixo * (-1);
       });
     });
   }
@@ -72,7 +79,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
 
   private buildChartDatasource() {
     this.chartDatasource = [];
-    const analisar = this.datasource.filter(o => o.analisar);
+    const analisar = this.datasourceMes.filter(o => o.analisar);
     this.chartDatasource = Array.from(this.analiseService.agruparCategoria(analisar));
   }
 
@@ -83,7 +90,7 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
     this.bar.datasource = this.chartDatasource;
     this.bar.options = {
       title: 'Gastos por categoria',
-      width: 375,
+      width: 350,
       height: 300,
       bar: { groupWidth: "70%" },
       legend: { position: "none" },
@@ -91,23 +98,18 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   }
 
   private barGastoFixoChart() {
+
     this.barGastoFixo = new ChartDefinition();
     this.barGastoFixo.type = ChartType.BarChart;
     this.barGastoFixo.columns = ['Categoria', 'Total'];
 
-    const fixos = this.datasource.filter(o => o.analisar && o.fixo);
+    const fixos = this.datasourceMes.filter(o => o.analisar && o.fixo);
     const grupo = this.analiseService.agruparCategoria(fixos)
 
-    this.gastosFixo = 0;
-    grupo.forEach(e => {
-      this.gastosFixo = this.gastosFixo + (e[1] as number);
-    });
-
     this.barGastoFixo.datasource = grupo;
-
     this.barGastoFixo.options = {
       title: 'Gastos fixos',
-      width: 375,
+      width: 350,
       height: 300,
       bar: { groupWidth: "70%" },
       legend: { position: "none" },
@@ -132,59 +134,86 @@ export class AnaliseComponent implements OnInit, AfterViewInit {
   }
 
   private lineChart() {
+
+    let matriz: number[][] = [];
+    const analisar = this.datasource.filter(o => o.analisar);
+    const categorias = [...new Set(analisar.map(n => n.categoria))];
+    const meses = [...new Set(analisar.map(n => n.mes))];
+
+    meses.forEach(mes => {
+      let linha: any[] = [];
+      linha.push(Constants.mesesAbreviados[mes - 1]);
+      categorias.forEach(categoria => {
+        let soma = 0;
+        analisar.filter(o => o.mes == mes && o.categoria == categoria).forEach(lancamento => {
+          soma = soma + lancamento.valor;
+        });
+        linha.push(soma * (-1));
+      });
+      matriz.push(linha);
+    });
+
     this.line = new ChartDefinition();
     this.line.type = ChartType.Line;
-    this.line.columns = ['Day', 'Guardians of the Galaxy', 'The Avengers', 'Transformers: Age of Extinction'];
-    this.line.datasource = [
-      [1, 37.8, 80.8, 41.8],
-      [2, 30.9, 69.5, 32.4],
-      [3, 25.4, 57, 25.7],
-      [4, 11.7, 18.8, 10.5],
-      [5, 11.9, 17.6, 10.4],
-      [6, 8.8, 13.6, 7.7],
-      [7, 7.6, 12.3, 9.6],
-      [8, 12.3, 29.2, 10.6],
-      [9, 16.9, 42.9, 14.8],
-      [10, 12.8, 30.9, 11.6],
-      [11, 5.3, 7.9, 4.7],
-      [12, 6.6, 8.4, 5.2],
-      [13, 4.8, 6.3, 3.6],
-      [14, 4.2, 6.2, 3.4]
-    ]
+    this.line.columns = [''].concat(categorias);
+    this.line.datasource = matriz.reverse();
     this.line.options = {
-      chart: {
-        title: 'Box Office Earnings in First Two Weeks of Opening',
-        subtitle: 'in millions of dollars (USD)'
+      legend: {
+        position: 'left'
       },
-      width: 700,
-      height: 400
+      chart: {
+        title: 'Projeção de categorias',
+      },
+      width: 500,
+      height: 250
     };
   }
 
+  private somar(valores: number[]): number {
+    let total = 0;
+    valores.forEach(v => {
+      total = total + v;
+    });
+    if (total < 0)
+      total = total * (-1);
+    return total;
+  }
+
   private areaChart() {
+    let matriz: number[][] = [];
+    const lancamentos = this.datasource.filter(o => o.tipo != 'CARTAO');
+    const meses = [...new Set(lancamentos.map(n => n.planilha))];
+    meses.forEach(mes => {
+      let linha: any[] = [mes, 0, 0, 0];
+      const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
+      //saldo
+      linha[1] = this.somar(lancamentosMes.map(n => n.valor));
+      //gasto
+      linha[2] = this.somar(lancamentosMes.filter(o => o.valor < 0).map(n => n.valor));
+      //fixo
+      linha[3] = this.somar(lancamentosMes.filter(o => o.valor < 0 && o.fixo == true).map(n => n.valor));
+      matriz.push(linha);
+    });
+
     this.area = new ChartDefinition();
     this.area.type = ChartType.AreaChart;
-    this.area.columns = ['Year', 'Sales', 'Expenses'];
-    this.area.datasource = [
-      ['2013', 1000, 400],
-      ['2014', 1170, 460],
-      ['2015', 660, 1120],
-      ['2016', 1030, 540]
-    ]
+    this.area.columns = ['', 'Saldo', 'Gastos', 'Fixos'];
+    this.area.datasource = matriz;
     this.area.options = {
-      title: 'Company Performance',
-      hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
+      title: 'Projeção de Rendimentos',
       vAxis: { minValue: 0 },
-      width: 600,
-      height: 280
-
+      width: 700,
+      height: 500,
+      legend: {
+        position: 'top'
+      }
     };
   }
 
   onSelectCategoria(e: any) {
     const i = e.selection[0].row;
     const categoria = this.bar.datasource[i][0];
-    this.tableDatasource = this.datasource;
+    this.tableDatasource = this.datasourceMes;
     this.tableDatasource = this.tableDatasource.filter(o => o.categoria == categoria);
   }
 

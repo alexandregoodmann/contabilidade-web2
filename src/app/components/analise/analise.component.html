@@ -3,7 +3,7 @@
 <app-select-planilha></app-select-planilha>
 
 <div class="w3-row">
-    <div class="w3-col m4">
+    <div class="w3-col m4" style="padding-right: 20px;">
         <div class="quadro-container">
             <div class="quadro">
                 <span class="label-valor">Saldo Atual</span>
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="table-container">
-            <button mat-button (click)="tableDatasource = datasource">Limpar Filtro</button>
+            <button mat-button (click)="tableDatasource = datasourceMes">Limpar Filtro</button>
             <table mat-table [dataSource]="tableDatasource" class="mat-elevation-z8" matSort>
                 <ng-container matColumnDef="data">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
@@ -53,7 +53,7 @@
             </table>
         </div>
     </div>
-    <div class="w3-col m8 table-container">
+    <div class="w3-col m8">
         <div class="w3-row">
             <div class="w3-col m3" *ngIf="bar != undefined && bar.columns.length > 0">
                 <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource"
@@ -73,19 +73,16 @@
             </div>
         </div>
         <div class="w3-row">
-            <!--
-
-                <div class="w3-col m6">
-                    <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
+            <div class="w3-col m6">
+                <google-chart #chart [type]="line.type"  [columns]="line.columns" [data]="line.datasource"
                     [options]="line.options" [height]="line.height">
                 </google-chart>
             </div>
-            <div class="w3-col m6 table-container">
+            <div class="w3-col m6">
                 <google-chart #chart [type]="area.type" [columns]="area.columns" [data]="area.datasource"
                     [options]="area.options" [width]="area.width" [height]="area.height">
                 </google-chart>
             </div>
-        -->
         </div>
     </div>
 </div>

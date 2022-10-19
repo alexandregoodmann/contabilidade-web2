@@ -13,4 +13,19 @@ export class Constants {
         'Novembro',
         'Dezembro'
     ];
+
+    public static mesesAbreviados: string[] = [
+        'JAN',
+        'FEV',
+        'MAR',
+        'ABR',
+        'MAI',
+        'JUN',
+        'JUL',
+        'AGO',
+        'SET',
+        'OUT',
+        'NOV',
+        'DEZ',
+    ];
 }

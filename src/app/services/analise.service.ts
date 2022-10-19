@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AnaliseDTO } from '../models/analiseDTO';
 
@@ -10,12 +11,12 @@ export class AnaliseService {
 
   constructor(private http: HttpClient) { }
 
-  getAnaliseAno(ano: number) {
-    return this.http.get(`${environment.url}/analise/${ano}`);
+  getAnaliseAno(ano: number): Observable<AnaliseDTO[]> {
+    return this.http.get<AnaliseDTO[]>(`${environment.url}/analise/${ano}`);
   }
 
-  getAnaliseAnoMes(ano: number, mes: number) {
-    return this.http.get(`${environment.url}/analise/${ano}/${mes}`);
+  getAnaliseAnoMes(ano: number, mes: number): Observable<AnaliseDTO[]> {
+    return this.http.get<AnaliseDTO[]>(`${environment.url}/analise/${ano}/${mes}`);
   }
 
   agruparCategoria(lancamentos: AnaliseDTO[]): (string | number)[][] {
