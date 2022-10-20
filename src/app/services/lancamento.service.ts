@@ -29,6 +29,13 @@ export class LancamentoService extends BasicCrudService<Lancamento> {
     );
   }
 
+  fixo(lancamento_ids: number[]) {
+    let dto = { list: lancamento_ids };
+    return this.http.post(`${environment.url}/lancamentos/fixo`, dto, httpOptions).pipe(
+      catchError(this.handleError('fixo'))
+    );
+  }
+
   categorizar(lancamento_ids: number[], categoria: Categoria) {
     let dto = { list: lancamento_ids, idCategoria: categoria.id };
     return this.http.post(`${environment.url}/lancamentos/categorizar`, dto, httpOptions).pipe(

@@ -14,7 +14,7 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class ExtratoComponent implements OnInit {
 
-  displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'valor', 'concluido'];
+  displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'fixo', 'valor', 'concluido'];
   extrato!: Extrato[];
   order: number = 1;
   saldoPrevisto: number = 0;
@@ -97,6 +97,13 @@ export class ExtratoComponent implements OnInit {
 
   concluirMarcados() {
     this.lancamentoService.concluir(this.marcados.map(n => n.id)).subscribe(() => { }, () => { }, () => {
+      this.marcados = [];
+      this.findExtrato();
+    });
+  }
+
+  marcarFixo() {
+    this.lancamentoService.fixo(this.marcados.map(n => n.id)).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });

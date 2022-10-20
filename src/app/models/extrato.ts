@@ -18,4 +18,5 @@ export class LancamentoDTO {
     concluido!: boolean;
     analisar!: boolean;
     marcado!: boolean;
+    fixo!: boolean;
 }
