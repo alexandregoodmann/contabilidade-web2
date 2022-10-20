@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Extrato } from '../models/extrato';
 import { Planilha } from '../models/planilha';
 import { PlanilhasAno } from '../models/planilhasano';
 import { BasicCrudService } from './basic-crud.service';
@@ -33,8 +34,8 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     return this.http.get<Array<PlanilhasAno>>(`${environment.url}/planilhas/mapa`);
   }
 
-  getExtrato(idPlanilha: number) {
-    return this.http.get(`${environment.url}/planilhas/${idPlanilha}/extrato`);
+  getExtrato(idPlanilha: number): Observable<Extrato[]> {
+    return this.http.get<Extrato[]>(`${environment.url}/planilhas/${idPlanilha}/extrato`);
   }
 
   initPlanilha(planilhas: PlanilhasAno[]): void {
