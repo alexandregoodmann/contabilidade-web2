@@ -104,28 +104,28 @@ export class ExtratoComponent implements OnInit {
   }
 
   concluirMarcados() {
-    this.lancamentoService.concluir(this.marcados.map(n => n.id)).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.concluir(this.marcados.map(n => n.idLancamento)).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });
   }
 
   marcarFixo() {
-    this.lancamentoService.fixo(this.marcados.map(n => n.id)).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.fixo(this.marcados.map(n => n.idLancamento)).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });
   }
 
   deleteAll() {
-    this.lancamentoService.deleteAll(this.marcados.map(n => n.id)).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.deleteAll(this.marcados.map(n => n.idLancamento)).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });
   }
 
   categorizar(categoria: Categoria) {
-    this.lancamentoService.categorizar(this.marcados.map(n => n.id), categoria).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.categorizar(this.marcados.map(n => n.idLancamento), categoria).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });

@@ -27,6 +27,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -34,6 +35,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
+import { AnaliseAnualComponent } from './components/analise-anual/analise-anual.component';
+import { AnaliseMensalComponent } from './components/analise-mensal/analise-mensal.component';
 import { AnaliseComponent } from './components/analise/analise.component';
 import { CargaComponent } from './components/carga/carga.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
@@ -43,12 +46,9 @@ import { LancamentoComponent } from './components/lancamento/lancamento.componen
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { InterceptorService } from './services/interceptor.service';
-import { ChartBarComponent } from './shared/chart-bar/chart-bar.component';
-import { ChartPieComponent } from './shared/chart-pie/chart-pie.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { ChartLineComponent } from './shared/chart-line/chart-line.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -102,10 +102,9 @@ const routes: Routes = [
     LancamentoComponent,
     ExtratoComponent,
     CargaComponent,
-    ChartPieComponent,
-    ChartBarComponent,
     AnaliseComponent,
-    ChartLineComponent
+    AnaliseMensalComponent,
+    AnaliseAnualComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
@@ -124,7 +123,7 @@ const routes: Routes = [
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    //MatNativeDateModule,
+    MatTabsModule,
     MatButtonModule,
     MatIconModule,
     MatListModule,

@@ -10,7 +10,7 @@ export class Extrato extends Conta {
 }
 
 export class LancamentoDTO {
-    id!: number;
+    idLancamento!: number;
     categoria!: string;
     data!: Date;
     descricao!: string;

@@ -1,0 +1,36 @@
+.table-container {
+    position: relative;
+    min-height: 200px;
+    max-height: 700px;
+    overflow: auto;
+
+    table {
+        width: 100%;
+    }
+}
+
+.quadro-container {
+    width: 100%;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.quadro {
+    height: 80px;
+    display: inline-grid;
+    padding: 20px;
+    width: 29%;
+    margin-right: 20px;
+    border: solid 0.5px #e5e5e5;
+}
+
+.label-valor {
+    font-size: 13px;
+    color: rgb(95, 95, 95);
+    text-align: right;
+}
+
+.valor {
+    text-align: right;
+    font-size: 20px;
+}

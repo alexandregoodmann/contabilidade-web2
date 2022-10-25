@@ -1,87 +1,15 @@
 <app-top-bar titulo="Análise"></app-top-bar>
 
-<app-select-planilha></app-select-planilha>
-
-<div class="w3-row">
-    <div class="w3-col m4" style="padding-right: 20px;">
-        <div class="quadro-container">
-            <div class="quadro">
-                <span class="label-valor">Saldo Atual</span>
-                <span class="valor">R$ {{saldoAtual| number: '1.2-2'}}</span>
-            </div>
-            <div class="quadro">
-                <span class="label-valor">Total de gastos</span>
-                <span class="valor">R$ {{totalGastos| number: '1.2-2'}}</span>
-            </div>
-            <div class="quadro">
-                <span class="label-valor">Gastos Fixos</span>
-                <span class="valor">R$ {{gastosFixo| number: '1.2-2'}}</span>
-            </div>
+<mat-tab-group>
+    <mat-tab label="Mensal">
+        <app-select-planilha></app-select-planilha>
+        <div *ngIf="datasourceMes != undefined && planilha != undefined">
+            <app-analise-mensal [datasource]="datasourceMes"></app-analise-mensal>
         </div>
-        <div class="table-container">
-            <button mat-button (click)="tableDatasource = datasourceMes">Limpar Filtro</button>
-            <table mat-table [dataSource]="tableDatasource" class="mat-elevation-z8" matSort>
-                <ng-container matColumnDef="data">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
-                    <td mat-cell *matCellDef="let item">{{item.data | date:'dd/MM'}} </td>
-                </ng-container>
-                <ng-container matColumnDef="banco">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Banco</th>
-                    <td mat-cell *matCellDef="let item"> {{item.banco}} </td>
-                </ng-container>
-                <ng-container matColumnDef="categoria">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
-                    <td mat-cell *matCellDef="let item"> {{item.categoria}} </td>
-                </ng-container>
-                <ng-container matColumnDef="descricao">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
-                    <td mat-cell *matCellDef="let item"> {{item.descricao}} </td>
-                </ng-container>
-                <ng-container matColumnDef="fixo">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Fixo</th>
-                    <td mat-cell *matCellDef="let item">
-                        <span *ngIf="item.fixo">Sim</span>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="valor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
-                    <td mat-cell *matCellDef="let item" style="text-align: right;"
-                        [ngStyle]="{'color':item.valor < 0 ? 'red' : 'black' }"> {{item.valor | number: '1.2-2'}} </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="colunas"></tr>
-                <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
-            </table>
+    </mat-tab>
+    <mat-tab label="Anual">
+        <div *ngIf="datasourceAno != undefined && planilha != undefined">
+            <app-analise-anual [datasource]="datasourceAno"></app-analise-anual>
         </div>
-    </div>
-    <div class="w3-col m4">
-        <div *ngIf="bar != undefined && bar.columns.length > 0">
-            <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource"
-                [options]="bar.options" [height]="bar.height" (select)="onSelectCategoria($event)">
-            </google-chart>
-        </div>
-        <div *ngIf="pie != undefined && pie.columns.length > 0">
-            <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource"
-                [options]="pie.options" [width]="pie.width" [height]="pie.height" (select)="onSelectCategoria($event)">
-            </google-chart>
-        </div>
-        <div *ngIf="barGastoFixo != undefined && barGastoFixo.columns.length > 0">
-            <google-chart #chart [type]="barGastoFixo.type" [columns]="barGastoFixo.columns"
-                [data]="barGastoFixo.datasource" [options]="barGastoFixo.options" [height]="barGastoFixo.height"
-                (select)="onSelectCategoria($event)">
-            </google-chart>
-        </div>
-    </div>
-    <div class="w3-col m4">
-        <google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource"
-            [options]="line.options" [height]="line.height">
-        </google-chart>
-        <google-chart #chart [type]="chartProjecaoGastos.type" [columns]="chartProjecaoGastos.columns"
-            [data]="chartProjecaoGastos.datasource" [options]="chartProjecaoGastos.options"
-            [width]="chartProjecaoGastos.width" [height]="chartProjecaoGastos.height">
-        </google-chart>
-        <google-chart #chart [type]="chartProjecaoSaldo.type" [columns]="chartProjecaoSaldo.columns"
-            [data]="chartProjecaoSaldo.datasource" [options]="chartProjecaoSaldo.options"
-            [width]="chartProjecaoSaldo.width" [height]="chartProjecaoSaldo.height">
-        </google-chart>
-    </div>
-</div>
+    </mat-tab>
+</mat-tab-group>
