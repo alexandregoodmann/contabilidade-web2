@@ -1,3 +1,5 @@
+<app-top-bar titulo="Análise Mensal"></app-top-bar>
+<app-select-planilha></app-select-planilha>
 <div class="w3-row">
     <div class="w3-col m5" style="padding-right: 20px;">
         <div class="table-container">
@@ -65,24 +67,15 @@
             </div>
         </div>
         <div>
-            <!--
-                <div *ngIf="bar != undefined && bar.columns.length > 0">
-                    <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource"
-                        [options]="bar.options" [height]="bar.height" (select)="onSelectCategoria($event)">
-                    </google-chart>
-                </div>
-
-                <div *ngIf="barGastoFixo != undefined && barGastoFixo.columns.length > 0">
-                    <google-chart #chart [type]="barGastoFixo.type" [columns]="barGastoFixo.columns"
-                        [data]="barGastoFixo.datasource" [options]="barGastoFixo.options" [height]="barGastoFixo.height"
-                        (select)="onSelectCategoria($event)">
-                    </google-chart>
-                </div>
-            -->
             <div *ngIf="pie != undefined && pie.columns.length > 0">
                 <google-chart #chart [type]="pie.type" [columns]="pie.columns" [data]="pie.datasource"
                     [options]="pie.options" [width]="pie.width" [height]="pie.height"
                     (select)="onSelectCategoria($event)">
+                </google-chart>
+            </div>
+            <div *ngIf="bar != undefined && bar.columns.length > 0">
+                <google-chart #chart [type]="bar.type" [columns]="bar.columns" [data]="bar.datasource"
+                    [options]="bar.options" [height]="bar.height" (select)="onSelectCategoria($event)">
                 </google-chart>
             </div>
         </div>

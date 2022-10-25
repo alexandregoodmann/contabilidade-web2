@@ -37,7 +37,6 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
 import { AnaliseAnualComponent } from './components/analise-anual/analise-anual.component';
 import { AnaliseMensalComponent } from './components/analise-mensal/analise-mensal.component';
-import { AnaliseComponent } from './components/analise/analise.component';
 import { CargaComponent } from './components/carga/carga.component';
 import { CategoriaComponent } from './components/categoria/categoria.component';
 import { ContaComponent } from './components/conta/conta.component';
@@ -62,8 +61,12 @@ const routes: Routes = [
     component: ExtratoComponent
   },
   {
-    path: 'analise',
-    component: AnaliseComponent
+    path: 'analisemensal',
+    component: AnaliseMensalComponent
+  },
+  {
+    path: 'analiseanual',
+    component: AnaliseAnualComponent
   },
   {
     path: 'lancamento',
@@ -102,7 +105,6 @@ const routes: Routes = [
     LancamentoComponent,
     ExtratoComponent,
     CargaComponent,
-    AnaliseComponent,
     AnaliseMensalComponent,
     AnaliseAnualComponent
   ],
