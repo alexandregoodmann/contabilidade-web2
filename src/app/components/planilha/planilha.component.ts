@@ -12,7 +12,7 @@ import { Constants } from 'src/app/shared/Constants';
 })
 export class PlanilhaComponent implements OnInit {
 
-  displayedColumns: string[] = ['ano', 'descricao'];
+  displayedColumns: string[] = ['ano', 'descricao', 'duplicar', 'delete'];
   group!: FormGroup;
   dataSource!: Planilha[];
   meses = Constants.listaMeses;
@@ -48,14 +48,14 @@ export class PlanilhaComponent implements OnInit {
   }
 
   delete(id: number) {
-    this.planilhaService.delete(id).subscribe({
-      next: (v) => console.log(v),
-      error: (e) => console.error(e),
-      complete: () => console.info('complete')
-    });
+    this.planilhaService.delete(id).subscribe(() => { this.findAll(); });
   }
 
   edit(obj: Planilha) {
     this.group.patchValue(obj);
+  }
+
+  duplicar(id: number) {
+    this.planilhaService.duplicarPlanilha(id).subscribe(() => { this.findAll(); });
   }
 }

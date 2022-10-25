@@ -38,6 +38,10 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     return this.http.get<Extrato[]>(`${environment.url}/planilhas/${idPlanilha}/extrato`);
   }
 
+  duplicarPlanilha(idPlanilha: number): Observable<any> {
+    return this.http.post(`${environment.url}/planilhas/${idPlanilha}/duplicar`, {});
+  }
+
   initPlanilha(planilhas: PlanilhasAno[]): void {
     let retorno!: Planilha;
     let hoje = new Date();
