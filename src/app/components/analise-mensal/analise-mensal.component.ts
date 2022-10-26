@@ -54,6 +54,8 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
 
         //calcula total de gastos
         this.totalGastos = 0;
+        console.log(this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO'));
+        
         this.totalGastos = this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO').map(n => n.valor).reduce((a, b) => { return a + b }) * (-1);
 
         //calcula gasto fixo
@@ -74,7 +76,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
 
   private barChart() {
     this.bar = new ChartDefinition();
-    this.bar.type = ChartType.BarChart;
+    this.bar.type = ChartType.ColumnChart;
 
     const totais = Array.from(this.analiseService.agruparCategoria(this.datasource.filter(o => o.analisar)));
     const fixos = Array.from(this.analiseService.agruparCategoria(this.datasource.filter(o => o.fixo && o.valor < 0)));
@@ -90,9 +92,9 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     });
 
     this.bar.options = {
-      width: 700,
-      height: 400,
-      bar: { groupWidth: "85%" },
+      width: 800,
+      height: 300,
+      bar: { groupWidth: "60%" },
       legend: { position: "top" },
     };
   }
@@ -101,7 +103,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     this.pie = new ChartDefinition();
     this.pie.type = ChartType.PieChart;
     this.pie.width = 700;
-    this.pie.height = 300;
+    this.pie.height = 350;
     this.pie.columns = ['Categoria', 'Total'];
 
     this.pie.datasource = Array.from(this.analiseService.agruparCategoria(this.datasource.filter(o => o.analisar)));
