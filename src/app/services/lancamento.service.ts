@@ -37,6 +37,9 @@ export class LancamentoService extends BasicCrudService<Lancamento> {
   }
 
   categorizar(lancamento_ids: number[], categoria: Categoria) {
+    if (lancamento_ids.length == 0 || categoria == undefined) {
+      throw ('ids de lancamentos não informados ou categoria faltando')
+    }
     let dto = { list: lancamento_ids, idCategoria: categoria.id };
     return this.http.post(`${environment.url}/lancamentos/categorizar`, dto, httpOptions).pipe(
       catchError(this.handleError('categorizar'))

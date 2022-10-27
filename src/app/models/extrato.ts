@@ -1,22 +1,16 @@
-import { Conta } from "./conta";
+import { CargaEnum, Conta, TipoContaEnum } from "./conta";
+import { LancamentoDTO } from "./lancamentoDTO";
 
-export class Extrato extends Conta {
-    expanded!: boolean;
-    marcado!: boolean;
-    saldoPrevisto!: number;
-    saldoEfetivado!: number;
-    categoria!: string;
-    lancamentos!: LancamentoDTO[];
-}
-
-export class LancamentoDTO {
-    idLancamento!: number;
-    categoria!: string;
-    data!: Date;
-    descricao!: string;
-    valor!: number;
-    concluido!: boolean;
-    analisar!: boolean;
-    marcado!: boolean;
-    fixo!: boolean;
+export interface ExtratoDTO {
+    id: number;
+    banco: string;
+    descricao: string;
+    tipo: TipoContaEnum;
+    carga: CargaEnum;
+    expanded: boolean;
+    marcado: boolean;
+    saldoPrevisto: number;
+    saldoEfetivado: number;
+    categoria: string;
+    lancamentos: LancamentoDTO[];
 }

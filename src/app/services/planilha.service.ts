@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Extrato } from '../models/extrato';
+import { ExtratoDTO } from '../models/extrato';
 import { Planilha } from '../models/planilha';
 import { PlanilhasAno } from '../models/planilhasano';
 import { BasicCrudService } from './basic-crud.service';
@@ -34,8 +34,8 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     return this.http.get<Array<PlanilhasAno>>(`${environment.url}/planilhas/mapa`);
   }
 
-  getExtrato(idPlanilha: number): Observable<Extrato[]> {
-    return this.http.get<Extrato[]>(`${environment.url}/planilhas/${idPlanilha}/extrato`);
+  getExtrato(idPlanilha: number): Observable<ExtratoDTO[]> {
+    return this.http.get<ExtratoDTO[]>(`${environment.url}/planilhas/${idPlanilha}/extrato`);
   }
 
   duplicarPlanilha(idPlanilha: number): Observable<any> {

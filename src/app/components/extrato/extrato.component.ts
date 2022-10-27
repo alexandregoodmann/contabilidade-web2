@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Categoria } from 'src/app/models/categoria';
-import { Extrato, LancamentoDTO } from 'src/app/models/extrato';
+import { ExtratoDTO } from 'src/app/models/extrato';
+import { LancamentoDTO } from 'src/app/models/lancamentoDTO';
 import { Planilha } from 'src/app/models/planilha';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
@@ -15,12 +16,12 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 export class ExtratoComponent implements OnInit {
 
   displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'fixo', 'valor', 'concluido'];
-  extrato!: Extrato[];
+  extrato!: ExtratoDTO[];
   order: number = 1;
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
-  marcados: LancamentoDTO[] = [];
+  marcados: number[] = [];
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
 
@@ -49,7 +50,7 @@ export class ExtratoComponent implements OnInit {
             l.fixo = false;
         })
       });
-      
+
       this.saldoPrevisto = 0;
       this.saldoAtual = 0;
       this.extrato.forEach(conta => {
@@ -85,10 +86,10 @@ export class ExtratoComponent implements OnInit {
   marcar(event: any, item: LancamentoDTO) {
     if (event.checked) {
       item.marcado = true;
-      this.marcados.push(item);
+      this.marcados.push(item.id);
     } else {
       item.marcado = false;
-      let i = this.marcados.indexOf(item);
+      let i = this.marcados.indexOf(item.id);
       this.marcados.splice(i, 1);
     }
   }
@@ -97,35 +98,35 @@ export class ExtratoComponent implements OnInit {
     this.marcados = [];
     if (event.checked) {
       lancamentos.forEach(l => { l.marcado = true });
-      this.marcados = lancamentos;
+      this.marcados = lancamentos.map(n => n.id);
     } else {
       lancamentos.forEach(l => { l.marcado = false });
     }
   }
 
   concluirMarcados() {
-    this.lancamentoService.concluir(this.marcados.map(n => n.idLancamento)).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.concluir(this.marcados).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });
   }
 
   marcarFixo() {
-    this.lancamentoService.fixo(this.marcados.map(n => n.idLancamento)).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.fixo(this.marcados).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });
   }
 
   deleteAll() {
-    this.lancamentoService.deleteAll(this.marcados.map(n => n.idLancamento)).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.deleteAll(this.marcados).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });
   }
 
   categorizar(categoria: Categoria) {
-    this.lancamentoService.categorizar(this.marcados.map(n => n.idLancamento), categoria).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.categorizar(this.marcados, categoria).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });
@@ -135,7 +136,7 @@ export class ExtratoComponent implements OnInit {
     return this.expandidos.get(id);
   }
 
-  expand(conta: Extrato) {
+  expand(conta: ExtratoDTO) {
     if (this.expandidos.has(conta.id)) {
       let e = this.expandidos.get(conta.id);
       this.expandidos.set(conta.id, !e);

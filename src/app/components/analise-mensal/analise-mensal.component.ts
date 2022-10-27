@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
-import { LancamentoDTO } from 'src/app/models/extrato';
+import { LancamentoDTO } from 'src/app/models/lancamentoDTO';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -55,7 +55,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
         //calcula total de gastos
         this.totalGastos = 0;
         console.log(this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO'));
-        
+
         this.totalGastos = this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO').map(n => n.valor).reduce((a, b) => { return a + b }) * (-1);
 
         //calcula gasto fixo
@@ -126,7 +126,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
   }
 
   editar(row: LancamentoDTO) {
-    this.router.navigate(['/lancamento'], { queryParams: { idLancamento: row.idLancamento } });
+    this.router.navigate(['/lancamento'], { queryParams: { idLancamento: row.id } });
   }
 
 }
