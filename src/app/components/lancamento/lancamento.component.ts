@@ -25,6 +25,7 @@ export class LancamentoComponent implements OnInit {
   categorias!: Array<Categoria>;
   lancamento!: Lancamento;
   planilhaSelecionada!: Planilha;
+  backto!: string | null;
 
   constructor(
     private fb: FormBuilder,
@@ -64,7 +65,10 @@ export class LancamentoComponent implements OnInit {
     });
 
     this.activatedRoute.queryParamMap.subscribe(param => {
+
       let idLancamento: number = param.get('idLancamento') as unknown as number;
+      this.backto = param.get('backto');
+
       if (idLancamento != undefined) {
         this.lancamentoService.findById(idLancamento).subscribe(lancamento => {
           this.lancamento = lancamento as Lancamento;
@@ -98,7 +102,8 @@ export class LancamentoComponent implements OnInit {
       this.lancamento.fixo = model.fixo;
       this.lancamento.descricao = model.descricao;
       this.lancamentoService.update(this.lancamento).subscribe(() => { }, () => { }, () => {
-        this.router.navigate(['/extrato']);
+        //this.router.navigate(['/extrato']);
+        this.router.navigate([this.backto]);
       });
     } else { //new
       this.lancamentoService.create(model).subscribe(() => { }, () => { }, () => { });

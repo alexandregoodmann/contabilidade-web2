@@ -51,18 +51,30 @@
             </table>
         </div>
     </div>
-    <div class="w3-col m1">
+    <div class="w3-col m1" *ngIf="datasource != undefined">
         <div class="quadro">
-            <span class="label-valor">Saldo Atual</span>
-            <span class="valor">R$ {{saldoAtual| number: '1.2-2'}}</span>
+            <span class="label-valor">Total entradas</span>
+            <span class="valor">R$ {{resumo.entrada| number: '1.2-2'}}</span>
         </div>
         <div class="quadro">
-            <span class="label-valor">Total de gastos</span>
-            <span class="valor">R$ {{totalGastos| number: '1.2-2'}}</span>
+            <span class="label-valor">Total saídas</span>
+            <span class="valor">R$ {{resumo.saida| number: '1.2-2'}}</span>
         </div>
         <div class="quadro">
-            <span class="label-valor">Gastos Fixos</span>
-            <span class="valor">R$ {{gastosFixo| number: '1.2-2'}}</span>
+            <span class="label-valor">Saldo</span>
+            <span class="valor">R$ {{resumo.saldo| number: '1.2-2'}}</span>
+        </div>
+        <div class="quadro">
+            <span class="label-valor">Entradas fixas</span>
+            <span class="valor">R$ {{resumo.entradaFixa| number: '1.2-2'}}</span>
+        </div>
+        <div class="quadro">
+            <span class="label-valor">Saídas fixas</span>
+            <span class="valor">R$ {{resumo.saidaFixa| number: '1.2-2'}}</span>
+        </div>
+        <div class="quadro">
+            <span class="label-valor">Saídas NÃO fixas</span>
+            <span class="valor">R$ {{resumo.saidaNaoFixa| number: '1.2-2'}}</span>
         </div>
     </div>
     <div class="w3-col m6">

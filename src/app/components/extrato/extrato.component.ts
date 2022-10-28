@@ -63,7 +63,7 @@ export class ExtratoComponent implements OnInit {
   }
 
   editar(idLancamento: number) {
-    this.router.navigate(['/lancamento'], { queryParams: { idLancamento: idLancamento } });
+    this.router.navigate(['/lancamento'], { queryParams: { backto: '/extrato', idLancamento: idLancamento } });
   }
 
   sortBy(indexConta: number, lancamentos: LancamentoDTO[], coluna: string) {

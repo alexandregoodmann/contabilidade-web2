@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
-import { LancamentoDTO } from 'src/app/models/lancamentoDTO';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -24,9 +23,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
   pie!: ChartDefinition;
   bar!: ChartDefinition;
   barGastoFixo!: ChartDefinition;
-  saldoAtual!: number;
-  totalGastos!: number;
-  gastosFixo!: number;
+  resumo!: ResumoAnalise;
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -48,23 +45,9 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
         this.pieChart();
         this.barChart();
 
-        //calcula saldo atual
-        this.saldoAtual = 0;
-        this.saldoAtual = this.datasource.filter(o => o.tipo != 'CARTAO').map(n => n.valor).reduce((a, b) => { return a + b });
-
-        //calcula total de gastos
-        this.totalGastos = 0;
-        console.log(this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO'));
-
-        this.totalGastos = this.datasource.filter(o => o.valor < 0 && o.tipo != 'CARTAO').map(n => n.valor).reduce((a, b) => { return a + b }) * (-1);
-
-        //calcula gasto fixo
-        this.gastosFixo = 0;
-        this.gastosFixo = this.datasource.filter(o => o.fixo && o.valor < 0).map(n => n.valor).reduce((a, b) => { return a + b }) * (-1);
-
+        this.calculaResumo();
       });
     });
-
 
   }
 
@@ -125,8 +108,29 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     this.tableDatasource = this.tableDatasource.filter(o => o.categoria == categoria);
   }
 
-  editar(row: LancamentoDTO) {
-    this.router.navigate(['/lancamento'], { queryParams: { idLancamento: row.id } });
+  editar(row: AnaliseDTO) {
+    this.router.navigate(['/lancamento'], { queryParams: { backto: '/analisemensal', idLancamento: row.idLancamento } });
   }
 
+  calculaResumo() {
+    this.resumo = new ResumoAnalise();
+    this.datasource.forEach(item => {
+      this.resumo.entrada = (item.valor > 0) ? this.resumo.entrada + item.valor : this.resumo.entrada;
+      this.resumo.saida = (item.valor < 0) ? this.resumo.saida + item.valor : this.resumo.saida;
+      this.resumo.entradaFixa = (item.fixo && item.valor > 0) ? this.resumo.entradaFixa + item.valor : this.resumo.entradaFixa;
+      this.resumo.saidaFixa = (item.fixo && item.valor < 0) ? this.resumo.saidaFixa + item.valor : this.resumo.saidaFixa;
+    });
+    this.resumo.saldo = this.resumo.entrada + this.resumo.saida;
+    this.resumo.saidaNaoFixa = this.resumo.saida - this.resumo.saidaFixa;
+  }
+
+}
+
+export class ResumoAnalise {
+  entrada: number = 0;
+  saida: number = 0;
+  saldo: number = 0;
+  entradaFixa: number = 0;
+  saidaFixa: number = 0;
+  saidaNaoFixa: number = 0;
 }
