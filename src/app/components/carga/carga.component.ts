@@ -36,7 +36,7 @@ export class CargaComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
 
     this.contaService.findAll().subscribe(data => {
-      //this.contas = (data as Conta[]).filter(o => o.carga != null);
+      this.contas = data.filter(o => o.banco.carga);
     });
 
     this.group = this.fb.group({
