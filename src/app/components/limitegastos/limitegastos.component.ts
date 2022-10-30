@@ -18,6 +18,7 @@ export class LimitegastosComponent implements OnInit {
   categorias!: Categoria[];
   planilha!: Planilha;
   datasource!: LimiteGastos[];
+  displayedColumns: string[] = ['ano', 'mes', 'categoria', 'analisar', 'limite'];
 
   constructor(
     private fb: FormBuilder,
