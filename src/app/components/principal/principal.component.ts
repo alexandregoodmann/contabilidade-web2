@@ -22,6 +22,7 @@ export class PrincipalComponent implements OnInit {
   menu: Menu[] = [
     { href: '/#/planilha', icon: 'tab', label: 'Planilha' },
     { href: '/#/categoria', icon: 'dashboard_customize', label: 'Categoria' },
+    { href: '/#/limitegastos', icon: 'dashboard_customize', label: 'Limite de Gastos' },
     { href: '/#/conta', icon: 'credit_card', label: 'Conta' },
     { href: '/#/lancamento', icon: 'add_card', label: 'Lançamento' },
     { href: '/#/extrato', icon: 'account_balance', label: 'Extrato' },

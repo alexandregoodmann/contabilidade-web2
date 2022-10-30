@@ -1,0 +1,26 @@
+<app-top-bar titulo="Categoria"></app-top-bar>
+
+<app-select-planilha></app-select-planilha>
+
+<form class="form" #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
+
+    <mat-form-field appearance="fill">
+        <mat-label>Categoria</mat-label>
+        <mat-select formControlName="categoria">
+            <mat-option *ngFor="let item of categorias" [value]="item">{{item.descricao}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Limite</mat-label>
+        <input currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' , align: 'left'}" matInput
+            formControlName="limite" type="tel">
+    </mat-form-field>
+
+    <div class="w3-display-container" style="height: 40px;">
+        <div class="w3-display-left">
+            <button mat-raised-button color="primary" type="submit" [disabled]="group.invalid">Salvar</button>
+        </div>
+    </div>
+
+</form>

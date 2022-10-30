@@ -42,6 +42,7 @@ import { CategoriaComponent } from './components/categoria/categoria.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
+import { LimitegastosComponent } from './components/limitegastos/limitegastos.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { InterceptorService } from './services/interceptor.service';
@@ -81,6 +82,10 @@ const routes: Routes = [
     component: CategoriaComponent
   },
   {
+    path: 'limitegastos',
+    component: LimitegastosComponent
+  },
+  {
     path: 'planilha',
     component: PlanilhaComponent
   },
@@ -106,7 +111,8 @@ const routes: Routes = [
     ExtratoComponent,
     CargaComponent,
     AnaliseMensalComponent,
-    AnaliseAnualComponent
+    AnaliseAnualComponent,
+    LimitegastosComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
