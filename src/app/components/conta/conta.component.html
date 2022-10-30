@@ -2,35 +2,24 @@
 
 <form class="form" #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
 
-    <mat-form-field appearance="fill">
-        <mat-label>Banco</mat-label>
-        <input matInput type="text" formControlName="banco">
-        <mat-error>Informe o banco</mat-error>
-    </mat-form-field>
+    <div style="margin-bottom: 10px;">
+        <mat-form-field appearance="fill">
+            <mat-label>Selecione o Banco</mat-label>
+            <input type="text" matInput formControlName="banco" [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let banco of bancoFiltro" [value]="banco">
+                    {{banco}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-hint *ngIf="carga" align="start"><strong>Este banco possui carga de arquivo</strong> </mat-hint>
+        </mat-form-field>
+    </div>
 
     <mat-form-field appearance="fill">
         <mat-label>Conta</mat-label>
         <input matInput type="text" formControlName="descricao">
         <mat-error>Informe a conta</mat-error>
     </mat-form-field>
-
-    <div class="chips-container">
-        <label class="mini-label" style="margin-left: 10px;">Tipo de conta</label>
-        <mat-chip-list #chipList selectable formControlName="tipo">
-            <mat-chip #c="matChip" (click)="setTipo(c)" *ngFor="let tipo of tipos" [value]="tipo.tipo">
-                {{tipo.descricao}}
-            </mat-chip>
-        </mat-chip-list>
-    </div>
-
-    <div class="chips-container">
-        <label class="mini-label" style="margin-left: 10px;">Possui carga de arquivo?</label>
-        <mat-chip-list #chipList selectable formControlName="carga">
-            <mat-chip #c="matChip" (click)="setCarga(c)" *ngFor="let carga of cargas" [value]="carga.arquivo">
-                {{carga.descricao}}
-            </mat-chip>
-        </mat-chip-list>
-    </div>
 
     <div class="w3-display-container" style="height: 40px;">
         <div class="w3-display-left">
@@ -45,7 +34,7 @@
 
         <ng-container matColumnDef="banco">
             <th mat-header-cell *matHeaderCellDef> Banco </th>
-            <td mat-cell *matCellDef="let item"> {{item.banco}} </td>
+            <td mat-cell *matCellDef="let item"> {{item.banco.nomeReduzido}} </td>
         </ng-container>
 
         <ng-container matColumnDef="descricao">
@@ -55,7 +44,7 @@
 
         <ng-container matColumnDef="carga">
             <th mat-header-cell *matHeaderCellDef> Carga </th>
-            <td mat-cell *matCellDef="let item"> <span *ngIf="item.carga != undefined">SIM</span></td>
+            <td mat-cell *matCellDef="let item"> <span *ngIf="item.banco.carga != undefined">SIM</span></td>
         </ng-container>
 
         <ng-container matColumnDef="delete">

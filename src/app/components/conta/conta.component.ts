@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
+import { Banco } from 'src/app/models/banco';
 import { Conta } from 'src/app/models/conta';
 import { ContaService } from 'src/app/services/conta.service';
 
@@ -12,9 +13,9 @@ import { ContaService } from 'src/app/services/conta.service';
 export class ContaComponent implements OnInit {
 
   group!: FormGroup;
+  bancos!: Banco[];
+  bancoFiltro!: string[];
   contas!: Conta[];
-  cargas = cargasArquivo;
-  tipos = tiposConta;
   displayedColumns: string[] = ['banco', 'descricao', 'carga', 'delete'];
 
   constructor(
@@ -23,33 +24,43 @@ export class ContaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.group = this.fb.group({
       id: [null],
       banco: [null, [Validators.required]],
-      descricao: [null, [Validators.required]],
-      tipo: [null, [Validators.required]],
-      carga: [null]
+      descricao: [null, [Validators.required]]
     });
+
+    this.contaService.findAllBancos().subscribe(data => {
+      this.bancos = data;
+      this.bancoFiltro = this.bancos.map(n => n.nomeReduzido);
+    });
+
+    this.group.get('banco')?.valueChanges.subscribe(data => {
+      if (data != undefined )
+        this.bancoFiltro = this.bancos.filter(o => o.nomeReduzido.toLowerCase().includes(data.toLowerCase())).map(n => n.nomeReduzido);
+    });
+
     this.findAll();
   }
 
-  setTipo(chip: MatChip) {
-    chip.toggleSelected();
-    this.group.get('tipo')?.setValue(chip.value);
-  }
-
-  setCarga(chip: MatChip) {
-    chip.toggleSelected();
-    this.group.get('carga')?.setValue(chip.value);
+  get carga() {
+    let descricao = this.group.get('banco')?.value;
+    if (descricao == undefined)
+      return false;
+    let banco = this.bancos.find(o => o.nomeReduzido === descricao);
+    return banco?.carga;
   }
 
   edit(conta: Conta) {
     this.group.patchValue(conta);
+    this.group.get('banco')?.setValue(conta.banco.nomeReduzido);
   }
 
   salvar() {
 
-    let model = new Conta(this.group.value);
+    let model = this.group.value;
+    model.banco = this.bancos.find(o => o.nomeReduzido === model.banco);
 
     if (this.group.get('id')?.value != null) {
       this.contaService.create(model).subscribe({
@@ -82,16 +93,3 @@ export class ContaComponent implements OnInit {
     });
   }
 }
-
-export const tiposConta = [
-  { tipo: "CC", descricao: "Conta corrente" },
-  { tipo: "CARTAO", descricao: "Cartão de crédito" },
-  { tipo: "CARTEIRA", descricao: "Carteira de dinheiro" },
-  { tipo: "REFEICAO", descricao: "Vale refeição" },
-  { tipo: "ALIMENTACAO", descricao: "Vale alimentação" },
-];
-
-export const cargasArquivo = [
-  { arquivo: "BRADESCO", descricao: "Bradesco" },
-  { arquivo: "C6", descricao: "Cartão C6" }
-];
