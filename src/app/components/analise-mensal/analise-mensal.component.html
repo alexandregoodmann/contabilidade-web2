@@ -68,11 +68,11 @@
             <span class="label-valor">Entradas fixas</span>
             <span class="valor">R$ {{resumo.entradaFixa| number: '1.2-2'}}</span>
         </div>
-        <div class="quadro">
+        <div class="quadro" (click)="filtrarFixo(true)">
             <span class="label-valor">Saídas fixas</span>
             <span class="valor">R$ {{resumo.saidaFixa| number: '1.2-2'}}</span>
         </div>
-        <div class="quadro">
+        <div class="quadro" (click)="filtrarFixo(false)">
             <span class="label-valor">Saídas NÃO fixas</span>
             <span class="valor">R$ {{resumo.saidaNaoFixa| number: '1.2-2'}}</span>
         </div>

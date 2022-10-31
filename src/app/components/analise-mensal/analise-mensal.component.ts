@@ -33,7 +33,6 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
 
@@ -110,6 +109,14 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
 
   editar(row: AnaliseDTO) {
     this.router.navigate(['/lancamento'], { queryParams: { backto: '/analisemensal', idLancamento: row.idLancamento } });
+  }
+
+  filtrarFixo(fixo: boolean) {
+    this.tableDatasource = this.datasource;
+    if (fixo)
+      this.tableDatasource = this.tableDatasource.filter(o => o.fixo == true);
+    else
+      this.tableDatasource = this.tableDatasource.filter(o => o.fixo != true);
   }
 
   calculaResumo() {
