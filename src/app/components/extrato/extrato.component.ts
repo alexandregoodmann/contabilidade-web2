@@ -55,7 +55,8 @@ export class ExtratoComponent implements OnInit {
       this.saldoAtual = 0;
       this.extrato.forEach(conta => {
         this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
-        this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
+        if (conta.descricao != 'C6 Cartão')
+          this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
       });
     });
   }
