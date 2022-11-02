@@ -123,7 +123,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     this.resumo = new ResumoAnalise();
     this.datasource.forEach(item => {
       this.resumo.entrada = (item.valor > 0) ? this.resumo.entrada + item.valor : this.resumo.entrada;
-      this.resumo.saida = (item.valor < 0) ? this.resumo.saida + item.valor : this.resumo.saida;
+      this.resumo.saida = (item.valor < 0 && item.categoria != 'Cartão') ? this.resumo.saida + item.valor : this.resumo.saida;
       this.resumo.entradaFixa = (item.fixo && item.valor > 0) ? this.resumo.entradaFixa + item.valor : this.resumo.entradaFixa;
       this.resumo.saidaFixa = (item.fixo && item.valor < 0) ? this.resumo.saidaFixa + item.valor : this.resumo.saidaFixa;
     });
