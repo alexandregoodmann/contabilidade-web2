@@ -165,3 +165,18 @@ const routes: Routes = [
   ]
 })
 export class AppModule { }
+
+export const MESES = [
+  { mes: 1, descricao: 'Janeiro', abr: 'JAN' },
+  { mes: 2, descricao: 'Fevereiro', abr: 'FEV' },
+  { mes: 3, descricao: 'Março', abr: 'MAR' },
+  { mes: 4, descricao: 'Abril', abr: 'ABR' },
+  { mes: 5, descricao: 'Maio', abr: 'MAI' },
+  { mes: 6, descricao: 'Junho', abr: 'JUN' },
+  { mes: 7, descricao: 'Julho', abr: 'JUL' },
+  { mes: 8, descricao: 'Agosto', abr: 'AGO' },
+  { mes: 9, descricao: 'Setembro', abr: 'SET' },
+  { mes: 10, descricao: 'Outubro', abr: 'OUT' },
+  { mes: 11, descricao: 'Novembro', abr: 'NOV' },
+  { mes: 12, descricao: 'Dezembro', abr: 'DEZ' },
+]

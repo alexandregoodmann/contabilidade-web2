@@ -27,7 +27,7 @@ export class PrincipalComponent implements OnInit {
     { href: '/#/lancamento', icon: 'add_card', label: 'Lançamento' },
     { href: '/#/extrato', icon: 'account_balance', label: 'Extrato' },
     { href: '/#/analisemensal', icon: 'analytics', label: 'Análise Mensal' },
-    //{ href: '/#/analiseanual', icon: 'analytics', label: 'Análise Anual' },
+    { href: '/#/analiseanual', icon: 'analytics', label: 'Análise Anual' },
     { href: '/#/carga', icon: 'file_upload', label: 'Carga de Arquivo' }
   ];
 

@@ -1,11 +1,17 @@
-<google-chart #chart [type]="line.type" [columns]="line.columns" [data]="line.datasource" [options]="line.options"
-    [height]="line.height">
-</google-chart>
-<google-chart #chart [type]="chartProjecaoGastos.type" [columns]="chartProjecaoGastos.columns"
-    [data]="chartProjecaoGastos.datasource" [options]="chartProjecaoGastos.options" [width]="chartProjecaoGastos.width"
-    [height]="chartProjecaoGastos.height">
-</google-chart>
-<google-chart #chart [type]="chartProjecaoSaldo.type" [columns]="chartProjecaoSaldo.columns"
-    [data]="chartProjecaoSaldo.datasource" [options]="chartProjecaoSaldo.options" [width]="chartProjecaoSaldo.width"
-    [height]="chartProjecaoSaldo.height">
-</google-chart>
+<app-top-bar titulo="Análise Anual"></app-top-bar>
+
+<div *ngIf="datasource != undefined" style="margin: 20px;">
+
+    <google-chart #chart [type]="saldo.type" [columns]="saldo.columns" [data]="saldo.datasource"
+        [options]="saldo.options" [width]="saldo.width" [height]="saldo.height">
+    </google-chart>
+
+    <google-chart #chart [type]="entradasaida.type" [columns]="entradasaida.columns" [data]="entradasaida.datasource"
+        [options]="entradasaida.options" [width]="entradasaida.width" [height]="entradasaida.height">
+    </google-chart>
+
+    <google-chart #chart [type]="categoria.type" [columns]="categoria.columns" [data]="categoria.datasource"
+        [options]="categoria.options" [width]="categoria.width" [height]="categoria.height">
+    </google-chart>
+
+</div>

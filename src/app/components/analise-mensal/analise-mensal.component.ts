@@ -134,6 +134,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
 }
 
 export class ResumoAnalise {
+  mes: number = 0;
   entrada: number = 0;
   saida: number = 0;
   saldo: number = 0;

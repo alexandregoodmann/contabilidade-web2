@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
-import { Constants } from 'src/app/shared/Constants';
+import { AnaliseService } from 'src/app/services/analise.service';
+import { PlanilhaService } from 'src/app/services/planilha.service';
 
 @Component({
   selector: 'app-analise-anual',
@@ -11,119 +12,114 @@ import { Constants } from 'src/app/shared/Constants';
 })
 export class AnaliseAnualComponent implements OnInit {
 
-  @Input() datasource!: AnaliseDTO[];
-  line!: ChartDefinition;
-  chartProjecaoGastos!: ChartDefinition;
-  chartProjecaoSaldo!: ChartDefinition;
+  datasource!: AnaliseDTO[];
+  entradasaida!: ChartDefinition;
+  saldo!: ChartDefinition;
+  categoria!: ChartDefinition;
+  width = 1200;
 
-  constructor() { }
+  constructor(
+    private analiseService: AnaliseService,
+    private planilhaService: PlanilhaService
+  ) { }
 
   ngOnInit(): void {
-    this.lineChart();
-    this.projecaoGastos();
-    this.projecaoSaldo();
-  }
-
-  private somar(valores: number[]): number {
-    let total = 0;
-    valores.forEach(v => {
-      total = total + v;
+    this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+      this.analiseService.getAnaliseAno(planilha.ano).subscribe(data => {
+        this.datasource = data;
+        this.graficoEntradaSaida();
+        this.graficoSaldo();
+        this.graficoCategoria();
+      });
     });
-    if (total < 0)
-      total = total * (-1);
-    return total;
   }
 
-  private projecaoSaldo() {
+  private graficoSaldo() {
     let matriz: number[][] = [];
     const lancamentos = this.datasource.filter(o => o.tipo != 'CARTAO');
     const meses = [...new Set(lancamentos.map(n => n.planilha))];
     meses.forEach(mes => {
       let linha: any[] = [mes, 0];
       const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
-      //saldo
-      linha[1] = this.somar(lancamentosMes.map(n => n.valor));
+      const entradas = lancamentosMes.filter(o => o.valor > 0);
+      const entrada = entradas.map(n => n.valor).reduce((a, b) => a + b);
+      const saidas = lancamentosMes.filter(o => o.valor < 0 && o.categoria != 'Cartão' && o.concluido);
+      const saida = saidas.map(n => n.valor).reduce((a, b) => a + b);
+      linha[1] = entrada + saida;
       matriz.push(linha);
     });
-
-    this.chartProjecaoSaldo = new ChartDefinition();
-    this.chartProjecaoSaldo.type = ChartType.AreaChart;
-    this.chartProjecaoSaldo.columns = ['', 'Saldo'];
-    this.chartProjecaoSaldo.datasource = matriz.reverse();
-    this.chartProjecaoSaldo.options = {
-      title: 'Projeção de saldos',
+    this.saldo = new ChartDefinition();
+    this.saldo.type = ChartType.AreaChart;
+    this.saldo.columns = ['', 'Saldo'];
+    this.saldo.datasource = matriz.reverse();
+    this.saldo.options = {
       vAxis: { minValue: 0 },
-      width: 600,
-      height: 200,
+      width: this.width,
+      height: 150,
       legend: {
-        position: 'none'
+        position: 'right'
       }
     };
   }
 
-  private projecaoGastos() {
+  private graficoEntradaSaida() {
     let matriz: number[][] = [];
     const lancamentos = this.datasource.filter(o => o.tipo != 'CARTAO');
     const meses = [...new Set(lancamentos.map(n => n.planilha))];
     meses.forEach(mes => {
       let linha: any[] = [mes, 0, 0];
       const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
-      //gasto
-      linha[1] = this.somar(lancamentosMes.filter(o => o.valor < 0).map(n => n.valor));
-      //fixo
-      linha[2] = this.somar(lancamentosMes.filter(o => o.valor < 0 && o.fixo == true).map(n => n.valor));
+      const entradas = lancamentosMes.filter(o => o.valor > 0 && o.categoria != 'Saldo Anterior');
+      if (entradas.length > 0)
+        linha[1] = entradas.map(n => n.valor).reduce((a, b) => a + b);
+      const saidas = lancamentosMes.filter(o => o.valor < 0 && o.categoria != 'Cartão');
+      linha[2] = saidas.map(n => n.valor).reduce((a, b) => a + b) * (-1);
       matriz.push(linha);
     });
-
-    this.chartProjecaoGastos = new ChartDefinition();
-    this.chartProjecaoGastos.type = ChartType.AreaChart;
-    this.chartProjecaoGastos.columns = ['', 'Gastos', 'Fixos'];
-    this.chartProjecaoGastos.datasource = matriz.reverse();
-    this.chartProjecaoGastos.options = {
-      title: 'Projeção de gastos',
+    this.entradasaida = new ChartDefinition();
+    this.entradasaida.type = ChartType.AreaChart;
+    this.entradasaida.columns = ['Mês', 'Entrada', 'Saída'];
+    this.entradasaida.datasource = matriz.reverse();
+    this.entradasaida.options = {
       vAxis: { minValue: 0 },
-      width: 600,
-      height: 200,
+      width: this.width,
+      height: 250,
       legend: {
-        position: 'in'
+        position: 'right'
       }
     };
   }
 
-  private lineChart() {
-
+  private graficoCategoria() {
     let matriz: number[][] = [];
-    const analisar = this.datasource.filter(o => o.analisar);
+    const analisar = this.datasource.filter(o => o.analisar && o.valor < 0);
     const categorias = [...new Set(analisar.map(n => n.categoria))];
-    const meses = [...new Set(analisar.map(n => n.mes))];
+    const meses = [...new Set(analisar.map(n => n.planilha))];
 
     meses.forEach(mes => {
-      let linha: any[] = [];
-      linha.push(Constants.mesesAbreviados[mes - 1]);
+      let linha: any[] = [mes];
       categorias.forEach(categoria => {
-        let soma = 0;
-        analisar.filter(o => o.mes == mes && o.categoria == categoria).forEach(lancamento => {
-          soma = soma + lancamento.valor;
-        });
-        linha.push(soma * (-1));
+        const somar = analisar.filter(o => o.planilha == mes && o.categoria == categoria);
+        if (somar.length > 0) {
+          linha.push(somar.map(n => n.valor).reduce((a, b) => a + b) * (-1));
+        } else {
+          linha.push(0);
+        }
       });
       matriz.push(linha);
     });
 
-    this.line = new ChartDefinition();
-    this.line.type = ChartType.Line;
-    this.line.columns = [''].concat(categorias);
-    this.line.datasource = matriz.reverse();
-    this.line.options = {
+    this.categoria = new ChartDefinition();
+    this.categoria.type = ChartType.LineChart;
+    this.categoria.columns = [''].concat(categorias);
+    this.categoria.datasource = matriz.reverse();
+    this.categoria.options = {
+      vAxis: { minValue: 0 },
       legend: {
-        position: 'left'
+        position: 'right'
       },
-      chart: {
-        title: 'Projeção de categorias',
-      },
-      width: 500,
-      height: 300
+      width: this.width,
+      height: 500
     };
   }
-
 }
