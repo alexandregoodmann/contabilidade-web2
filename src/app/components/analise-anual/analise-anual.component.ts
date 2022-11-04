@@ -4,6 +4,7 @@ import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-analise-anual',
@@ -13,14 +14,18 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 export class AnaliseAnualComponent implements OnInit {
 
   datasource!: AnaliseDTO[];
+  width = 800;
+  height = 300;
+
   entradasaida!: ChartDefinition;
   saldo!: ChartDefinition;
   categoria!: ChartDefinition;
-  width = 1200;
+  media!: ChartDefinition;
 
   constructor(
     private analiseService: AnaliseService,
-    private planilhaService: PlanilhaService
+    private planilhaService: PlanilhaService,
+    private utilService: UtilService
   ) { }
 
   ngOnInit(): void {
@@ -30,6 +35,7 @@ export class AnaliseAnualComponent implements OnInit {
         this.graficoEntradaSaida();
         this.graficoSaldo();
         this.graficoCategoria();
+        this.graficoMedia();
       });
     });
   }
@@ -53,9 +59,10 @@ export class AnaliseAnualComponent implements OnInit {
     this.saldo.columns = ['', 'Saldo'];
     this.saldo.datasource = matriz.reverse();
     this.saldo.options = {
+      title: "Saldo mensal",
       vAxis: { minValue: 0 },
       width: this.width,
-      height: 150,
+      height: this.height,
       legend: {
         position: 'right'
       }
@@ -81,9 +88,10 @@ export class AnaliseAnualComponent implements OnInit {
     this.entradasaida.columns = ['Mês', 'Entrada', 'Saída'];
     this.entradasaida.datasource = matriz.reverse();
     this.entradasaida.options = {
+      title: "Total de entradas e de saídas por mês",
       vAxis: { minValue: 0 },
       width: this.width,
-      height: 250,
+      height: this.height,
       legend: {
         position: 'right'
       }
@@ -91,6 +99,7 @@ export class AnaliseAnualComponent implements OnInit {
   }
 
   private graficoCategoria() {
+
     let matriz: number[][] = [];
     const analisar = this.datasource.filter(o => o.analisar && o.valor < 0);
     const categorias = [...new Set(analisar.map(n => n.categoria))];
@@ -114,12 +123,62 @@ export class AnaliseAnualComponent implements OnInit {
     this.categoria.columns = [''].concat(categorias);
     this.categoria.datasource = matriz.reverse();
     this.categoria.options = {
+      title: "Gastos por categoria a cada mês",
       vAxis: { minValue: 0 },
       legend: {
         position: 'right'
       },
       width: this.width,
-      height: 500
+      height: this.height,
     };
   }
+
+  private graficoMedia() {
+
+    let matriz: any[][] = [];
+    const analisar = this.datasource.filter(o => o.analisar && o.valor < 0);
+    const categorias = [...new Set(analisar.map(n => n.categoria))];
+    const meses = [...new Set(analisar.map(n => n.mes))];
+
+    let medias: Array<{ categoria: string, mes: number, total: number }> = [];
+    categorias.forEach(categoria => {
+      meses.forEach(mes => {
+        const filter = analisar.filter(o => o.categoria == categoria && o.mes == mes);
+        if (filter.length > 0) {
+          const total = filter.map(n => n.valor).reduce((a, b) => a + b);
+          medias.push({ categoria: categoria, mes: mes, total: total * (-1) });
+        } else {
+          medias.push({ categoria: categoria, mes: mes, total: 0 });
+        }
+      });
+    });
+
+    let linhas: Array<{ categoria: string, media: number }> = [];
+    categorias.forEach(categoria => {
+      const filter = medias.filter(o => o.categoria == categoria);
+      const media = filter.map(n => n.total).reduce((a, b) => a + b) / filter.length;
+      linhas.push({ categoria: categoria, media: media });
+    });
+
+    linhas = this.utilService.sortCollection({ active: 'media', direction: 'desc' }, linhas);
+
+    linhas.forEach(l => {
+      matriz.push([l.categoria, l.media]);
+    });
+
+    this.media = new ChartDefinition();
+    this.media.type = ChartType.ColumnChart;
+    this.media.columns = ['', ''];
+    this.media.datasource = matriz;
+
+    this.media.options = {
+      title: "Média de gasto anual por categoria",
+      width: this.width,
+      height: this.height,
+      bar: { groupWidth: "90%" },
+      legend: { position: "none" },
+    };
+
+  }
 }
+
