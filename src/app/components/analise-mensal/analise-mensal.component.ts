@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
+import { LimiteGastos } from 'src/app/models/limitegastos';
 import { AnaliseService } from 'src/app/services/analise.service';
+import { LimitegastosService } from 'src/app/services/limitegastos.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
 
@@ -24,26 +26,28 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
   bar!: ChartDefinition;
   barGastoFixo!: ChartDefinition;
   resumo!: ResumoAnalise;
+  limites!: LimiteGastos[];
 
   constructor(
     private planilhaService: PlanilhaService,
     private analiseService: AnaliseService,
     private utilService: UtilService,
+    private limiteService: LimitegastosService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-      this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
 
-        //datasources
+      this.limiteService.findAll().subscribe(data => {
+        this.limites = data.filter(o => o.planilha.ano == planilha.ano && o.planilha.mes == planilha.mes);
+      });
+
+      this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
         this.datasource = data;
         this.tableDatasource = this.datasource;
-
-        //constroi graficos
         this.pieChart();
         this.barChart();
-
         this.calculaResumo();
       });
     });
@@ -62,14 +66,17 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
 
     const totais = Array.from(this.analiseService.agruparCategoria(this.datasource.filter(o => o.analisar)));
     const fixos = Array.from(this.analiseService.agruparCategoria(this.datasource.filter(o => o.fixo && o.valor < 0)));
-    const labels = [...new Set(totais.map(o => o[0]).concat(fixos.map(o => o[0])))]
+    const categorias = [...new Set(totais.map(o => o[0]).concat(fixos.map(o => o[0])))]
 
-    this.bar.columns = ['Categoria', 'Total', 'Fixo'];
+    console.log(this.limites);
+
+    this.bar.columns = ['', 'Limite', 'Total', 'Fixo'];
     this.bar.datasource = [];
-    labels.forEach(l => {
-      const t = totais.filter(o => o[0] == l);
-      const f = fixos.filter(o => o[0] == l);
-      const linha = [l, t.length > 0 ? t[0][1] : 0, f.length > 0 ? f[0][1] : 0];
+    categorias.forEach(categoria => {
+      const t = totais.filter(o => o[0] == categoria);
+      const f = fixos.filter(o => o[0] == categoria);
+      const limite = this.limites.find(o => o.categoria.descricao == categoria)?.limite;
+      const linha = [categoria, (limite == undefined) ? 0 : limite, t.length > 0 ? t[0][1] : 0, f.length > 0 ? f[0][1] : 0];
       this.bar.datasource.push(linha);
     });
 
