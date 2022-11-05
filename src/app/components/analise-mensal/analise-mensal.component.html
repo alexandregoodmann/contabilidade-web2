@@ -29,7 +29,9 @@
                 <ng-container matColumnDef="valor">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
                     <td mat-cell *matCellDef="let item" style="text-align: right;"
-                        [ngStyle]="{'color':item.valor < 0 ? 'red' : 'black' }"> {{item.valor | number: '1.2-2'}} </td>
+                        [ngStyle]="{'color':item.valor < 0 ? 'red' : 'black' }">
+                        {{item.valor | number: '1.2-2'}}
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="limpar">
                     <th mat-header-cell *matHeaderCellDef>
@@ -43,7 +45,9 @@
                             </button>
                         </mat-menu>
                     </th>
-                    <td mat-cell *matCellDef="let item"></td>
+                    <td mat-cell *matCellDef="let item">
+                        <mat-icon *ngIf="item.concluido">check</mat-icon>
+                    </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="colunas"></tr>
@@ -52,27 +56,23 @@
         </div>
     </div>
     <div class="w3-col m1" *ngIf="datasource != undefined">
-        <div class="quadro">
+        <div class="quadro" (click)="filtrarFixo('entrada')">
             <span class="label-valor">Total entradas</span>
             <span class="valor">R$ {{resumo.entrada| number: '1.2-2'}}</span>
         </div>
-        <div class="quadro">
+        <div class="quadro" (click)="filtrarFixo('saida')">
             <span class="label-valor">Total saídas</span>
             <span class="valor">R$ {{resumo.saida| number: '1.2-2'}}</span>
         </div>
         <div class="quadro">
-            <span class="label-valor">Saldo</span>
+            <span class="label-valor">Saldo Previsto</span>
             <span class="valor">R$ {{resumo.saldo| number: '1.2-2'}}</span>
         </div>
-        <div class="quadro">
-            <span class="label-valor">Entradas fixas</span>
-            <span class="valor">R$ {{resumo.entradaFixa| number: '1.2-2'}}</span>
-        </div>
-        <div class="quadro" (click)="filtrarFixo(true)">
+        <div class="quadro" (click)="filtrarFixo('saidaFixa')">
             <span class="label-valor">Saídas fixas</span>
             <span class="valor">R$ {{resumo.saidaFixa| number: '1.2-2'}}</span>
         </div>
-        <div class="quadro" (click)="filtrarFixo(false)">
+        <div class="quadro" (click)="filtrarFixo('saidaNaoFixa')">
             <span class="label-valor">Saídas NÃO fixas</span>
             <span class="valor">R$ {{resumo.saidaNaoFixa| number: '1.2-2'}}</span>
         </div>

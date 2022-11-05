@@ -111,24 +111,31 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/lancamento'], { queryParams: { backto: '/analisemensal', idLancamento: row.idLancamento } });
   }
 
-  filtrarFixo(fixo: boolean) {
+  filtrarFixo(item: string) {
     this.tableDatasource = this.datasource;
-    if (fixo)
-      this.tableDatasource = this.tableDatasource.filter(o => o.fixo == true);
-    else
-      this.tableDatasource = this.tableDatasource.filter(o => o.fixo != true);
+    switch (item) {
+      case 'entrada':
+        this.tableDatasource = this.datasource.filter(o => o.valor > 0);
+        break;
+      case 'saida':
+        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && o.categoria != 'Cartão');
+        break;
+      case 'saidaFixa':
+        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && o.fixo && o.categoria != 'Cartão');
+        break;
+      case 'saidaNaoFixa':
+        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && !o.fixo && o.categoria != 'Cartão');
+        break;
+    }
   }
 
   calculaResumo() {
     this.resumo = new ResumoAnalise();
-    this.datasource.forEach(item => {
-      this.resumo.entrada = (item.valor > 0) ? this.resumo.entrada + item.valor : this.resumo.entrada;
-      this.resumo.saida = (item.valor < 0 && item.categoria != 'Cartão') ? this.resumo.saida + item.valor : this.resumo.saida;
-      this.resumo.entradaFixa = (item.fixo && item.valor > 0) ? this.resumo.entradaFixa + item.valor : this.resumo.entradaFixa;
-      this.resumo.saidaFixa = (item.fixo && item.valor < 0) ? this.resumo.saidaFixa + item.valor : this.resumo.saidaFixa;
-    });
+    this.resumo.entrada = this.datasource.filter(o => o.valor > 0).map(n => n.valor).reduce((a, b) => a + b);
+    this.resumo.saida = this.datasource.filter(o => o.valor < 0 && o.categoria != 'Cartão').map(n => n.valor).reduce((a, b) => a + b);
     this.resumo.saldo = this.resumo.entrada + this.resumo.saida;
-    this.resumo.saidaNaoFixa = this.resumo.saida - this.resumo.saidaFixa;
+    this.resumo.saidaFixa = this.datasource.filter(o => o.valor < 0 && o.fixo && o.categoria != 'Cartão').map(n => n.valor).reduce((a, b) => a + b);
+    this.resumo.saidaNaoFixa = this.datasource.filter(o => o.valor < 0 && !o.fixo && o.categoria != 'Cartão').map(n => n.valor).reduce((a, b) => a + b);
   }
 
 }
@@ -138,7 +145,6 @@ export class ResumoAnalise {
   entrada: number = 0;
   saida: number = 0;
   saldo: number = 0;
-  entradaFixa: number = 0;
   saidaFixa: number = 0;
   saidaNaoFixa: number = 0;
 }
