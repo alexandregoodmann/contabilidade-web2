@@ -28,16 +28,6 @@
 <div class="content-table">
     <table mat-table [dataSource]="datasource" class="mat-elevation-z8">
 
-        <ng-container matColumnDef="ano">
-            <th mat-header-cell *matHeaderCellDef> Ano <th>
-            <td mat-cell *matCellDef="let item"> {{item.planilha.ano}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="mes">
-            <th mat-header-cell *matHeaderCellDef> Mês </th>
-            <td mat-cell *matCellDef="let item"> {{item.planilha.descricao}} </td>
-        </ng-container>
-
         <ng-container matColumnDef="categoria">
             <th mat-header-cell *matHeaderCellDef> Categoria </th>
             <td mat-cell *matCellDef="let item"> {{item.categoria.descricao}} </td>
@@ -56,6 +46,13 @@
                 <span class="right">
                     R$ {{item.limite | number: '1.2-2'}}
                 </span>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let item; let i = index">
+                <mat-icon (click)="delete(item.id)">delete</mat-icon>
             </td>
         </ng-container>
 

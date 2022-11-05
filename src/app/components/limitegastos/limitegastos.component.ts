@@ -18,7 +18,7 @@ export class LimitegastosComponent implements OnInit {
   categorias!: Categoria[];
   planilha!: Planilha;
   datasource!: LimiteGastos[];
-  displayedColumns: string[] = ['ano', 'mes', 'categoria', 'analisar', 'limite'];
+  displayedColumns: string[] = ['categoria', 'analisar', 'limite', 'delete'];
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +28,7 @@ export class LimitegastosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.group = this.fb.group({
       categoria: [null, [Validators.required]],
       limite: [null, [Validators.required]]
@@ -37,16 +38,16 @@ export class LimitegastosComponent implements OnInit {
       this.categorias = data;
     });
 
-    this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilha = data });
+    this.planilhaService.planilhaSelecionada.subscribe(data => {
+      this.planilha = data
+      this.findAll();
+    });
 
-    this.findAll();
   }
 
   findAll() {
     this.limiteGastosService.findAll().subscribe(data => {
-      this.datasource = data;
-      console.log(this.datasource);
-
+      this.datasource = data.filter(o => o.planilha.ano == this.planilha.ano && o.planilha.mes == this.planilha.mes);
     });
   }
 
@@ -54,6 +55,12 @@ export class LimitegastosComponent implements OnInit {
     let model = this.group.value;
     model.planilha = this.planilha;
     this.limiteGastosService.create(model).subscribe(data => {
+      this.findAll();
+    });
+  }
+
+  delete(id: number) {
+    this.limiteGastosService.delete(id).subscribe(() => {
       this.findAll();
     });
   }
