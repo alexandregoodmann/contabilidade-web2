@@ -42,14 +42,14 @@ export class AnaliseAnualComponent implements OnInit {
 
   private graficoSaldo() {
     let matriz: number[][] = [];
-    const lancamentos = this.datasource.filter(o => o.tipo != 'CARTAO');
+    const lancamentos = this.datasource.filter(o => o.tipo != 'CARTÃO');
     const meses = [...new Set(lancamentos.map(n => n.planilha))];
     meses.forEach(mes => {
       let linha: any[] = [mes, 0];
       const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
       const entradas = lancamentosMes.filter(o => o.valor > 0);
       const entrada = entradas.map(n => n.valor).reduce((a, b) => a + b);
-      const saidas = lancamentosMes.filter(o => o.valor < 0 && o.categoria != 'Cartão' && o.concluido);
+      const saidas = lancamentosMes.filter(o => o.valor < 0 && o.categoria != 'Cartão');
       let saida = (saidas.length > 0) ? saidas.map(n => n.valor).reduce((a, b) => a + b) : 0;
       linha[1] = entrada + saida;
       matriz.push(linha);
