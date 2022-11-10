@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatChip } from '@angular/material/chips';
 import { Banco } from 'src/app/models/banco';
 import { Conta } from 'src/app/models/conta';
 import { ContaService } from 'src/app/services/conta.service';
@@ -16,7 +15,7 @@ export class ContaComponent implements OnInit {
   bancos!: Banco[];
   bancoFiltro!: string[];
   contas!: Conta[];
-  displayedColumns: string[] = ['banco', 'descricao', 'carga', 'delete'];
+  displayedColumns: string[] = ['banco', 'descricao', 'tipo', 'carga', 'delete'];
 
   constructor(
     private fb: FormBuilder,
@@ -28,7 +27,8 @@ export class ContaComponent implements OnInit {
     this.group = this.fb.group({
       id: [null],
       banco: [null, [Validators.required]],
-      descricao: [null, [Validators.required]]
+      descricao: [null, [Validators.required]],
+      tipo: [null, [Validators.required]]
     });
 
     this.contaService.findAllBancos().subscribe(data => {
@@ -37,11 +37,15 @@ export class ContaComponent implements OnInit {
     });
 
     this.group.get('banco')?.valueChanges.subscribe(data => {
-      if (data != undefined )
+      if (data != undefined)
         this.bancoFiltro = this.bancos.filter(o => o.nomeReduzido.toLowerCase().includes(data.toLowerCase())).map(n => n.nomeReduzido);
     });
 
     this.findAll();
+  }
+
+  setTipo(item: string) {
+    this.group.get('tipo')?.setValue(item);
   }
 
   get carga() {
