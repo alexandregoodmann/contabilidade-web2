@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Categoria } from 'src/app/models/categoria';
+import { TipoConta } from 'src/app/models/conta';
 import { ExtratoDTO } from 'src/app/models/extrato';
 import { LancamentoDTO } from 'src/app/models/lancamentoDTO';
 import { Planilha } from 'src/app/models/planilha';
@@ -43,22 +44,8 @@ export class ExtratoComponent implements OnInit {
   private findExtrato() {
     this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
       this.extrato = data;
-
-      this.extrato.forEach(c => {
-        c.lancamentos.forEach(l => {
-          if (l.fixo != true)
-            l.fixo = false;
-        })
-      });
-
-      this.saldoPrevisto = 0;
-      this.saldoAtual = 0;
-      this.extrato.forEach(conta => {
-        if (conta.descricao != 'C6 Cartão'){
-          this.saldoPrevisto = this.saldoPrevisto + conta.saldoPrevisto;
-          this.saldoAtual = this.saldoAtual + conta.saldoEfetivado;
-        }
-      });
+      this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
+      this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
     });
   }
 

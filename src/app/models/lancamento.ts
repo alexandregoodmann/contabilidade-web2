@@ -13,4 +13,9 @@ export class Lancamento {
     data!: Date;
     concluido!: boolean;
     fixo!: boolean;
+    tipo!: TipoLancamento;
+}
+
+export enum TipoLancamento {
+    SALDO = 'SALDO', FATURA = 'FATURA'
 }
