@@ -8,5 +8,5 @@ export class Conta {
 }
 
 export enum TipoConta {
-    CC, CARTAO
+    CC = 'CC', CARTAO = 'CARTAO'
 }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
+import { TipoConta } from 'src/app/models/conta';
 import { LimiteGastos } from 'src/app/models/limitegastos';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { LimitegastosService } from 'src/app/services/limitegastos.service';
@@ -125,13 +126,13 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
         this.tableDatasource = this.datasource.filter(o => o.valor > 0);
         break;
       case 'saida':
-        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && o.categoria != 'Cartão');
+        this.tableDatasource = this.datasource.filter(o => o.valor < 0);
         break;
       case 'saidaFixa':
-        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && o.fixo && o.categoria != 'Cartão');
+        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && o.fixo);
         break;
       case 'saidaNaoFixa':
-        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && !o.fixo && o.categoria != 'Cartão');
+        this.tableDatasource = this.datasource.filter(o => o.valor < 0 && !o.fixo);
         break;
     }
   }
@@ -139,10 +140,10 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
   calculaResumo() {
     this.resumo = new ResumoAnalise();
     this.resumo.entrada = this.datasource.filter(o => o.valor > 0).map(n => n.valor).reduce((a, b) => a + b);
-    this.resumo.saida = this.datasource.filter(o => o.valor < 0 && o.categoria != 'Cartão').map(n => n.valor).reduce((a, b) => a + b);
+    this.resumo.saida = this.datasource.filter(o => o.valor < 0 && o.tipoConta == TipoConta.CC).map(n => n.valor).reduce((a, b) => a + b);
     this.resumo.saldo = this.resumo.entrada + this.resumo.saida;
-    this.resumo.saidaFixa = this.datasource.filter(o => o.valor < 0 && o.fixo && o.categoria != 'Cartão').map(n => n.valor).reduce((a, b) => a + b);
-    this.resumo.saidaNaoFixa = this.datasource.filter(o => o.valor < 0 && !o.fixo && o.categoria != 'Cartão').map(n => n.valor).reduce((a, b) => a + b);
+    this.resumo.saidaFixa = this.datasource.filter(o => o.valor < 0 && o.fixo).map(n => n.valor).reduce((a, b) => a + b);
+    this.resumo.saidaNaoFixa = this.datasource.filter(o => o.valor < 0 && !o.fixo).map(n => n.valor).reduce((a, b) => a + b);
   }
 
 }
