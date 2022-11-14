@@ -1,13 +1,7 @@
 <app-top-bar titulo="Lançameto"></app-top-bar>
-
+<app-select-planilha></app-select-planilha>
 <div class="form">
-
-    <div class="select-container">
-        <app-link-planilha></app-link-planilha>
-    </div>
-
     <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
-
         <div class="chips-container">
             <label class="mini-label" style="margin-left: 10px;">Selecione a Conta Corrente</label>
             <mat-chip-list #chipList selectable formControlName="conta">

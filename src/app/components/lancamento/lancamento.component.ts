@@ -50,7 +50,7 @@ export class LancamentoComponent implements OnInit {
 
     this.group = this.fb.group({
       conta: [null, [Validators.required]],
-      categoria: [null, [Validators.required]],
+      categoria: [null],
       data: [null, [Validators.required]],
       descricao: [null, [Validators.required]],
       valor: [null, [Validators.required]],
