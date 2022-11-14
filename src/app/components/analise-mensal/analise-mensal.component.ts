@@ -69,8 +69,6 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     const fixos = Array.from(this.analiseService.agruparCategoria(this.datasource.filter(o => o.fixo && o.valor < 0)));
     const categorias = [...new Set(totais.map(o => o[0]).concat(fixos.map(o => o[0])))]
 
-    console.log(this.limites);
-
     this.bar.columns = ['', 'Limite', 'Total', 'Fixo'];
     this.bar.datasource = [];
     categorias.forEach(categoria => {
