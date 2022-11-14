@@ -49,6 +49,7 @@ import { InterceptorService } from './services/interceptor.service';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
+import { AnaliseComponent } from './components/analise/analise.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -62,12 +63,8 @@ const routes: Routes = [
     component: ExtratoComponent
   },
   {
-    path: 'analisemensal',
-    component: AnaliseMensalComponent
-  },
-  {
-    path: 'analiseanual',
-    component: AnaliseAnualComponent
+    path: 'analise',
+    component: AnaliseComponent
   },
   {
     path: 'lancamento',
@@ -112,7 +109,8 @@ const routes: Routes = [
     CargaComponent,
     AnaliseMensalComponent,
     AnaliseAnualComponent,
-    LimitegastosComponent
+    LimitegastosComponent,
+    AnaliseComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
