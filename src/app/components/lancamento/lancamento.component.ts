@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { disableDebugTools } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Categoria } from 'src/app/models/categoria';
 import { Conta } from 'src/app/models/conta';
@@ -55,6 +56,7 @@ export class LancamentoComponent implements OnInit {
       descricao: [null, [Validators.required]],
       valor: [null, [Validators.required]],
       fixo: [null],
+      repetir: [null],
       concluido: [null]
     });
 
@@ -86,7 +88,6 @@ export class LancamentoComponent implements OnInit {
   }
 
   salvar() {
-
     let model = this.group?.value;
     model.categoria = this.categorias.filter(o => o.id == model.categoria)[0];
     model.conta = this.contas.filter(o => o.id == model.conta)[0];

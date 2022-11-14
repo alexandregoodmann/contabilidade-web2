@@ -38,6 +38,11 @@
                 formControlName="valor" type="tel">
         </mat-form-field>
 
+        <mat-form-field appearance="fill">
+            <mat-label>Repetir</mat-label>
+            <input matInput formControlName="repetir" min="0" type="number">
+        </mat-form-field>
+
         <div class="w3-row" style="margin-bottom: 40px;">
             <div class="w3-col s6">
                 <mat-slide-toggle formControlName="concluido">Concluído</mat-slide-toggle>
