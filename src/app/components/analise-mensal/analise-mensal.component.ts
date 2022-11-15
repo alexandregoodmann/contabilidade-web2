@@ -114,7 +114,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
   }
 
   editar(row: AnaliseDTO) {
-    this.router.navigate(['/lancamento'], { queryParams: { backto: '/analisemensal', idLancamento: row.idLancamento } });
+    this.router.navigate(['/lancamento'], { queryParams: { backto: '/analise', idLancamento: row.idLancamento } });
   }
 
   filtrarFixo(item: string) {

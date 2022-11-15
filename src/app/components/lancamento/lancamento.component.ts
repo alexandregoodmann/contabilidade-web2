@@ -6,7 +6,7 @@ import { disableDebugTools } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Categoria } from 'src/app/models/categoria';
 import { Conta } from 'src/app/models/conta';
-import { Lancamento } from 'src/app/models/lancamento';
+import { Lancamento, TipoLancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { CategoriaService } from 'src/app/services/categoria.service';
 import { ContaService } from 'src/app/services/conta.service';
@@ -94,6 +94,7 @@ export class LancamentoComponent implements OnInit {
     model.categoria = this.categorias.filter(o => o.id == model.categoria)[0];
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
+    model.tipo = (model.repetir > 0) ? TipoLancamento.SERIE : undefined;
 
     //edit
     if (this.lancamento && this.lancamento.id) {

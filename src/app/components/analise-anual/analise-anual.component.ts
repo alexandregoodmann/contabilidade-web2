@@ -7,6 +7,7 @@ import { TipoLancamento } from 'src/app/models/lancamento';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
+import { MESES } from 'src/app/app.module';
 
 @Component({
   selector: 'app-analise-anual',
@@ -45,21 +46,22 @@ export class AnaliseAnualComponent implements OnInit {
   private graficoSaldo() {
     let matriz: number[][] = [];
     const lancamentos = this.datasource.filter(o => o.tipoConta == TipoConta.CC);
-    const meses = [...new Set(lancamentos.map(n => n.planilha))];
-    meses.forEach(mes => {
-      let linha: any[] = [mes, 0];
-      const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
+    const mesez = [...new Set(lancamentos.map(n => n.mes))].sort((a, b) => a - b);
+    mesez.forEach(mes => {
+      let linha: any[] = [MESES[mes - 1].abr, 0, 0];
+      const lancamentosMes = lancamentos.filter(o => o.mes == mes);
       const entradas = lancamentosMes.filter(o => o.valor > 0);
       const entrada = entradas.map(n => n.valor).reduce((a, b) => a + b);
       const saidas = lancamentosMes.filter(o => o.valor < 0);
       let saida = (saidas.length > 0) ? saidas.map(n => n.valor).reduce((a, b) => a + b) : 0;
       linha[1] = entrada + saida;
+      linha[2] = entrada + saida;
       matriz.push(linha);
     });
     this.saldo = new ChartDefinition();
     this.saldo.type = ChartType.AreaChart;
-    this.saldo.columns = ['', 'Saldo'];
-    this.saldo.datasource = matriz.reverse();
+    this.saldo.columns = ['', 'Saldo', { role: 'annotation' }];
+    this.saldo.datasource = matriz;
     this.saldo.options = {
       title: "Saldo mensal",
       vAxis: { minValue: 0 },
@@ -74,10 +76,10 @@ export class AnaliseAnualComponent implements OnInit {
   private graficoEntradaSaida() {
     let matriz: number[][] = [];
     const lancamentos = this.datasource.filter(o => o.tipoConta == TipoConta.CC);
-    const meses = [...new Set(lancamentos.map(n => n.planilha))];
-    meses.forEach(mes => {
-      let linha: any[] = [mes, 0, 0];
-      const lancamentosMes = lancamentos.filter(o => o.planilha == mes);
+    const mesez = [...new Set(lancamentos.map(n => n.mes))].sort((a, b) => a - b);
+    mesez.forEach(mes => {
+      let linha: any[] = [MESES[mes - 1].abr, 0, 0];
+      const lancamentosMes = lancamentos.filter(o => o.mes == mes);
       const entradas = lancamentosMes.filter(o => o.valor > 0 && o.tipoLancamento != TipoLancamento.SALDO);
       if (entradas.length > 0)
         linha[1] = entradas.map(n => n.valor).reduce((a, b) => a + b);
@@ -88,7 +90,7 @@ export class AnaliseAnualComponent implements OnInit {
     this.entradasaida = new ChartDefinition();
     this.entradasaida.type = ChartType.AreaChart;
     this.entradasaida.columns = ['Mês', 'Entrada', 'Saída'];
-    this.entradasaida.datasource = matriz.reverse();
+    this.entradasaida.datasource = matriz;
     this.entradasaida.options = {
       title: "Total de entradas e de saídas por mês",
       vAxis: { minValue: 0 },
@@ -105,12 +107,12 @@ export class AnaliseAnualComponent implements OnInit {
     let matriz: number[][] = [];
     const analisar = this.datasource.filter(o => o.analisar && o.valor < 0);
     const categorias = [...new Set(analisar.map(n => n.categoria))];
-    const meses = [...new Set(analisar.map(n => n.planilha))];
+    const mesez = [...new Set(analisar.map(n => n.mes))].sort((a, b) => a - b);
 
-    meses.forEach(mes => {
-      let linha: any[] = [mes];
+    mesez.forEach(mes => {
+      let linha: any[] = [MESES[mes - 1].abr];
       categorias.forEach(categoria => {
-        const somar = analisar.filter(o => o.planilha == mes && o.categoria == categoria);
+        const somar = analisar.filter(o => o.mes == mes && o.categoria == categoria);
         if (somar.length > 0) {
           linha.push(somar.map(n => n.valor).reduce((a, b) => a + b) * (-1));
         } else {
@@ -123,7 +125,7 @@ export class AnaliseAnualComponent implements OnInit {
     this.categoria = new ChartDefinition();
     this.categoria.type = ChartType.LineChart;
     this.categoria.columns = [''].concat(categorias);
-    this.categoria.datasource = matriz.reverse();
+    this.categoria.datasource = matriz;
     this.categoria.options = {
       title: "Gastos por categoria a cada mês",
       vAxis: { minValue: 0 },
@@ -140,11 +142,11 @@ export class AnaliseAnualComponent implements OnInit {
     let matriz: any[][] = [];
     const analisar = this.datasource.filter(o => o.analisar && o.valor < 0);
     const categorias = [...new Set(analisar.map(n => n.categoria))];
-    const meses = [...new Set(analisar.map(n => n.mes))];
+    const mesez = [...new Set(analisar.map(n => n.mes))].sort((a, b) => a - b);
 
     let medias: Array<{ categoria: string, mes: number, total: number }> = [];
     categorias.forEach(categoria => {
-      meses.forEach(mes => {
+      mesez.forEach(mes => {
         const filter = analisar.filter(o => o.categoria == categoria && o.mes == mes);
         if (filter.length > 0) {
           const total = filter.map(n => n.valor).reduce((a, b) => a + b);

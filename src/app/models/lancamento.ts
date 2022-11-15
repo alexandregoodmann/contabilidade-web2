@@ -19,5 +19,5 @@ export class Lancamento {
 }
 
 export enum TipoLancamento {
-    SALDO = 'SALDO', FATURA = 'FATURA'
+    SALDO = 'SALDO', FATURA = 'FATURA', SERIE = 'SERIE'
 }
