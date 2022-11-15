@@ -14,6 +14,8 @@ export class Lancamento {
     concluido!: boolean;
     fixo!: boolean;
     tipo!: TipoLancamento;
+    repetir!: number;
+    hash!: string;
 }
 
 export enum TipoLancamento {

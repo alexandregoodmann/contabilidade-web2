@@ -82,12 +82,14 @@ export class LancamentoComponent implements OnInit {
           }
           this.group?.get('fixo')?.setValue(lancamento.fixo);
           this.group?.get('concluido')?.setValue(lancamento.concluido);
+          this.group?.get('repetir')?.setValue(lancamento.repetir);
         });
       }
     });
   }
 
   salvar() {
+
     let model = this.group?.value;
     model.categoria = this.categorias.filter(o => o.id == model.categoria)[0];
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
@@ -102,18 +104,19 @@ export class LancamentoComponent implements OnInit {
       this.lancamento.concluido = model.concluido;
       this.lancamento.fixo = model.fixo;
       this.lancamento.descricao = model.descricao;
-      this.lancamentoService.update(this.lancamento).subscribe(() => { }, () => { }, () => {
-        //this.router.navigate(['/extrato']);
+      this.lancamento.repetir = this.lancamento.repetir;
+      this.lancamento.hash = this.lancamento.hash;
+      this.lancamentoService.update(this.lancamento).subscribe(() => {
         this.router.navigate([this.backto]);
       });
     } else { //new
-      this.lancamentoService.create(model).subscribe(() => { }, () => { }, () => { });
+      this.lancamentoService.create(model).subscribe();
     }
 
   }
 
   apagar() {
-    this.lancamentoService.delete(this.lancamento.id).subscribe(() => { }, () => { }, () => {
+    this.lancamentoService.delete(this.lancamento.id).subscribe(() => {
       this.snackBar.open('Lançamento apagado', undefined, { duration: environment.tempoSnackBar });
       this.router.navigate(['/extrato'],);
     });
