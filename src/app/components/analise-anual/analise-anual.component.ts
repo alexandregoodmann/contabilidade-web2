@@ -17,7 +17,7 @@ import { MESES } from 'src/app/app.module';
 export class AnaliseAnualComponent implements OnInit {
 
   datasource!: AnaliseDTO[];
-  width = 800;
+  width = 1200;
   height = 300;
 
   entradasaida!: ChartDefinition;

@@ -1,24 +1,16 @@
 <div *ngIf="datasource != undefined" style="margin: 20px;">
-    <div class="w3-row">
-        <div class="w3-col m6">
-            <google-chart #chart [type]="saldo.type" [columns]="saldo.columns" [data]="saldo.datasource"
-                [options]="saldo.options" [width]="saldo.width" [height]="saldo.height">
-            </google-chart>
+    <google-chart #chart [type]="saldo.type" [columns]="saldo.columns" [data]="saldo.datasource"
+        [options]="saldo.options" [width]="saldo.width" [height]="saldo.height">
+    </google-chart>
 
-            <google-chart #chart [type]="entradasaida.type" [columns]="entradasaida.columns"
-                [data]="entradasaida.datasource" [options]="entradasaida.options" [width]="entradasaida.width"
-                [height]="entradasaida.height">
-            </google-chart>
-        </div>
-        <div class="w3-col m6">
-            <google-chart #chart [type]="categoria.type" [columns]="categoria.columns" [data]="categoria.datasource"
-                [options]="categoria.options" [width]="categoria.width" [height]="categoria.height">
-            </google-chart>
+    <google-chart #chart [type]="entradasaida.type" [columns]="entradasaida.columns" [data]="entradasaida.datasource"
+        [options]="entradasaida.options" [width]="entradasaida.width" [height]="entradasaida.height">
+    </google-chart>
+    <google-chart #chart [type]="categoria.type" [columns]="categoria.columns" [data]="categoria.datasource"
+        [options]="categoria.options" [width]="categoria.width" [height]="categoria.height">
+    </google-chart>
 
-            <google-chart #chart [type]="media.type" [columns]="media.columns" [data]="media.datasource"
-                [options]="media.options" [width]="media.width" [height]="media.height">
-            </google-chart>
-
-        </div>
-    </div>
+    <google-chart #chart [type]="media.type" [columns]="media.columns" [data]="media.datasource"
+        [options]="media.options" [width]="media.width" [height]="media.height">
+    </google-chart>
 </div>
