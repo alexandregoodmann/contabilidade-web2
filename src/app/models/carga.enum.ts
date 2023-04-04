@@ -1,3 +1,3 @@
 export enum CargaEnum {
-    Bradesco, C6
+    Bradesco, C6, Itau
 }

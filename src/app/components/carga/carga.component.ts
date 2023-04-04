@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
 export class CargaComponent implements OnInit {
 
   group!: FormGroup;
-  bancos = ['Bradesco', 'C6'];
+  bancos = ['Bradesco', 'C6', 'Itaú'];
   contas!: Conta[];
   planilhaSelecionada!: Planilha;
   fileName = '';
