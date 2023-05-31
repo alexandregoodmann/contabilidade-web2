@@ -47,4 +47,10 @@ export class AnaliseService {
     return retorno;
   }
 
+  downloadExtrato(ano: number, mes: number): Observable<Blob> {
+    return this.http.get((`${environment.url}/analise/downloadextrato/${ano}/${mes}`), {
+      responseType: 'blob'
+    });
+  }
+
 }

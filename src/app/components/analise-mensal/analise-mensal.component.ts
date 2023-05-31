@@ -6,10 +6,12 @@ import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
 import { TipoConta } from 'src/app/models/conta';
 import { LimiteGastos } from 'src/app/models/limitegastos';
+import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { LimitegastosService } from 'src/app/services/limitegastos.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-analise-mensal',
@@ -28,6 +30,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
   barGastoFixo!: ChartDefinition;
   resumo!: ResumoAnalise;
   limites!: LimiteGastos[];
+  planilhaSelecionada!: Planilha;
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -39,6 +42,8 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+
+      this.planilhaSelecionada = planilha;
 
       this.limiteService.findAll().subscribe(data => {
         this.limites = data.filter(o => o.planilha.ano == planilha.ano && o.planilha.mes == planilha.mes);
@@ -144,6 +149,12 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     this.resumo.saidaNaoFixa = this.datasource.filter(o => o.valor < 0 && !o.fixo).map(n => n.valor).reduce((a, b) => a + b);
   }
 
+  downloadExtrato(): void {
+    let fileName = 'extrato-' + this.planilhaSelecionada.ano + '-' + this.planilhaSelecionada.mes + '.cvs'
+    this.analiseService
+      .downloadExtrato(this.planilhaSelecionada.ano, this.planilhaSelecionada.mes)
+      .subscribe(blob => saveAs(blob, fileName));
+  }
 }
 
 export class ResumoAnalise {

@@ -41,6 +41,11 @@
                                 <mat-icon>clear_all</mat-icon>
                                 <span>Limpar</span>
                             </button>
+                            <button mat-menu-item (click)="downloadExtrato()">
+                                <mat-icon>download</mat-icon>
+                                <span>Download</span>
+                            </button>
+
                         </mat-menu>
                     </th>
                     <td mat-cell *matCellDef="let item">
