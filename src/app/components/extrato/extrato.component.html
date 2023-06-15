@@ -86,10 +86,15 @@
 
             <ng-container matColumnDef="concluido">
                 <th mat-header-cell *matHeaderCellDef>
-                    <button mat-icon-button [matMenuTriggerFor]="menu" [disabled]="marcados.length == 0">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="editar(0)">
+                            <mat-icon>add_card</mat-icon>
+                            <span>Lançamento</span>
+                        </button>
+                        <mat-divider></mat-divider>
                         <button mat-menu-item (click)="concluirMarcados()">
                             <mat-icon>done</mat-icon>
                             <span>Concluído</span>
