@@ -18,13 +18,13 @@ export class ExtratoComponent implements OnInit {
 
   displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'fixo', 'valor', 'concluido'];
   extrato!: ExtratoDTO[];
-  order: number = 1;
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   marcados: number[] = [];
   categorias!: Categoria[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
+  ordem: OrdemExtrato = new OrdemExtrato();
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -46,6 +46,9 @@ export class ExtratoComponent implements OnInit {
       this.extrato = data;
       this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
       this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
+
+      if (this.ordem.indexConta != undefined && this.ordem.lancamentos != undefined && this.ordem.coluna != undefined)
+        this.sortBy(this.ordem.indexConta, this.ordem.lancamentos, this.ordem.coluna, false);
     });
   }
 
@@ -56,8 +59,8 @@ export class ExtratoComponent implements OnInit {
       this.router.navigate(['/lancamento']);
   }
 
-  sortBy(indexConta: number, lancamentos: LancamentoDTO[], coluna: string) {
-    let ret = this.order;
+  sortBy(indexConta: number, lancamentos: LancamentoDTO[], coluna: string, update?: boolean) {
+    let ret = this.ordem.sort;
     lancamentos.sort(function (x: any, y: any) {
       x[coluna] = (x[coluna] == null) ? '' : x[coluna];
       y[coluna] = (y[coluna] == null) ? '' : y[coluna];
@@ -70,7 +73,14 @@ export class ExtratoComponent implements OnInit {
       return 0;
     });
     this.extrato[indexConta].lancamentos = Array.from(lancamentos);
-    this.order = this.order * (-1);
+
+    if (update == undefined) {
+      if (this.ordem.coluna == coluna)
+        this.ordem.sort = this.ordem.sort * (-1);
+      this.ordem.coluna = coluna;
+      this.ordem.indexConta = indexConta;
+      this.ordem.lancamentos = this.extrato[indexConta].lancamentos;
+    }
   }
 
   marcar(event: any, item: LancamentoDTO) {
@@ -135,4 +145,11 @@ export class ExtratoComponent implements OnInit {
     }
   }
 
+}
+
+export class OrdemExtrato {
+  sort: number = 1;
+  indexConta?: number;
+  lancamentos?: LancamentoDTO[];
+  coluna?: string;
 }
