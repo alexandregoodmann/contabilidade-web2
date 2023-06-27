@@ -69,4 +69,8 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     return planilhas[i].planilhas[j];
   }
 
+  processar(): Observable<any> {
+    return this.http.post(`${environment.url}/planilhas/processar`, {});
+  }
+  
 }

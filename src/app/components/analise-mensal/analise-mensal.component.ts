@@ -2,8 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { ChartType } from 'angular-google-charts';
-import { AnaliseDTO } from 'src/app/models/analiseDTO';
+import { saveAs } from 'file-saver';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
+import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { TipoConta } from 'src/app/models/conta';
 import { LimiteGastos } from 'src/app/models/limitegastos';
 import { Planilha } from 'src/app/models/planilha';
@@ -11,7 +12,6 @@ import { AnaliseService } from 'src/app/services/analise.service';
 import { LimitegastosService } from 'src/app/services/limitegastos.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
-import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-analise-mensal',
@@ -154,6 +154,10 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     this.analiseService
       .downloadExtrato(this.planilhaSelecionada.ano, this.planilhaSelecionada.mes)
       .subscribe(blob => saveAs(blob, fileName));
+  }
+
+  processar() {
+    this.planilhaService.processar().subscribe();
   }
 }
 
