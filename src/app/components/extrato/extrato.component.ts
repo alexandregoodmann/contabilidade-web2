@@ -46,9 +46,6 @@ export class ExtratoComponent implements OnInit {
       this.extrato = data;
       this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
       this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
-
-      if (this.ordem.indexConta != undefined && this.ordem.lancamentos != undefined && this.ordem.coluna != undefined)
-        this.sortBy(this.ordem.indexConta, this.ordem.lancamentos, this.ordem.coluna, false);
     });
   }
 
@@ -73,14 +70,7 @@ export class ExtratoComponent implements OnInit {
       return 0;
     });
     this.extrato[indexConta].lancamentos = Array.from(lancamentos);
-
-    if (update == undefined) {
-      if (this.ordem.coluna == coluna)
-        this.ordem.sort = this.ordem.sort * (-1);
-      this.ordem.coluna = coluna;
-      this.ordem.indexConta = indexConta;
-      this.ordem.lancamentos = this.extrato[indexConta].lancamentos;
-    }
+    this.ordem.sort = this.ordem.sort * (-1);
   }
 
   marcar(event: any, item: LancamentoDTO) {
