@@ -82,7 +82,6 @@ export class LancamentoComponent implements OnInit {
           }
           this.group?.get('fixo')?.setValue(lancamento.fixo);
           this.group?.get('concluido')?.setValue(lancamento.concluido);
-          this.group?.get('repetir')?.setValue(lancamento.repetir);
         });
       }
     });
@@ -94,7 +93,6 @@ export class LancamentoComponent implements OnInit {
     model.categoria = this.categorias.filter(o => o.id == model.categoria)[0];
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
-    model.tipo = (model.repetir > 0) ? TipoLancamento.SERIE : undefined;
 
     //edit
     if (this.lancamento && this.lancamento.id) {
@@ -105,8 +103,6 @@ export class LancamentoComponent implements OnInit {
       this.lancamento.concluido = model.concluido;
       this.lancamento.fixo = model.fixo;
       this.lancamento.descricao = model.descricao;
-      this.lancamento.repetir = this.lancamento.repetir;
-      this.lancamento.hash = this.lancamento.hash;
       this.lancamentoService.update(this.lancamento).subscribe(() => {
         this.router.navigate([this.backto]);
       });
