@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import localePt from '@angular/common/locales/pt';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -37,10 +37,11 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
 import { AnaliseAnualComponent } from './components/analise-anual/analise-anual.component';
 import { AnaliseMensalComponent } from './components/analise-mensal/analise-mensal.component';
+import { AnaliseComponent } from './components/analise/analise.component';
 import { CargaComponent } from './components/carga/carga.component';
-import { CategoriaComponent } from './components/categoria/categoria.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
+import { LabelComponent } from './components/label/label.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { LimitegastosComponent } from './components/limitegastos/limitegastos.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
@@ -49,7 +50,6 @@ import { InterceptorService } from './services/interceptor.service';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { AnaliseComponent } from './components/analise/analise.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -75,8 +75,8 @@ const routes: Routes = [
     component: ContaComponent
   },
   {
-    path: 'categoria',
-    component: CategoriaComponent
+    path: 'label',
+    component: LabelComponent
   },
   {
     path: 'limitegastos',
@@ -102,7 +102,7 @@ const routes: Routes = [
     LinkPlanilhaComponent,
     PlanilhaComponent,
     TopBarComponent,
-    CategoriaComponent,
+    LabelComponent,
     ContaComponent,
     LancamentoComponent,
     ExtratoComponent,

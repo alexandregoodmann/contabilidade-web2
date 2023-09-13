@@ -1,11 +1,11 @@
-import { Categoria } from "./categoria";
+import { Label } from "./label";
 import { Conta } from "./conta";
 import { Planilha } from "./planilha";
 
 export class Lancamento {
     id!: number;
     conta!: Conta;
-    categoria!: Categoria;
+    categoria!: Label;
     planilha!: Planilha;
     dtLancamento!: Date;
     descricao!: string;

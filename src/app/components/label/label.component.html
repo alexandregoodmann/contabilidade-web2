@@ -1,11 +1,11 @@
-<app-top-bar titulo="Categoria"></app-top-bar>
+<app-top-bar titulo="Label"></app-top-bar>
 
 <form class="form" #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
 
     <mat-form-field appearance="fill">
-        <mat-label>Categoria</mat-label>
+        <mat-label>Label</mat-label>
         <input matInput type="text" formControlName="descricao">
-        <mat-error>Informe a categoria</mat-error>
+        <mat-error>Informe um label</mat-error>
     </mat-form-field>
 
     <div style="margin-top: 10px;margin-bottom: 20px;">

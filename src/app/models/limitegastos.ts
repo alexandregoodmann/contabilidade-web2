@@ -1,9 +1,9 @@
-import { Categoria } from "./categoria";
+import { Label } from "./label";
 import { Planilha } from "./planilha";
 
 export class LimiteGastos {
     id!: number;
-    categoria!: Categoria;
+    categoria!: Label;
     planilha!: Planilha;
     limite!: number;
 }

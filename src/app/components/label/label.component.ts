@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Categoria } from 'src/app/models/categoria';
-import { CategoriaService } from 'src/app/services/categoria.service';
+import { Label } from 'src/app/models/label';
+import { LabelService } from 'src/app/services/label.service';
 
 @Component({
   selector: 'app-categoria',
-  templateUrl: './categoria.component.html',
-  styleUrls: ['./categoria.component.css']
+  templateUrl: './label.component.html',
+  styleUrls: ['./label.component.css']
 })
-export class CategoriaComponent implements OnInit {
+export class LabelComponent implements OnInit {
 
-  categoria?: Categoria;
+  categoria?: Label;
   group!: FormGroup;
-  categorias!: Array<Categoria>;
+  categorias!: Array<Label>;
   displayedColumns: string[] = ['descricao', 'analisar', 'delete'];
 
   constructor(
     private fb: FormBuilder,
-    private categoriaService: CategoriaService,
+    private labelService: LabelService,
     private snackBar: MatSnackBar
   ) { }
 
@@ -32,11 +32,11 @@ export class CategoriaComponent implements OnInit {
 
   salvar() {
     if (this.categoria == undefined) {
-      this.categoriaService.create(this.group.value).subscribe(() => { }, () => { }, () => { this.findAll(); });
+      this.labelService.create(this.group.value).subscribe(() => { }, () => { }, () => { this.findAll(); });
     } else {
       let model = this.group.value;
       model.id = this.categoria.id;
-      this.categoriaService.update(this.group.value).subscribe(() => { }, () => { }, () => {
+      this.labelService.update(this.group.value).subscribe(() => { }, () => { }, () => {
         this.categoria = undefined;
         this.group.reset();
         this.findAll();
@@ -45,18 +45,18 @@ export class CategoriaComponent implements OnInit {
   }
 
   findAll() {
-    this.categoriaService.findAll().subscribe(data => {
-      this.categorias = data as unknown as Categoria[];
+    this.labelService.findAll().subscribe(data => {
+      this.categorias = data as unknown as Label[];
     });
   }
 
-  edit(obj: Categoria) {
+  edit(obj: Label) {
     this.categoria = obj;
     this.group.patchValue(obj);
   }
 
   delete(id: number) {
-    this.categoriaService.delete(id).subscribe({
+    this.labelService.delete(id).subscribe({
       complete: () => {
         this.categoria = undefined;
         this.group.reset();

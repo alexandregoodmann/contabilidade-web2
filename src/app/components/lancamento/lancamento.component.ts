@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { disableDebugTools } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Categoria } from 'src/app/models/categoria';
 import { Conta } from 'src/app/models/conta';
-import { Lancamento, TipoLancamento } from 'src/app/models/lancamento';
+import { Label } from 'src/app/models/label';
+import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
-import { CategoriaService } from 'src/app/services/categoria.service';
 import { ContaService } from 'src/app/services/conta.service';
+import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { environment } from 'src/environments/environment';
@@ -23,7 +22,7 @@ export class LancamentoComponent implements OnInit {
 
   group!: FormGroup;
   contas!: Array<Conta>;
-  categorias!: Array<Categoria>;
+  labels!: Array<Label>;
   lancamento!: Lancamento;
   planilhaSelecionada!: Planilha;
   backto!: string | null;
@@ -31,7 +30,7 @@ export class LancamentoComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private contaService: ContaService,
-    private categoriaService: CategoriaService,
+    private labelService: LabelService,
     private lancamentoService: LancamentoService,
     private planilhaService: PlanilhaService,
     private activatedRoute: ActivatedRoute,
@@ -45,8 +44,8 @@ export class LancamentoComponent implements OnInit {
       this.contas = data as unknown as Array<Conta>;
     });
 
-    this.categoriaService.findAll().subscribe(data => {
-      this.categorias = data as unknown as Array<Categoria>;
+    this.labelService.findAll().subscribe(data => {
+      this.labels = data as unknown as Array<Label>;
     });
 
     this.group = this.fb.group({
@@ -90,7 +89,7 @@ export class LancamentoComponent implements OnInit {
   salvar() {
 
     let model = this.group?.value;
-    model.categoria = this.categorias.filter(o => o.id == model.categoria)[0];
+    model.categoria = this.labels.filter(o => o.id == model.categoria)[0];
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
 

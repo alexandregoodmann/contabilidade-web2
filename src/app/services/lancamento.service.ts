@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Categoria } from '../models/categoria';
+import { Label } from '../models/label';
 import { Lancamento } from '../models/lancamento';
 import { BasicCrudService, httpOptions } from './basic-crud.service';
 
@@ -36,7 +36,7 @@ export class LancamentoService extends BasicCrudService<Lancamento> {
     );
   }
 
-  categorizar(lancamento_ids: number[], categoria: Categoria) {
+  categorizar(lancamento_ids: number[], categoria: Label) {
     if (lancamento_ids.length == 0 || categoria == undefined) {
       throw ('ids de lancamentos não informados ou categoria faltando')
     }

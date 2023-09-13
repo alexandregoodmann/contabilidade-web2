@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Categoria } from 'src/app/models/categoria';
 import { TipoConta } from 'src/app/models/conta';
 import { ExtratoDTO } from 'src/app/models/extrato';
+import { Label } from 'src/app/models/label';
 import { LancamentoDTO } from 'src/app/models/lancamentoDTO';
 import { Planilha } from 'src/app/models/planilha';
-import { CategoriaService } from 'src/app/services/categoria.service';
+import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 
@@ -22,14 +22,14 @@ export class ExtratoComponent implements OnInit {
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   marcados: number[] = [];
-  categorias!: Categoria[];
+  labels!: Label[];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
   ordem: OrdemExtrato = new OrdemExtrato();
 
   constructor(
     private planilhaService: PlanilhaService,
     private lancamentoService: LancamentoService,
-    private categoriaService: CategoriaService,
+    private labelService: LabelService,
     private router: Router
   ) { }
 
@@ -38,13 +38,13 @@ export class ExtratoComponent implements OnInit {
       this.planilhaSelecionada = planilha;
       this.findExtrato();
     });
-    this.categoriaService.findAll().subscribe(data => { this.categorias = data });
+    this.labelService.findAll().subscribe(data => { this.labels = data });
   }
 
   private findExtrato() {
     this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
       console.log(data);
-      
+
       this.extrato = data;
       this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
       this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
@@ -117,8 +117,8 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-  categorizar(categoria: Categoria) {
-    this.lancamentoService.categorizar(this.marcados, categoria).subscribe(() => { }, () => { }, () => {
+  categorizar(label: Label) {
+    this.lancamentoService.categorizar(this.marcados, label).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
       this.findExtrato();
     });

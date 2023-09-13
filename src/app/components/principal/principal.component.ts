@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Categoria } from 'src/app/models/categoria';
 import { Conta } from 'src/app/models/conta';
+import { Label } from 'src/app/models/label';
 import { Menu } from 'src/app/models/menu';
 import { PlanilhasAno } from 'src/app/models/planilhasano';
-import { CategoriaService } from 'src/app/services/categoria.service';
 import { ContaService } from 'src/app/services/conta.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 
@@ -16,13 +15,12 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 export class PrincipalComponent implements OnInit {
 
   contas: Conta[] = [];
-  categorias: Categoria[] = [];
+  labels: Label[] = [];
   planilhasAno!: PlanilhasAno[];
-  banners: Menu[] = [];
-  menu: Menu[] = [
+  banners: Menu[] = [
     { href: '/#/planilha', icon: 'tab', label: 'Planilha' },
-    { href: '/#/categoria', icon: 'dashboard_customize', label: 'Categoria' },
-    { href: '/#/limitegastos', icon: 'dashboard_customize', label: 'Limite de Gastos' },
+    { href: '/#/label', icon: 'dashboard_customize', label: 'Label' },
+    // { href: '/#/limitegastos', icon: 'dashboard_customize', label: 'Limite de Gastos' },
     { href: '/#/conta', icon: 'credit_card', label: 'Conta' },
     { href: '/#/lancamento', icon: 'add_card', label: 'Lançamento' },
     { href: '/#/extrato', icon: 'account_balance', label: 'Extrato' },
@@ -33,7 +31,6 @@ export class PrincipalComponent implements OnInit {
   constructor(
     private planilhaService: PlanilhaService,
     private contaService: ContaService,
-    private categoriaService: CategoriaService,
     private _snackBar: MatSnackBar
   ) { }
 
@@ -42,7 +39,6 @@ export class PrincipalComponent implements OnInit {
     this.planilhaService.getMapa().subscribe(data => {
       this.planilhasAno = data;
     }, (err) => { }, () => {
-      this.banners.push(this.menu[0]);
       if (this.planilhasAno.length == 0) {
         this.openSnackBar('Você precisa cadastrar uma Planilha');
       } else {
@@ -52,38 +48,9 @@ export class PrincipalComponent implements OnInit {
           if (data.id == undefined)
             this.planilhaService.initPlanilha(this.planilhasAno);
         });
-
-        this.getContas();
-        this.getCategorias();
       }
     });
 
-  }
-
-  private getContas() {
-    this.banners.push(this.menu[1]);
-    this.contaService.findAll().subscribe(data => {
-      this.contas = data;
-    }, (err) => { }, () => {
-      if (this.contas.length == 0) {
-        this.openSnackBar('Você precisa cadastrar uma Conta');
-      } else if (this.categorias.length > 0) {
-        this.banners = this.menu;
-      }
-    });
-  }
-
-  private getCategorias() {
-    this.banners.push(this.menu[2]);
-    this.categoriaService.findAll().subscribe(data => {
-      this.categorias = data;
-    }, (err) => { }, () => {
-      if (this.categorias.length == 0) {
-        this.openSnackBar('Você precisa cadastrar uma Categoria');
-      } else if (this.contas.length > 0) {
-        this.banners = this.menu;
-      }
-    });
   }
 
   private openSnackBar(msg: string) {

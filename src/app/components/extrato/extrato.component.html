@@ -114,9 +114,9 @@
                             <mat-icon>drag_indicator</mat-icon>
                             <span>Categoria</span>
                         </button>
-                        <div class="menu-extrato" *ngFor="let categoria of categorias">
-                            <div style="width: 100%;" (click)="categorizar(categoria)">
-                                {{categoria.descricao}}
+                        <div class="menu-extrato" *ngFor="let label of labels">
+                            <div style="width: 100%;" (click)="categorizar(label)">
+                                {{label.descricao}}
                             </div>
                         </div>
                     </mat-menu>

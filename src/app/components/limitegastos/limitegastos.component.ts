@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Categoria } from 'src/app/models/categoria';
+import { Label } from 'src/app/models/label';
 import { LimiteGastos } from 'src/app/models/limitegastos';
 import { Planilha } from 'src/app/models/planilha';
-import { CategoriaService } from 'src/app/services/categoria.service';
+import { LabelService } from 'src/app/services/label.service';
 import { LimitegastosService } from 'src/app/services/limitegastos.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 
@@ -15,14 +15,14 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 export class LimitegastosComponent implements OnInit {
 
   group!: FormGroup;
-  categorias!: Categoria[];
+  labels!: Label[];
   planilha!: Planilha;
   datasource!: LimiteGastos[];
   displayedColumns: string[] = ['categoria', 'analisar', 'limite', 'delete'];
 
   constructor(
     private fb: FormBuilder,
-    private categoriaService: CategoriaService,
+    private labelService: LabelService,
     private planilhaService: PlanilhaService,
     private limiteGastosService: LimitegastosService
   ) { }
@@ -34,8 +34,8 @@ export class LimitegastosComponent implements OnInit {
       limite: [null, [Validators.required]]
     });
 
-    this.categoriaService.findAll().subscribe(data => {
-      this.categorias = data;
+    this.labelService.findAll().subscribe(data => {
+      this.labels = data;
     });
 
     this.planilhaService.planilhaSelecionada.subscribe(data => {
