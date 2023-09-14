@@ -1,0 +1,21 @@
+<form #form [formGroup]="group" autocomplete="off">
+    <mat-form-field appearance="fill">
+        <mat-label>{{label}}</mat-label>
+        <mat-chip-list #chipList>
+            <mat-chip *ngFor="let label of labels" (removed)="remove(label)">
+                {{label.descricao}}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            <input placeholder="Nova label..." #fruitInput formControlName="label" sum [matAutocomplete]="auto"
+                [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event); form.reset();">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event); form.reset();">
+            <mat-option *ngFor="let label of filteredLabels" [value]="label">
+                {{label.descricao}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>

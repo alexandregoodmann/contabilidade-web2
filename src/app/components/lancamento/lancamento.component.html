@@ -11,14 +11,7 @@
             </mat-chip-list>
         </div>
 
-        <div class="chips-container">
-            <label class="mini-label" style="margin-left: 10px;">Selecione a Categoria</label>
-            <mat-chip-list #chipList multiple formControlName="categoria">
-                <mat-chip #c="matChip" (click)="setCategoria(c)" *ngFor="let item of categorias" [value]="item.id">
-                    {{item.descricao}}
-                </mat-chip>
-            </mat-chip-list>
-        </div>
+        <app-chips label="Labels" (emitter)="updateLabels($event)"></app-chips>
 
         <mat-form-field appearance="fill">
             <mat-label>Data</mat-label>

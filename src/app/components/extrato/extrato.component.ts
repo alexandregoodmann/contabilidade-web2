@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TipoConta } from 'src/app/models/conta';
 import { ExtratoDTO } from 'src/app/models/extrato';
 import { Label } from 'src/app/models/label';
-import { LancamentoDTO } from 'src/app/models/lancamentoDTO';
+import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
@@ -43,8 +43,6 @@ export class ExtratoComponent implements OnInit {
 
   private findExtrato() {
     this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
-      console.log(data);
-
       this.extrato = data;
       this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
       this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
@@ -58,7 +56,7 @@ export class ExtratoComponent implements OnInit {
       this.router.navigate(['/lancamento']);
   }
 
-  sortBy(indexConta: number, lancamentos: LancamentoDTO[], coluna: string, update?: boolean) {
+  sortBy(indexConta: number, lancamentos: Lancamento[], coluna: string, update?: boolean) {
     let ret = this.ordem.sort;
     lancamentos.sort(function (x: any, y: any) {
       x[coluna] = (x[coluna] == null) ? '' : x[coluna];
@@ -75,7 +73,7 @@ export class ExtratoComponent implements OnInit {
     this.ordem.sort = this.ordem.sort * (-1);
   }
 
-  marcar(event: any, item: LancamentoDTO) {
+  marcar(event: any, item: Lancamento) {
     if (event.checked) {
       item.marcado = true;
       this.marcados.push(item.id);
@@ -86,7 +84,7 @@ export class ExtratoComponent implements OnInit {
     }
   }
 
-  marcarTodos(event: any, lancamentos: LancamentoDTO[]) {
+  marcarTodos(event: any, lancamentos: Lancamento[]) {
     this.marcados = [];
     if (event.checked) {
       lancamentos.forEach(l => { l.marcado = true });
@@ -142,6 +140,6 @@ export class ExtratoComponent implements OnInit {
 export class OrdemExtrato {
   sort: number = 1;
   indexConta?: number;
-  lancamentos?: LancamentoDTO[];
+  lancamentos?: Lancamento[];
   coluna?: string;
 }

@@ -1,11 +1,11 @@
-import { Label } from "./label";
 import { Conta } from "./conta";
+import { Label } from "./label";
 import { Planilha } from "./planilha";
 
 export class Lancamento {
     id!: number;
     conta!: Conta;
-    categoria!: Label;
+    labels!: Label[];
     planilha!: Planilha;
     dtLancamento!: Date;
     descricao!: string;
@@ -14,6 +14,8 @@ export class Lancamento {
     concluido!: boolean;
     fixo!: boolean;
     tipo!: TipoLancamento;
+    analisar!: boolean;
+    marcado!: boolean;
 }
 
 export enum TipoLancamento {

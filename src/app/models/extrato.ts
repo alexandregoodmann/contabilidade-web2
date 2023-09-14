@@ -1,5 +1,5 @@
 import { TipoConta } from "./conta";
-import { LancamentoDTO } from "./lancamentoDTO";
+import { Lancamento } from "./lancamento";
 
 export interface ExtratoDTO {
     id: number;
@@ -11,5 +11,5 @@ export interface ExtratoDTO {
     saldoPrevisto: number;
     saldoEfetivado: number;
     categoria: string;
-    lancamentos: LancamentoDTO[];
+    lancamentos: Lancamento[];
 }

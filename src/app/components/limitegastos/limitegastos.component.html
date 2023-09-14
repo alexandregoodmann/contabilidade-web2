@@ -7,7 +7,7 @@
     <mat-form-field appearance="fill">
         <mat-label>Categoria</mat-label>
         <mat-select formControlName="categoria">
-            <mat-option *ngFor="let item of categorias" [value]="item">{{item.descricao}}</mat-option>
+            <mat-option *ngFor="let item of labels" [value]="item">{{item.descricao}}</mat-option>
         </mat-select>
     </mat-form-field>
 

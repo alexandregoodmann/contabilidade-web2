@@ -50,12 +50,11 @@ export class LancamentoComponent implements OnInit {
 
     this.group = this.fb.group({
       conta: [null, [Validators.required]],
-      categoria: [null],
+      labels: [null],
       data: [null, [Validators.required]],
       descricao: [null, [Validators.required]],
       valor: [null, [Validators.required]],
       fixo: [null],
-      repetir: [null],
       concluido: [null]
     });
 
@@ -76,9 +75,6 @@ export class LancamentoComponent implements OnInit {
           this.group?.patchValue(lancamento);
           this.group?.get('data')?.setValue(new Date(lancamento.data));
           this.group?.get('conta')?.setValue(lancamento.conta.id);
-          if (lancamento.categoria != undefined) {
-            this.group?.get('categoria')?.setValue(lancamento.categoria.id);
-          }
           this.group?.get('fixo')?.setValue(lancamento.fixo);
           this.group?.get('concluido')?.setValue(lancamento.concluido);
         });
@@ -89,14 +85,12 @@ export class LancamentoComponent implements OnInit {
   salvar() {
 
     let model = this.group?.value;
-    model.categoria = this.labels.filter(o => o.id == model.categoria)[0];
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
 
     //edit
     if (this.lancamento && this.lancamento.id) {
       this.lancamento.valor = model.valor;
-      this.lancamento.categoria = model.categoria;
       this.lancamento.conta = model.conta;
       this.lancamento.data = model.data;
       this.lancamento.concluido = model.concluido;
@@ -123,9 +117,7 @@ export class LancamentoComponent implements OnInit {
     this.group?.get('conta')?.setValue(chip.value);
   }
 
-  setCategoria(chip: MatChip) {
-    chip.toggleSelected();
-    this.group?.get('categoria')?.setValue(chip.value);
+  updateLabels(labels: Label[]) {
+    this.group.get('labels')?.setValue(labels);
   }
-
 }
