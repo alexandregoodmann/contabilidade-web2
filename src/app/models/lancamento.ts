@@ -1,20 +1,19 @@
 import { Conta } from "./conta";
-import { Label } from "./label";
 import { Planilha } from "./planilha";
 
 export class Lancamento {
     id!: number;
     conta!: Conta;
-    labels!: Label[];
+    cartao!: Conta;
     planilha!: Planilha;
-    dtLancamento!: Date;
+    data!: Date;
     descricao!: string;
     valor!: number;
-    data!: Date;
-    concluido!: boolean;
     fixo!: boolean;
+    concluido!: boolean;
+    numeroBradesco!: boolean;
     tipo!: TipoLancamento;
-    analisar!: boolean;
+    parcelas!: string;
     marcado!: boolean;
 }
 

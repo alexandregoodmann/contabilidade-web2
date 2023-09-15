@@ -50,7 +50,7 @@ export class LancamentoComponent implements OnInit {
 
     this.group = this.fb.group({
       conta: [null, [Validators.required]],
-      labels: [null],
+      labels: [null, [Validators.required]],
       data: [null, [Validators.required]],
       descricao: [null, [Validators.required]],
       valor: [null, [Validators.required]],
@@ -83,11 +83,10 @@ export class LancamentoComponent implements OnInit {
   }
 
   salvar() {
-
+    debugger
     let model = this.group?.value;
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
-
     //edit
     if (this.lancamento && this.lancamento.id) {
       this.lancamento.valor = model.valor;
