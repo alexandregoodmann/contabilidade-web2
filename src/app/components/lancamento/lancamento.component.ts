@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,6 +11,7 @@ import { ContaService } from 'src/app/services/conta.service';
 import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { ChipsComponent } from 'src/app/shared/chips/chips.component';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -22,10 +23,12 @@ export class LancamentoComponent implements OnInit {
 
   group!: FormGroup;
   contas!: Array<Conta>;
-  labels!: Array<Label>;
+  labels!: string[];
   lancamento!: Lancamento;
   planilhaSelecionada!: Planilha;
   backto!: string | null;
+
+  @ViewChild(ChipsComponent) chips!: ChipsComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -45,7 +48,7 @@ export class LancamentoComponent implements OnInit {
     });
 
     this.labelService.findAll().subscribe(data => {
-      this.labels = data as unknown as Array<Label>;
+      this.labels = (data as unknown as Array<Label>).map(o => o.descricao);opd
     });
 
     this.group = this.fb.group({
@@ -66,27 +69,30 @@ export class LancamentoComponent implements OnInit {
 
     this.activatedRoute.queryParamMap.subscribe(param => {
 
-      let idLancamento: number = param.get('idLancamento') as unknown as number;
       this.backto = param.get('backto');
+      let idLancamento = param.get('idLancamento') as unknown as number;
 
-      if (idLancamento != undefined) {
-        this.lancamentoService.findById(idLancamento).subscribe(lancamento => {
-          this.lancamento = lancamento as Lancamento;
-          this.group?.patchValue(lancamento);
-          this.group?.get('data')?.setValue(new Date(lancamento.data));
-          this.group?.get('conta')?.setValue(lancamento.conta.id);
-          this.group?.get('fixo')?.setValue(lancamento.fixo);
-          this.group?.get('concluido')?.setValue(lancamento.concluido);
-        });
-      }
+      this.lancamentoService.findById(idLancamento).subscribe(data => {
+        this.lancamento = data as Lancamento;
+        console.log(this.lancamento);
+
+        this.group?.patchValue(this.lancamento);
+        this.group?.get('data')?.setValue(new Date(this.lancamento.data));
+        this.group?.get('conta')?.setValue(this.lancamento.conta.id);
+        this.group?.get('fixo')?.setValue(this.lancamento.fixo);
+        this.group?.get('concluido')?.setValue(this.lancamento.concluido);
+      });
+
     });
   }
 
   salvar() {
-    debugger
+
     let model = this.group?.value;
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
+    model.labels = (model.labels as Label[]).map(n => n.descricao);
+
     //edit
     if (this.lancamento && this.lancamento.id) {
       this.lancamento.valor = model.valor;
@@ -95,11 +101,17 @@ export class LancamentoComponent implements OnInit {
       this.lancamento.concluido = model.concluido;
       this.lancamento.fixo = model.fixo;
       this.lancamento.descricao = model.descricao;
+
       this.lancamentoService.update(this.lancamento).subscribe(() => {
         this.router.navigate([this.backto]);
+      }, (err) => { }, () => {
+        this.chips.reset();
       });
+
     } else { //new
-      this.lancamentoService.create(model).subscribe();
+      this.lancamentoService.create(model).subscribe(() => { }, (err) => { }, () => {
+        this.chips.reset();
+      });
     }
 
   }

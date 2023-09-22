@@ -69,4 +69,8 @@ export class ChipsComponent implements OnInit {
     this.emitter.emit(this.labels);
   }
 
+  reset(){
+    this.group.reset();
+  }
+
 }

@@ -16,7 +16,7 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class ExtratoComponent implements OnInit {
 
-  displayedColumns: string[] = ['acao', 'data', 'categoria', 'descricao', 'fixo', 'valor', 'concluido'];
+  displayedColumns: string[] = ['acao', 'data', 'descricao', 'fixo', 'valor', 'concluido'];
   extrato!: ExtratoDTO[];
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;

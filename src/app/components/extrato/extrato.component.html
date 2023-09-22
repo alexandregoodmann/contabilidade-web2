@@ -55,18 +55,14 @@
                 <td mat-cell *matCellDef="let item" (click)="editar(item.id)"> {{item.data | date:'dd/MM'}} </td>
             </ng-container>
 
-            <ng-container matColumnDef="categoria">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                    (click)="sortBy(indexConta, conta.lancamentos, 'categoria')">
-                    Categoria </th>
-                <td mat-cell *matCellDef="let item" (click)="editar(item.id)"> {{item?.categoria}} </td>
-            </ng-container>
-
             <ng-container matColumnDef="descricao">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header
                     (click)="sortBy(indexConta, conta.lancamentos, 'descricao')">
                     Descrição </th>
-                <td mat-cell *matCellDef="let item" (click)="editar(item.id)"> {{item.descricao}} </td>
+                <td mat-cell *matCellDef="let item" (click)="editar(item.id)">
+                    {{item.descricao}}
+                    <span class="extratoLabel" *ngFor="let l of item.labels">{{l}}</span>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="fixo">
@@ -90,7 +86,7 @@
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="editar(0)">
+                        <button mat-menu-item>
                             <mat-icon>add_card</mat-icon>
                             <span>Lançamento</span>
                         </button>
@@ -114,11 +110,14 @@
                             <mat-icon>drag_indicator</mat-icon>
                             <span>Categoria</span>
                         </button>
-                        <div class="menu-extrato" *ngFor="let label of labels">
-                            <div style="width: 100%;" (click)="categorizar(label)">
-                                {{label.descricao}}
+                        <!--
+
+                            <div class="menu-extrato" *ngFor="let label of labels">
+                                <div style="width: 100%;" (click)="categorizar(label)">
+                                    {{label.descricao}}
+                                </div>
                             </div>
-                        </div>
+                        -->
                     </mat-menu>
                 </th>
                 <td mat-cell *matCellDef="let item" (click)="editar(item.id)">
