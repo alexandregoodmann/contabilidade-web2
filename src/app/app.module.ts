@@ -50,7 +50,6 @@ import { InterceptorService } from './services/interceptor.service';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { ChipsComponent } from './shared/chips/chips.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -111,8 +110,7 @@ const routes: Routes = [
     AnaliseMensalComponent,
     AnaliseAnualComponent,
     LimitegastosComponent,
-    AnaliseComponent,
-    ChipsComponent
+    AnaliseComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
