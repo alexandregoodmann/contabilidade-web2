@@ -14,12 +14,12 @@ import { LabelService } from 'src/app/services/label.service';
 export class ChipsComponent implements OnInit {
 
   @Input() title!: string;
+  @Input() labels!: string[];
   @Output() emitter = new EventEmitter<string[]>();
 
   group!: FormGroup;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   filteredLabels: string[] = [];
-  labels: string[] = [];
   allLabels: string[] = [];
 
   constructor(
@@ -28,7 +28,6 @@ export class ChipsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.labelService.findAll().subscribe(data => {
       this.allLabels = (data as unknown as Label[]).map(o => o.descricao);
     });
@@ -37,7 +36,7 @@ export class ChipsComponent implements OnInit {
       labels: [null]
     });
 
-    this.group.get('label')?.valueChanges.subscribe(data => {
+    this.group.get('labels')?.valueChanges.subscribe(data => {
       let search = (data == null || data == undefined) ? '' : data;
       if (search.id == undefined)
         this.filteredLabels = this.allLabels.filter(o => o.toLowerCase().includes(search.toLowerCase()));
