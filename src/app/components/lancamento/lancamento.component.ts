@@ -48,7 +48,7 @@ export class LancamentoComponent implements OnInit {
     });
 
     this.labelService.findAll().subscribe(data => {
-      this.labels = (data as unknown as Array<Label>).map(o => o.descricao);opd
+      this.labels = (data as unknown as Array<Label>).map(o => o.descricao);
     });
 
     this.group = this.fb.group({
@@ -74,13 +74,13 @@ export class LancamentoComponent implements OnInit {
 
       this.lancamentoService.findById(idLancamento).subscribe(data => {
         this.lancamento = data as Lancamento;
-        console.log(this.lancamento);
-
         this.group?.patchValue(this.lancamento);
         this.group?.get('data')?.setValue(new Date(this.lancamento.data));
         this.group?.get('conta')?.setValue(this.lancamento.conta.id);
         this.group?.get('fixo')?.setValue(this.lancamento.fixo);
         this.group?.get('concluido')?.setValue(this.lancamento.concluido);
+        this.group?.get('labels')?.setValue(this.lancamento.labels);
+        this.chips.group.get('labels')?.setValue(this.lancamento.labels);
       });
 
     });
@@ -91,7 +91,6 @@ export class LancamentoComponent implements OnInit {
     let model = this.group?.value;
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
-    model.labels = (model.labels as Label[]).map(n => n.descricao);
 
     //edit
     if (this.lancamento && this.lancamento.id) {
@@ -105,12 +104,12 @@ export class LancamentoComponent implements OnInit {
       this.lancamentoService.update(this.lancamento).subscribe(() => {
         this.router.navigate([this.backto]);
       }, (err) => { }, () => {
-        this.chips.reset();
+        this.chips.group.reset();
       });
 
     } else { //new
       this.lancamentoService.create(model).subscribe(() => { }, (err) => { }, () => {
-        this.chips.reset();
+        this.chips.group.reset();
       });
     }
 
@@ -128,7 +127,7 @@ export class LancamentoComponent implements OnInit {
     this.group?.get('conta')?.setValue(chip.value);
   }
 
-  updateLabels(labels: Label[]) {
+  updateLabels(labels: string[]) {
     this.group.get('labels')?.setValue(labels);
   }
 }

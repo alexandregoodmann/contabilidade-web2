@@ -13,14 +13,14 @@ import { LabelService } from 'src/app/services/label.service';
 })
 export class ChipsComponent implements OnInit {
 
-  @Input() label!: string;
-  @Output() emitter = new EventEmitter<Label[]>();
-  
+  @Input() title!: string;
+  @Output() emitter = new EventEmitter<string[]>();
+
   group!: FormGroup;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  filteredLabels: Label[] = [];
-  labels: Label[] = [];
-  allLabels: Label[] = [];
+  filteredLabels: string[] = [];
+  labels: string[] = [];
+  allLabels: string[] = [];
 
   constructor(
     private labelService: LabelService,
@@ -29,34 +29,29 @@ export class ChipsComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.findAll();
+    this.labelService.findAll().subscribe(data => {
+      this.allLabels = (data as unknown as Label[]).map(o => o.descricao);
+    });
+
     this.group = this.fb.group({
-      label: [null]
+      labels: [null]
     });
 
     this.group.get('label')?.valueChanges.subscribe(data => {
       let search = (data == null || data == undefined) ? '' : data;
       if (search.id == undefined)
-        this.filteredLabels = this.allLabels.filter(o => o.descricao.toLowerCase().includes(search.toLowerCase()));
-    });
-  }
-
-  findAll() {
-    this.labelService.findAll().subscribe(data => {
-      this.allLabels = data as unknown as Label[];
+        this.filteredLabels = this.allLabels.filter(o => o.toLowerCase().includes(search.toLowerCase()));
     });
   }
 
   add(event: MatChipInputEvent): void {
     if (event.value != undefined && event.value != '') {
-      let temp = new Label();
-      temp.descricao = event.value;
-      this.labels.push(temp);
+      this.labels.push(event.value);
       this.emitter.emit(this.labels);
     }
   }
 
-  remove(label: Label): void {
+  remove(label: string): void {
     const index = this.labels.indexOf(label);
     if (index >= 0) {
       this.labels.splice(index, 1);
@@ -67,10 +62,6 @@ export class ChipsComponent implements OnInit {
   selected(event: MatAutocompleteSelectedEvent): void {
     this.labels.push(event.option.value);
     this.emitter.emit(this.labels);
-  }
-
-  reset(){
-    this.group.reset();
   }
 
 }

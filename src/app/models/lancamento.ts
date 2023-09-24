@@ -15,6 +15,7 @@ export class Lancamento {
     tipo!: TipoLancamento;
     parcelas!: string;
     marcado!: boolean;
+    labels!: string[];
 }
 
 export enum TipoLancamento {
