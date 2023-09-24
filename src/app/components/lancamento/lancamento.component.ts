@@ -1,6 +1,8 @@
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatChip } from '@angular/material/chips';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChip, MatChipInputEvent } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Conta } from 'src/app/models/conta';
@@ -25,6 +27,11 @@ export class LancamentoComponent implements OnInit {
   planilhaSelecionada!: Planilha;
   backto!: string | null;
 
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  filteredLabels: string[] = [];
+  labels: string[] = [];
+  allLabels: string[] = [];
+
   constructor(
     private fb: FormBuilder,
     private contaService: ContaService,
@@ -37,6 +44,10 @@ export class LancamentoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.labelService.findAll().subscribe(data => {
+      this.allLabels = data.map(o => o.descricao);
+    });
 
     this.contaService.findAll().subscribe(data => {
       this.contas = data as unknown as Array<Conta>;
@@ -73,6 +84,13 @@ export class LancamentoComponent implements OnInit {
         });
       }
     });
+
+    this.group.get('labels')?.valueChanges.subscribe(data => {
+      let search = (data == null || data == undefined) ? '' : data;
+      if (search.id == undefined)
+        this.filteredLabels = this.allLabels.filter(o => o.toLowerCase().includes(search.toLowerCase()));
+    });
+
   }
 
   salvar() {
@@ -81,6 +99,9 @@ export class LancamentoComponent implements OnInit {
     model.conta = this.contas.filter(o => o.id == model.conta)[0];
     model.planilha = this.planilhaSelecionada;
 
+    console.log(model);
+    return;
+    
     //edit
     if (this.lancamento && this.lancamento.id) {
       this.lancamento.valor = model.valor;
@@ -114,5 +135,21 @@ export class LancamentoComponent implements OnInit {
     this.group?.get('conta')?.setValue(chip.value);
   }
 
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) {
+      this.labels.push(value);
+    }
+  }
 
+  remove(fruit: string): void {
+    const index = this.labels.indexOf(fruit);
+    if (index >= 0) {
+      this.labels.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.labels.push(event.option.viewValue);
+  }
 }
