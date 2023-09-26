@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { AnaliseDTO } from 'src/app/models/analiseDTO';
+import { MESES } from 'src/app/app.module';
 import { ChartDefinition } from 'src/app/models/ChartDefinition';
+import { AnaliseDTO } from 'src/app/models/analiseDTO';
 import { TipoConta } from 'src/app/models/conta';
 import { TipoLancamento } from 'src/app/models/lancamento';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
-import { MESES } from 'src/app/app.module';
 
 @Component({
   selector: 'app-analise-anual',
@@ -105,26 +105,10 @@ export class AnaliseAnualComponent implements OnInit {
   private graficoCategoria() {
 
     let matriz: number[][] = [];
-    const analisar = this.datasource.filter(o => o.analisar && o.valor < 0);
-    const categorias = [...new Set(analisar.map(n => n.categoria))];
-    const mesez = [...new Set(analisar.map(n => n.mes))].sort((a, b) => a - b);
-
-    mesez.forEach(mes => {
-      let linha: any[] = [MESES[mes - 1].abr];
-      categorias.forEach(categoria => {
-        const somar = analisar.filter(o => o.mes == mes && o.categoria == categoria);
-        if (somar.length > 0) {
-          linha.push(somar.map(n => n.valor).reduce((a, b) => a + b) * (-1));
-        } else {
-          linha.push(0);
-        }
-      });
-      matriz.push(linha);
-    });
 
     this.categoria = new ChartDefinition();
     this.categoria.type = ChartType.LineChart;
-    this.categoria.columns = [''].concat(categorias);
+    //this.categoria.columns = [''].concat(categorias);
     this.categoria.datasource = matriz;
     this.categoria.options = {
       title: "Gastos por categoria a cada mês",
@@ -140,29 +124,10 @@ export class AnaliseAnualComponent implements OnInit {
   private graficoMedia() {
 
     let matriz: any[][] = [];
-    const analisar = this.datasource.filter(o => o.analisar && o.valor < 0);
-    const categorias = [...new Set(analisar.map(n => n.categoria))];
-    const mesez = [...new Set(analisar.map(n => n.mes))].sort((a, b) => a - b);
 
     let medias: Array<{ categoria: string, mes: number, total: number }> = [];
-    categorias.forEach(categoria => {
-      mesez.forEach(mes => {
-        const filter = analisar.filter(o => o.categoria == categoria && o.mes == mes);
-        if (filter.length > 0) {
-          const total = filter.map(n => n.valor).reduce((a, b) => a + b);
-          medias.push({ categoria: categoria, mes: mes, total: total * (-1) });
-        } else {
-          medias.push({ categoria: categoria, mes: mes, total: 0 });
-        }
-      });
-    });
 
     let linhas: Array<{ categoria: string, media: number }> = [];
-    categorias.forEach(categoria => {
-      const filter = medias.filter(o => o.categoria == categoria);
-      const media = filter.map(n => n.total).reduce((a, b) => a + b) / filter.length;
-      linhas.push({ categoria: categoria, media: media });
-    });
 
     linhas = this.utilService.sortCollection({ active: 'media', direction: 'desc' }, linhas);
 

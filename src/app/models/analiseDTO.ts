@@ -9,8 +9,6 @@ export interface AnaliseDTO {
     banco: string;
     tipoLancamento: TipoLancamento;
     tipoConta: TipoConta;
-    categoria: string;
-    analisar: boolean;
     data: Date;
     descricao: string;
     valor: number;

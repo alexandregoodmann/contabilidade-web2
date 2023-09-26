@@ -9,7 +9,6 @@ import { TipoConta } from 'src/app/models/conta';
 import { LimiteGastos } from 'src/app/models/limitegastos';
 import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
-import { LimitegastosService } from 'src/app/services/limitegastos.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { UtilService } from 'src/app/services/util.service';
 
@@ -22,7 +21,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  colunas: string[] = ['data', 'banco', 'categoria', 'descricao', 'fixo', 'valor', 'limpar'];
+  colunas: string[] = ['data', 'banco', 'descricao', 'fixo', 'valor'];
   datasource!: AnaliseDTO[];
   tableDatasource!: AnaliseDTO[];
   pie!: ChartDefinition;
@@ -36,25 +35,20 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
     private planilhaService: PlanilhaService,
     private analiseService: AnaliseService,
     private utilService: UtilService,
-    private limiteService: LimitegastosService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-
       this.planilhaSelecionada = planilha;
-
-      this.limiteService.findAll().subscribe(data => {
-        this.limites = data.filter(o => o.planilha.ano == planilha.ano && o.planilha.mes == planilha.mes);
-      });
-
       this.analiseService.getAnaliseAnoMes(planilha.ano, planilha.mes).subscribe(data => {
+        console.log(data);
         this.datasource = data;
         this.tableDatasource = this.datasource;
+        /*
         this.pieChart();
         this.barChart();
-        this.calculaResumo();
+        this.calculaResumo();*/
       });
     });
 
@@ -65,7 +59,7 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
       this.tableDatasource = this.utilService.sortCollection(sort, this.tableDatasource);
     });
   }
-
+/*
   private barChart() {
     this.bar = new ChartDefinition();
     this.bar.type = ChartType.ColumnChart;
@@ -110,13 +104,14 @@ export class AnaliseMensalComponent implements OnInit, AfterViewInit {
       }
     };
   }
-
+  
   onSelectCategoria(e: any) {
     const i = e.selection[0].row;
     const categoria = this.bar.datasource[i][0];
     this.tableDatasource = this.datasource;
     this.tableDatasource = this.tableDatasource.filter(o => o.categoria == categoria);
   }
+  */
 
   editar(row: AnaliseDTO) {
     this.router.navigate(['/lancamento'], { queryParams: { backto: '/analise', idLancamento: row.idLancamento } });

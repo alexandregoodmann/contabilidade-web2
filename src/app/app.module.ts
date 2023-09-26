@@ -43,14 +43,13 @@ import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
 import { LabelComponent } from './components/label/label.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
-import { LimitegastosComponent } from './components/limitegastos/limitegastos.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { InterceptorService } from './services/interceptor.service';
+import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { ChipsComponent } from './shared/chips/chips.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -80,10 +79,6 @@ const routes: Routes = [
     component: LabelComponent
   },
   {
-    path: 'limitegastos',
-    component: LimitegastosComponent
-  },
-  {
     path: 'planilha',
     component: PlanilhaComponent
   },
@@ -110,7 +105,6 @@ const routes: Routes = [
     CargaComponent,
     AnaliseMensalComponent,
     AnaliseAnualComponent,
-    LimitegastosComponent,
     AnaliseComponent,
     ChipsComponent
   ],
