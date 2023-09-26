@@ -8,7 +8,7 @@
                     <mat-icon>cancel</mat-icon>
                 </button>
             </mat-chip>
-            <input placeholder="Nova label..." #fruitInput formControlName="label" sum [matAutocomplete]="auto"
+            <input placeholder="Nova label..." #labelInput formControlName="labels" sum [matAutocomplete]="auto"
                 [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 (matChipInputTokenEnd)="add($event); form.reset();">
         </mat-chip-list>

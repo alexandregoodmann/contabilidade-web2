@@ -72,16 +72,19 @@ export class LancamentoComponent implements OnInit {
       this.backto = param.get('backto');
       let idLancamento = param.get('idLancamento') as unknown as number;
 
-      this.lancamentoService.findById(idLancamento).subscribe(data => {
-        this.lancamento = data as Lancamento;
-        this.group?.patchValue(this.lancamento);
-        this.group?.get('data')?.setValue(new Date(this.lancamento.data));
-        this.group?.get('conta')?.setValue(this.lancamento.conta.id);
-        this.group?.get('fixo')?.setValue(this.lancamento.fixo);
-        this.group?.get('concluido')?.setValue(this.lancamento.concluido);
-        this.group?.get('labels')?.setValue(this.lancamento.labels);
-        this.chips.group.get('labels')?.setValue(this.lancamento.labels);
-      });
+      if (idLancamento){
+        this.lancamentoService.findById(idLancamento).subscribe(data => {
+          this.lancamento = data as Lancamento;
+          this.group?.patchValue(this.lancamento);
+          this.group?.get('data')?.setValue(new Date(this.lancamento.data));
+          this.group?.get('conta')?.setValue(this.lancamento.conta.id);
+          this.group?.get('fixo')?.setValue(this.lancamento.fixo);
+          this.group?.get('concluido')?.setValue(this.lancamento.concluido);
+          this.group?.get('labels')?.setValue(this.lancamento.labels);
+          this.chips.group.get('labels')?.setValue(this.lancamento.labels);
+          this.chips.labels = this.lancamento.labels;
+        });
+      }
 
     });
   }
@@ -110,6 +113,7 @@ export class LancamentoComponent implements OnInit {
     } else { //new
       this.lancamentoService.create(model).subscribe(() => { }, (err) => { }, () => {
         this.chips.group.reset();
+        this.chips.labels = [];
       });
     }
 

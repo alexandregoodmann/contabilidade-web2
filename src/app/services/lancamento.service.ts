@@ -11,8 +11,6 @@ import { BasicCrudService, httpOptions } from './basic-crud.service';
 })
 export class LancamentoService extends BasicCrudService<Lancamento> {
 
-  lancamento!: Lancamento;
-
   constructor(private http: HttpClient) {
     super(http, `${environment.url}/lancamentos`)
   }
