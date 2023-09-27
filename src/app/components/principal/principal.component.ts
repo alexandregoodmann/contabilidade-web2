@@ -20,11 +20,9 @@ export class PrincipalComponent implements OnInit {
   banners: Menu[] = [
     { href: '/#/planilha', icon: 'tab', label: 'Planilha' },
     { href: '/#/label', icon: 'dashboard_customize', label: 'Label' },
-    // { href: '/#/limitegastos', icon: 'dashboard_customize', label: 'Limite de Gastos' },
     { href: '/#/conta', icon: 'credit_card', label: 'Conta' },
     { href: '/#/lancamento', icon: 'add_card', label: 'Lançamento' },
     { href: '/#/extrato', icon: 'account_balance', label: 'Extrato' },
-    { href: '/#/analise', icon: 'analytics', label: 'Análise' },
     { href: '/#/carga', icon: 'file_upload', label: 'Carga de Arquivo' }
   ];
 

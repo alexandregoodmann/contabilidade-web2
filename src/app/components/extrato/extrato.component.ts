@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ChartType } from 'angular-google-charts';
 import { TipoConta } from 'src/app/models/conta';
 import { ExtratoDTO } from 'src/app/models/extrato';
 import { Label } from 'src/app/models/label';
