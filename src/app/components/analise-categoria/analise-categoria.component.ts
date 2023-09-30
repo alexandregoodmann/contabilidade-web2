@@ -1,34 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
-import { ExtratoDTO } from 'src/app/models/extrato';
 import { AnaliseService } from 'src/app/services/analise.service';
-import { LabelService } from 'src/app/services/label.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 
 @Component({
-  selector: 'app-extrato-graficos',
-  templateUrl: './extrato-graficos.component.html',
-  styleUrls: ['./extrato-graficos.component.scss']
+  selector: 'app-analise-categoria',
+  templateUrl: './analise-categoria.component.html',
+  styleUrls: ['./analise-categoria.component.scss']
 })
-export class ExtratoGraficosComponent implements OnInit {
-
-  extrato: ExtratoDTO[] = [];
-  labels: string[] = [];
+export class AnaliseCategoriaComponent implements OnInit {
 
   title = 'Gastos em categorias';
+  columnNames = ['Categoria', 'Percentage'];
   type = ChartType.PieChart;
   datasource = [
     ['Alimentação', 14.40]
   ];
-  columnNames = ['Categoria', 'Percentage'];
   options = {
     is3D: true
   };
-  width = 550;
-  height = 400;
+  width = 500;
+  height = 500;
 
   constructor(
-    private labelService: LabelService,
     private planilhaService: PlanilhaService,
     private analiseService: AnaliseService
   ) { }

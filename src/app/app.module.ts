@@ -35,6 +35,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
+import { AnaliseCategoriaComponent } from './components/analise-categoria/analise-categoria.component';
 import { CargaComponent } from './components/carga/carga.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
@@ -47,7 +48,6 @@ import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { ExtratoGraficosComponent } from './components/extrato-graficos/extrato-graficos.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -98,7 +98,7 @@ const routes: Routes = [
     ExtratoComponent,
     CargaComponent,
     ChipsComponent,
-    ExtratoGraficosComponent
+    AnaliseCategoriaComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),

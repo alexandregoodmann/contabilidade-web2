@@ -7,6 +7,18 @@
 
         <div class="w3-row" style="margin-top: 15px; margin-left: 15px;">
             <div class="select-container w3-col s4">
+                <form #form [formGroup]="group" autocomplete="off">
+                    <mat-form-field>
+                        <mat-label>Filtrar por Label</mat-label>
+                        <input type="text" placeholder="label" matInput formControlName="labels"
+                            [matAutocomplete]="auto">
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option *ngFor="let label of labels" [value]="label.descricao">
+                                {{label.descricao}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </form>
             </div>
             <div class="select-container w3-col s4" style="text-align: right; padding-right: 24px;">
                 <label class="mini-label">Saldo Atual</label>
@@ -128,7 +140,7 @@
     </div>
 
     <div class="w3-col s7">
-        <app-extrato-graficos></app-extrato-graficos>
+        <app-analise-categoria></app-analise-categoria>
     </div>
 
 </div>

@@ -10,6 +10,5 @@ export interface ExtratoDTO {
     tipo: TipoConta;
     saldoPrevisto: number;
     saldoEfetivado: number;
-    categoria: string;
     lancamentos: Lancamento[];
 }

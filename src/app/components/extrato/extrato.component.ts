@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ChartType } from 'angular-google-charts';
 import { TipoConta } from 'src/app/models/conta';
 import { ExtratoDTO } from 'src/app/models/extrato';
 import { Label } from 'src/app/models/label';
@@ -17,8 +17,9 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class ExtratoComponent implements OnInit {
 
+  group!: FormGroup;
   displayedColumns: string[] = ['acao', 'data', 'descricao', 'fixo', 'valor', 'concluido'];
-  extrato!: ExtratoDTO[];
+  extrato: ExtratoDTO[] = [];
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
@@ -31,15 +32,25 @@ export class ExtratoComponent implements OnInit {
     private planilhaService: PlanilhaService,
     private lancamentoService: LancamentoService,
     private labelService: LabelService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit() {
+
+    this.group = this.fb.group({
+      labels: [null]
+    });
+
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
       this.findExtrato();
     });
     this.labelService.findAll().subscribe(data => { this.labels = data });
+
+    this.group.get('labels')?.valueChanges.subscribe(data => {
+      console.log(data);
+    });
   }
 
   private findExtrato() {
