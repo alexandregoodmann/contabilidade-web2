@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
 import { ExtratoDTO } from 'src/app/models/extrato';
+import { AnaliseService } from 'src/app/services/analise.service';
 import { LabelService } from 'src/app/services/label.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 
@@ -16,52 +17,32 @@ export class ExtratoGraficosComponent implements OnInit {
 
   title = 'Gastos em categorias';
   type = ChartType.PieChart;
-  data: any[][] = [];
-  columnNames = ['Browser', 'Percentage'];
+  datasource = [
+    ['Alimentação', 14.40]
+  ];
+  columnNames = ['Categoria', 'Percentage'];
   options = {
+    is3D: true
   };
   width = 550;
   height = 400;
 
   constructor(
     private labelService: LabelService,
-    private planilhaService: PlanilhaService
+    private planilhaService: PlanilhaService,
+    private analiseService: AnaliseService
   ) { }
 
   ngOnInit(): void {
 
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-      this.planilhaService.getExtrato(planilha.id).subscribe(extrato => {
-        this.extrato = extrato;
-      }, (error) => { }, () => {
-        this.labelService.findAll().subscribe(data => {
-          this.labels = data.filter(o => o.analisar).map(n => n.descricao);
-        }, (err) => { }, () => {
-          this.montaDatasource();
+      this.analiseService.getAnaliseCategoria(planilha.ano, planilha.mes).subscribe(data => {
+        this.datasource = [];
+        data.forEach(obj => {
+          this.datasource.push([obj.descricao, obj.soma]);
         });
       });
     });
-  }
-
-  montaDatasource() {
-    let mapa = new Map<String, number>();
-    this.extrato.forEach(conta => {
-      conta.lancamentos.forEach(lancamento => {
-        lancamento.labels.forEach(label => {
-          if (this.labels.includes(label)) {
-            mapa.set(label, lancamento.valor);
-          }
-        });
-      });
-    });
-
-    mapa.forEach((v, k) => {
-      let vet = [k, v];
-      this.data.push(vet);
-    });
-
-    console.log(this.data);
-
   }
 
 }
