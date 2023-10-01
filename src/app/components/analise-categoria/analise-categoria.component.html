@@ -1,5 +1,5 @@
 <div *ngIf="datasource.length > 0">
     <google-chart #chart [title]="title" [type]="type" [data]="datasource" [columns]="columnNames" [options]="options"
-        [width]="width" [height]="height">
+        (select)="filter($event)" [width]="width" [height]="height">
     </google-chart>
 </div>

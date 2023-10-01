@@ -6,6 +6,7 @@ import { ExtratoDTO } from 'src/app/models/extrato';
 import { Label } from 'src/app/models/label';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
+import { AnaliseService } from 'src/app/services/analise.service';
 import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
@@ -34,7 +35,8 @@ export class ExtratoComponent implements OnInit {
     private lancamentoService: LancamentoService,
     private labelService: LabelService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private analiseService: AnaliseService
   ) { }
 
   ngOnInit() {
@@ -43,16 +45,15 @@ export class ExtratoComponent implements OnInit {
       labels: [null]
     });
 
-    this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-      this.planilhaSelecionada = planilha;
-      this.findExtrato();
-    });
     this.labelService.findAll().subscribe(data => { this.labels = data });
 
     this.group.get('labels')?.valueChanges.subscribe(data => {
       if (data)
         this.filteredLabels = this.labels.filter(o => o.descricao.toLocaleLowerCase().includes(data.toLocaleLowerCase()));
     });
+
+    this.analiseService.getExtrato(true);
+    this.analiseService.extratoObservable.subscribe(data => { this.extrato = data; });
 
   }
 

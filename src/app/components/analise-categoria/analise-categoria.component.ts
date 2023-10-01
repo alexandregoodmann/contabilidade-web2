@@ -28,7 +28,6 @@ export class AnaliseCategoriaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.analiseService.getAnaliseCategoria(planilha.ano, planilha.mes).subscribe(data => {
         this.datasource = [];
@@ -37,6 +36,14 @@ export class AnaliseCategoriaComponent implements OnInit {
         });
       });
     });
+  }
+
+  filter(e: any) {
+    if (e.selection.length > 0) {
+      let i: number = e.selection[0].row as number;
+      let label = this.datasource[i][0] as string;
+      this.analiseService.filtrarExtratoPorCategoria(label);
+    }
   }
 
 }
