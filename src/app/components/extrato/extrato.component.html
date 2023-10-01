@@ -5,20 +5,36 @@
 <div class="w3-row">
     <div class="w3-col s5">
 
-        <div class="w3-row" style="margin-top: 15px; margin-left: 15px;">
-            <div class="select-container w3-col s4">
-                <form #form [formGroup]="group" autocomplete="off">
+        <!-- FILTROS -->
+        <form #form [formGroup]="group" autocomplete="off" (ngSubmit)="filtrar()">
+            <div style="display: flex; width: 100%;">
+                <div style="width: 80%;">
                     <mat-form-field>
                         <mat-label>Filtrar por Label</mat-label>
-                        <input type="text" placeholder="label" matInput formControlName="labels"
+                        <input type=" text" placeholder="label" matInput formControlName="labels"
                             [matAutocomplete]="auto">
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                            <mat-option *ngFor="let label of labels" [value]="label.descricao">
+                            <mat-option *ngFor="let label of filteredLabels" [value]="label.descricao">
                                 {{label.descricao}}
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
-                </form>
+                </div>
+                <div style="width: 20%;">
+                    <button mat-mini-fab color="basic" aria-label="Filtrar extrato" type="submit">
+                        <mat-icon>filter_alt</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="basic" aria-label="Limpar filtros" type="button"
+                        (click)="findExtrato(); form.reset()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- SALDOS TOTAIS -->
+        <div class="w3-row" style="margin-top: 15px; margin-left: 15px;">
+            <div class="select-container w3-col s4">
             </div>
             <div class="select-container w3-col s4" style="text-align: right; padding-right: 24px;">
                 <label class="mini-label">Saldo Atual</label>

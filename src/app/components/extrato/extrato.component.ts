@@ -25,6 +25,7 @@ export class ExtratoComponent implements OnInit {
   planilhaSelecionada!: Planilha;
   marcados: number[] = [];
   labels!: Label[];
+  filteredLabels: Label[] = [];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
   ordem: OrdemExtrato = new OrdemExtrato();
 
@@ -49,11 +50,13 @@ export class ExtratoComponent implements OnInit {
     this.labelService.findAll().subscribe(data => { this.labels = data });
 
     this.group.get('labels')?.valueChanges.subscribe(data => {
-      console.log(data);
+      if (data)
+        this.filteredLabels = this.labels.filter(o => o.descricao.toLocaleLowerCase().includes(data.toLocaleLowerCase()));
     });
+
   }
 
-  private findExtrato() {
+  findExtrato() {
     this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
       this.extrato = data;
       this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
@@ -145,6 +148,14 @@ export class ExtratoComponent implements OnInit {
     } else {
       this.expandidos.set(conta.id, true);
     }
+  }
+
+  filtrar() {
+    let label = this.group.get('labels')?.value;
+    this.extrato.forEach(conta => {
+      conta.lancamentos = conta.lancamentos = conta.lancamentos.filter(l => l.labels.includes(label));
+    });
+    this.extrato = this.extrato.filter(e => e.lancamentos.length > 0);
   }
 
 }
