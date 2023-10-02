@@ -53,16 +53,14 @@ export class ExtratoComponent implements OnInit {
     });
 
     this.analiseService.getExtrato(true);
-    this.analiseService.extratoObservable.subscribe(data => { this.extrato = data; });
-
-  }
-
-  findExtrato() {
-    this.planilhaService.getExtrato(this.planilhaSelecionada.id).subscribe(data => {
+    this.analiseService.extratoObservable.subscribe(data => {
       this.extrato = data;
-      this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
-      this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
+      if (this.extrato.length > 0) {
+        this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
+        this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
+      }
     });
+
   }
 
   editar(idLancamento: number) {
@@ -113,28 +111,28 @@ export class ExtratoComponent implements OnInit {
   concluirMarcados() {
     this.lancamentoService.concluir(this.marcados).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
-      this.findExtrato();
+      this.analiseService.getExtrato(true);
     });
   }
 
   marcarFixo() {
     this.lancamentoService.fixo(this.marcados).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
-      this.findExtrato();
+      this.analiseService.getExtrato(true);
     });
   }
 
   deleteAll() {
     this.lancamentoService.deleteAll(this.marcados).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
-      this.findExtrato();
+      this.analiseService.getExtrato(true);
     });
   }
 
   categorizar(label: Label) {
     this.lancamentoService.categorizar(this.marcados, label).subscribe(() => { }, () => { }, () => {
       this.marcados = [];
-      this.findExtrato();
+      this.analiseService.getExtrato(true);
     });
   }
 
