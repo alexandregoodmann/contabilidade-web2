@@ -6,7 +6,6 @@ export interface ExtratoDTO {
     banco: string;
     descricao: string;
     expanded: boolean;
-    marcado: boolean;
     tipo: TipoConta;
     saldoPrevisto: number;
     saldoEfetivado: number;

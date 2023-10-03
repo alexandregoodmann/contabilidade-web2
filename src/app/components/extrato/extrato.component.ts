@@ -9,7 +9,6 @@ import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
-import { PlanilhaService } from 'src/app/services/planilha.service';
 
 @Component({
   selector: 'app-extrato',
@@ -19,19 +18,17 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 export class ExtratoComponent implements OnInit {
 
   group!: FormGroup;
-  displayedColumns: string[] = ['acao', 'data', 'descricao', 'fixo', 'valor', 'concluido'];
+  displayedColumns: string[] = ['data', 'descricao', 'valor', 'fixo', 'concluido'];
   extrato: ExtratoDTO[] = [];
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
-  marcados: number[] = [];
   labels!: Label[];
   filteredLabels: Label[] = [];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
   ordem: OrdemExtrato = new OrdemExtrato();
 
   constructor(
-    private planilhaService: PlanilhaService,
     private lancamentoService: LancamentoService,
     private labelService: LabelService,
     private router: Router,
@@ -48,8 +45,9 @@ export class ExtratoComponent implements OnInit {
     this.labelService.findAll().subscribe(data => { this.labels = data });
 
     this.group.get('labels')?.valueChanges.subscribe(data => {
-      if (data)
+      if (data) {
         this.filteredLabels = this.labels.filter(o => o.descricao.toLocaleLowerCase().includes(data.toLocaleLowerCase()));
+      }
     });
 
     this.analiseService.getExtrato(true);
@@ -87,52 +85,14 @@ export class ExtratoComponent implements OnInit {
     this.ordem.sort = this.ordem.sort * (-1);
   }
 
-  marcar(event: any, item: Lancamento) {
-    if (event.checked) {
-      item.marcado = true;
-      this.marcados.push(item.id);
-    } else {
-      item.marcado = false;
-      let i = this.marcados.indexOf(item.id);
-      this.marcados.splice(i, 1);
-    }
-  }
-
-  marcarTodos(event: any, lancamentos: Lancamento[]) {
-    this.marcados = [];
-    if (event.checked) {
-      lancamentos.forEach(l => { l.marcado = true });
-      this.marcados = lancamentos.map(n => n.id);
-    } else {
-      lancamentos.forEach(l => { l.marcado = false });
-    }
-  }
-
-  concluirMarcados() {
-    this.lancamentoService.concluir(this.marcados).subscribe(() => { }, () => { }, () => {
-      this.marcados = [];
-      this.analiseService.getExtrato(true);
-    });
-  }
-
-  marcarFixo() {
-    this.lancamentoService.fixo(this.marcados).subscribe(() => { }, () => { }, () => {
-      this.marcados = [];
-      this.analiseService.getExtrato(true);
-    });
-  }
-
-  deleteAll() {
-    this.lancamentoService.deleteAll(this.marcados).subscribe(() => { }, () => { }, () => {
-      this.marcados = [];
-      this.analiseService.getExtrato(true);
-    });
-  }
-
-  categorizar(label: Label) {
-    this.lancamentoService.categorizar(this.marcados, label).subscribe(() => { }, () => { }, () => {
-      this.marcados = [];
-      this.analiseService.getExtrato(true);
+  update(acao: string, event: any, item: Lancamento) {
+    this.lancamentoService.findById(item.id).subscribe(data => {
+      if (acao == 'fixo') {
+        data.fixo = event._checked;
+      } else if (acao == 'concluido') {
+        data.concluido = event._checked;
+      }
+      this.lancamentoService.update(data).subscribe();
     });
   }
 

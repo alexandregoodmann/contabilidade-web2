@@ -22,20 +22,6 @@ export class LancamentoService extends BasicCrudService<Lancamento> {
     );
   }
 
-  concluir(lancamento_ids: number[]) {
-    let dto = { list: lancamento_ids };
-    return this.http.post(`${environment.url}/lancamentos/concluir`, dto, httpOptions).pipe(
-      catchError(this.handleError('concluir'))
-    );
-  }
-
-  fixo(lancamento_ids: number[]) {
-    let dto = { list: lancamento_ids };
-    return this.http.post(`${environment.url}/lancamentos/fixo`, dto, httpOptions).pipe(
-      catchError(this.handleError('fixo'))
-    );
-  }
-
   categorizar(lancamento_ids: number[], categoria: Label) {
     if (lancamento_ids.length == 0 || categoria == undefined) {
       throw ('ids de lancamentos não informados ou categoria faltando')

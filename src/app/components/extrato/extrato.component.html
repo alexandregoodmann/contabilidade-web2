@@ -3,7 +3,7 @@
 <app-select-planilha></app-select-planilha>
 
 <div class="w3-row">
-    <div class="w3-col l5">
+    <div class="w3-col l6">
 
         <!-- FILTROS 
         <form #form [formGroup]="group" autocomplete="off" (ngSubmit)="filtrar()">
@@ -71,15 +71,6 @@
 
                 <table mat-table [dataSource]="conta.lancamentos" class="mat-elevation-z8" style="width: 100%" matSort>
 
-                    <ng-container matColumnDef="acao">
-                        <th mat-header-cell *matHeaderCellDef>
-                            <mat-checkbox (change)="marcarTodos($event, conta.lancamentos)"></mat-checkbox>
-                        </th>
-                        <td mat-cell *matCellDef="let item">
-                            <mat-checkbox (change)="marcar($event, item)" [checked]="item.marcado"></mat-checkbox>
-                        </td>
-                    </ng-container>
-
                     <ng-container matColumnDef="data">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header
                             (click)="sortBy(indexConta, conta.lancamentos, 'data')"> Data
@@ -98,52 +89,28 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="fixo">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header
-                            (click)="sortBy(indexConta, conta.lancamentos, 'fixo')">Fixo</th>
-                        <td mat-cell *matCellDef="let item">
-                            <span *ngIf="item.fixo">Sim</span>
-                        </td>
-                    </ng-container>
-
                     <ng-container matColumnDef="valor">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: right;"
                             (click)="sortBy(indexConta, conta.lancamentos, 'valor')"> Valor </th>
-                        <td mat-cell *matCellDef="let item" (click)="editar(item.id)" style="text-align: right;"
+                        <td mat-cell *matCellDef="let item" (click)="editar(item.id)" class="valor"
                             [ngStyle]="{'color':item.valor < 0 ? 'red' : 'black' }"> {{item.valor | number: '1.2-2'}}
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="concluido">
-                        <th mat-header-cell *matHeaderCellDef>
-                            <button mat-icon-button [matMenuTriggerFor]="menu">
-                                <mat-icon>more_vert</mat-icon>
-                            </button>
-                            <mat-menu #menu="matMenu">
-                                <button mat-menu-item>
-                                    <mat-icon>add_card</mat-icon>
-                                    <span>Lançamento</span>
-                                </button>
-                                <mat-divider></mat-divider>
-                                <button mat-menu-item (click)="concluirMarcados()">
-                                    <mat-icon>done</mat-icon>
-                                    <span>Concluído</span>
-                                </button>
-                                <mat-divider></mat-divider>
-                                <button mat-menu-item (click)="marcarFixo()">
-                                    <mat-icon>cached</mat-icon>
-                                    <span>Fixo</span>
-                                </button>
-                                <mat-divider></mat-divider>
-                                <button mat-menu-item (click)="deleteAll()">
-                                    <mat-icon>delete</mat-icon>
-                                    <span>Apagar</span>
-                                </button>
+                    <ng-container matColumnDef="fixo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            (click)="sortBy(indexConta, conta.lancamentos, 'fixo')">Fixo</th>
+                        <td mat-cell *matCellDef="let item">
+                            <mat-checkbox #fixo [checked]="item.fixo" (click)="update('fixo', fixo, item)"></mat-checkbox>
+                        </td>
+                    </ng-container>
 
-                            </mat-menu>
-                        </th>
-                        <td mat-cell *matCellDef="let item" (click)="editar(item.id)">
-                            <mat-icon *ngIf="item.concluido">check</mat-icon>
+                    <ng-container matColumnDef="concluido">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                            (click)="sortBy(indexConta, conta.lancamentos, 'concluido')">Concluído</th>
+                        <td mat-cell *matCellDef="let item">
+                            <mat-checkbox #concluido [checked]="item.concluido"
+                                (click)="update('concluido', concluido, item)"></mat-checkbox>
                         </td>
                     </ng-container>
 
@@ -155,7 +122,7 @@
         </mat-accordion>
     </div>
 
-    <div class="w3-col l7">
+    <div class="w3-col l6">
         <app-analise-categoria></app-analise-categoria>
     </div>
 
