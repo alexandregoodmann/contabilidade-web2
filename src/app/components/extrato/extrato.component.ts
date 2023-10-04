@@ -68,8 +68,9 @@ export class ExtratoComponent implements OnInit {
       this.router.navigate(['/lancamento']);
   }
 
-  sortBy(indexConta: number, lancamentos: Lancamento[], coluna: string, update?: boolean) {
+  sortBy(indexConta: number, lancamentos: Lancamento[], coluna: string) {
     let ret = this.ordem.sort;
+
     lancamentos.sort(function (x: any, y: any) {
       x[coluna] = (x[coluna] == null) ? '' : x[coluna];
       y[coluna] = (y[coluna] == null) ? '' : y[coluna];
@@ -81,6 +82,7 @@ export class ExtratoComponent implements OnInit {
       }
       return 0;
     });
+    
     this.extrato[indexConta].lancamentos = Array.from(lancamentos);
     this.ordem.sort = this.ordem.sort * (-1);
   }
