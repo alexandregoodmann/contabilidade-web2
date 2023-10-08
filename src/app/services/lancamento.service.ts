@@ -22,6 +22,12 @@ export class LancamentoService extends BasicCrudService<Lancamento> {
     );
   }
 
+  processarLabels(dto: any){
+    return this.http.post(`${environment.url}/lancamentos/processarLabels`, dto, httpOptions).pipe(
+      catchError(this.handleError('processarLabels'))
+    );
+  }
+
   categorizar(lancamento_ids: number[], categoria: Label) {
     if (lancamento_ids.length == 0 || categoria == undefined) {
       throw ('ids de lancamentos não informados ou categoria faltando')
