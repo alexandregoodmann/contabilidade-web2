@@ -28,6 +28,17 @@
                 [expanded]="isExpanded(conta.id)">
                 <mat-expansion-panel-header (click)="expand(conta)">
                     <mat-panel-title>
+                        <!-- menu button -->
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item>
+                                <mat-icon>dialpad</mat-icon>
+                                <span>Processar Labels</span>
+                            </button>
+                        </mat-menu>
+                        <!-- menu button -->
                         <span class="header">
                             {{conta.descricao}}
                         </span>

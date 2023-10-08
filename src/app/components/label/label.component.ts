@@ -1,6 +1,8 @@
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { Sort } from '@angular/material/sort';
 import { Label } from 'src/app/models/label';
 import { LabelService } from 'src/app/services/label.service';
 
@@ -11,13 +13,14 @@ import { LabelService } from 'src/app/services/label.service';
 })
 export class LabelComponent implements OnInit {
 
+  datasource: Label[] = [];
   categoria?: Label;
   group!: FormGroup;
-  categorias!: Array<Label>;
   displayedColumns: string[] = ['descricao', 'analisar', 'chaves', 'delete'];
   chaves: Set<string> = new Set<string>();
 
   constructor(
+    private _liveAnnouncer: LiveAnnouncer,
     private fb: FormBuilder,
     private labelService: LabelService
   ) { }
@@ -59,7 +62,12 @@ export class LabelComponent implements OnInit {
 
   findAll() {
     this.labelService.findAll().subscribe(data => {
-      this.categorias = data as unknown as Label[];
+      this.datasource = data.sort(function (a, b) {
+        if (a.descricao > b.descricao)
+          return 1;
+        else
+          return -1;
+      });
     });
   }
 
@@ -89,5 +97,13 @@ export class LabelComponent implements OnInit {
 
   removeChave(chave: string) {
     this.chaves.delete(chave);
+  }
+
+  sortTable(sortState: Sort) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
   }
 }
