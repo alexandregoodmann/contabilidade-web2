@@ -8,6 +8,16 @@
         <mat-error>Informe um label</mat-error>
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+        <mat-label>Chaves label automático</mat-label>
+        <mat-chip-list #chipList aria-label="Label automático" multiple formControlName="chaves">
+            <mat-chip *ngFor="let chave of chaves" [selected]="chave" [value]="chave" (removed)="removeChave(chave)">
+                {{chave}}
+            </mat-chip>
+            <input placeholder="Nova chave..." [matChipInputFor]="chipList" (matChipInputTokenEnd)="addChave($event)">
+        </mat-chip-list>
+    </mat-form-field>
+
     <div style="margin-top: 10px;margin-bottom: 20px;">
         <mat-slide-toggle formControlName="analisar">Analisar</mat-slide-toggle>
     </div>
@@ -21,7 +31,7 @@
 </form>
 
 <div class="content-table">
-    <table mat-table [dataSource]="categorias" class="mat-elevation-z8">
+    <table mat-table [dataSource]="datasource" class="mat-elevation-z8">
 
         <ng-container matColumnDef="descricao">
             <th mat-header-cell *matHeaderCellDef> Descrição </th>
@@ -31,6 +41,13 @@
         <ng-container matColumnDef="analisar">
             <th mat-header-cell *matHeaderCellDef> Analisar </th>
             <td mat-cell *matCellDef="let item"> <span *ngIf="item.analisar">SIM</span> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="chaves">
+            <th mat-header-cell *matHeaderCellDef> Chaves </th>
+            <td mat-cell *matCellDef="let item">
+                {{item.chaves}}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="delete">

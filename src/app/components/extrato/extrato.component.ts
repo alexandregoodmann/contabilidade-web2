@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TipoConta } from 'src/app/models/conta';
 import { ExtratoDTO } from 'src/app/models/extrato';
-import { Label } from 'src/app/models/label';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
-import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
+import { PlanilhaService } from 'src/app/services/planilha.service';
 
 @Component({
   selector: 'app-extrato',
@@ -17,38 +15,24 @@ import { LancamentoService } from 'src/app/services/lancamento.service';
 })
 export class ExtratoComponent implements OnInit {
 
-  group!: FormGroup;
   displayedColumns: string[] = ['data', 'descricao', 'valor', 'fixo', 'concluido'];
   extrato: ExtratoDTO[] = [];
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
-  labels!: Label[];
-  filteredLabels: Label[] = [];
   expandidos: Map<number, boolean> = new Map<number, boolean>();
   ordem: OrdemExtrato = new OrdemExtrato();
 
   constructor(
     private lancamentoService: LancamentoService,
-    private labelService: LabelService,
     private router: Router,
-    private fb: FormBuilder,
-    private analiseService: AnaliseService
+    private analiseService: AnaliseService,
+    private planilhaService: PlanilhaService
   ) { }
 
   ngOnInit() {
 
-    this.group = this.fb.group({
-      labels: [null]
-    });
-
-    this.labelService.findAll().subscribe(data => { this.labels = data });
-
-    this.group.get('labels')?.valueChanges.subscribe(data => {
-      if (data) {
-        this.filteredLabels = this.labels.filter(o => o.descricao.toLocaleLowerCase().includes(data.toLocaleLowerCase()));
-      }
-    });
+    this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
 
     this.analiseService.getExtrato(true);
     this.analiseService.extratoObservable.subscribe(data => {
@@ -82,7 +66,7 @@ export class ExtratoComponent implements OnInit {
       }
       return 0;
     });
-    
+
     this.extrato[indexConta].lancamentos = Array.from(lancamentos);
     this.ordem.sort = this.ordem.sort * (-1);
   }
@@ -109,14 +93,6 @@ export class ExtratoComponent implements OnInit {
     } else {
       this.expandidos.set(conta.id, true);
     }
-  }
-
-  filtrar() {
-    let label = this.group.get('labels')?.value;
-    this.extrato.forEach(conta => {
-      conta.lancamentos = conta.lancamentos = conta.lancamentos.filter(l => l.labels.includes(label));
-    });
-    this.extrato = this.extrato.filter(e => e.lancamentos.length > 0);
   }
 
 }

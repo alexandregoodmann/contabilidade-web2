@@ -1,6 +1,8 @@
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Sort } from '@angular/material/sort';
 import { Label } from 'src/app/models/label';
 import { LabelService } from 'src/app/services/label.service';
 
@@ -11,28 +13,40 @@ import { LabelService } from 'src/app/services/label.service';
 })
 export class LabelComponent implements OnInit {
 
+  datasource: Label[] = [];
   categoria?: Label;
   group!: FormGroup;
-  categorias!: Array<Label>;
-  displayedColumns: string[] = ['descricao', 'analisar', 'delete'];
+  displayedColumns: string[] = ['descricao', 'analisar', 'chaves', 'delete'];
+  chaves: Set<string> = new Set<string>();
 
   constructor(
+    private _liveAnnouncer: LiveAnnouncer,
     private fb: FormBuilder,
-    private labelService: LabelService,
-    private snackBar: MatSnackBar
+    private labelService: LabelService
   ) { }
 
   ngOnInit() {
     this.group = this.fb.group({
       descricao: [null, [Validators.required]],
-      analisar: [null]
+      analisar: [null],
+      chaves: [null]
     });
     this.findAll();
   }
 
   salvar() {
+
+    let _value = '';
+    this.chaves.forEach(e => {
+      _value = (_value.length == 0) ? e : _value.concat(";").concat(e);
+    });
+    this.group.get('chaves')?.setValue(_value);
+
     if (this.categoria == undefined) {
-      this.labelService.create(this.group.value).subscribe(() => { }, () => { }, () => { this.findAll(); });
+      this.labelService.create(this.group.value).subscribe(() => { }, () => { }, () => {
+        this.findAll();
+        this.chaves = new Set<string>();
+      });
     } else {
       let model = this.group.value;
       model.id = this.categoria.id;
@@ -40,17 +54,26 @@ export class LabelComponent implements OnInit {
         this.categoria = undefined;
         this.group.reset();
         this.findAll();
+        this.chaves = new Set<string>();
       });
     }
+
   }
 
   findAll() {
     this.labelService.findAll().subscribe(data => {
-      this.categorias = data as unknown as Label[];
+      this.datasource = data.sort(function (a, b) {
+        if (a.descricao > b.descricao)
+          return 1;
+        else
+          return -1;
+      });
     });
   }
 
   edit(obj: Label) {
+    if (obj.chaves != '')
+      obj.chaves.split(';').forEach(e => { this.chaves.add(e) });
     this.categoria = obj;
     this.group.patchValue(obj);
   }
@@ -65,4 +88,22 @@ export class LabelComponent implements OnInit {
     });
   }
 
+  addChave(event: MatChipInputEvent) {
+    if (event.value) {
+      this.chaves.add(event.value);
+      event.chipInput!.clear();
+    }
+  }
+
+  removeChave(chave: string) {
+    this.chaves.delete(chave);
+  }
+
+  sortTable(sortState: Sort) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+  }
 }
