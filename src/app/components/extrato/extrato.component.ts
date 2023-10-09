@@ -95,12 +95,6 @@ export class ExtratoComponent implements OnInit {
     }
   }
 
-  processarLabels(conta: any) {
-    let obj = { idPlanilha: this.planilhaSelecionada.id, idConta: conta.id };
-    this.lancamentoService.processarLabels(obj).subscribe();
-    this.analiseService.getExtrato(true);
-  }
-
 }
 
 export class OrdemExtrato {
