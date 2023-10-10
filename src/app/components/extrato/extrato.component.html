@@ -41,6 +41,12 @@
                         </span>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
+       
+                <!-- bar buttons -->
+                <div style="background-color: #d5d4d4; height: 30px; width: 100%;">
+                    <button mat-button type="button" (click)="processarLabels(conta)">Processar labels</button>
+                </div>
+       
                 <table mat-table [dataSource]="conta.lancamentos" class="mat-elevation-z8" style="width: 100%" matSort>
 
                     <ng-container matColumnDef="data">
