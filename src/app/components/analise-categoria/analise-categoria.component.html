@@ -2,4 +2,23 @@
     <google-chart #chart [title]="title" [type]="type" [data]="datasource" [columns]="columnNames" [options]="options"
         (select)="filter($event)" [width]="width" [height]="height">
     </google-chart>
+
+    <table>
+        <tr>
+            <th>Categoria</th>
+            <th>Total</th>
+            <th>%</th>
+        </tr>
+        <tr *ngFor="let item of datasourceTable">
+            <td>{{item.descricao}}</td>
+            <td>R$ {{item.soma | number: '1.2-2'}}</td>
+            <td>{{item.porcentagem | number: '1.2-2'}}</td>
+        </tr>
+        <tfoot>
+            <tr>
+                <td>Total</td>
+                <td>R$ {{total | number: '1.2-2'}}</td>
+            </tr>
+        </tfoot>
+    </table>
 </div>

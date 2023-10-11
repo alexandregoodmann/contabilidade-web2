@@ -35,13 +35,18 @@ export class AnaliseService {
     });
   }
 
-  filtrarExtratoPorCategoria(label: string) {
+  filtrarExtratoPorCategoria(label?: string) {
     this.getExtrato(false);
     this.extratoDataSource.forEach(conta => {
-      conta.lancamentos = conta.lancamentos = conta.lancamentos.filter(l => l.labels.includes(label));
+      if (label == undefined) {
+        conta.lancamentos = conta.lancamentos.filter(l => l.labels.length == 0);
+      } else {
+        conta.lancamentos = conta.lancamentos.filter(l => l.labels.includes(label));
+      }
     });
     this.extratoDataSource = this.extratoDataSource.filter(e => e.lancamentos.length > 0);
     this.extratoBehavior.next(this.extratoDataSource);
   }
+
 }
 

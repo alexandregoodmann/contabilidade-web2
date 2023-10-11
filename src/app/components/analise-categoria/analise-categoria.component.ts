@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
+import { AnaliseCategoria } from 'src/app/models/analise-categoria';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 
@@ -10,6 +11,7 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class AnaliseCategoriaComponent implements OnInit {
 
+  // grafic
   title = 'Gastos em categorias';
   columnNames = ['Categoria', 'Percentage'];
   type = ChartType.PieChart;
@@ -22,6 +24,10 @@ export class AnaliseCategoriaComponent implements OnInit {
   width = 500;
   height = 500;
 
+  //table
+  datasourceTable: AnaliseCategoria[] = [];
+  total: number = 0;
+
   constructor(
     private planilhaService: PlanilhaService,
     private analiseService: AnaliseService
@@ -30,6 +36,11 @@ export class AnaliseCategoriaComponent implements OnInit {
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.analiseService.getAnaliseCategoria(planilha.ano, planilha.mes).subscribe(data => {
+        this.datasourceTable = data;
+        this.total = this.datasourceTable.map(o => o.soma).reduce((a, b) => a + b);
+        this.datasourceTable.forEach(e => {
+          e.porcentagem = e.soma / this.total * 100;
+        });
         this.datasource = [];
         data.forEach(obj => {
           this.datasource.push([obj.descricao, obj.soma]);

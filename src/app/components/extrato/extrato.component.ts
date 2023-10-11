@@ -102,6 +102,10 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
+  filtrarSemLabels(){
+    this.analiseService.filtrarExtratoPorCategoria(undefined);
+  }
+
 }
 
 export class OrdemExtrato {
