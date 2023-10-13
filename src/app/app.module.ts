@@ -48,6 +48,7 @@ import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
+import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -98,7 +99,8 @@ const routes: Routes = [
     ExtratoComponent,
     CargaComponent,
     ChipsComponent,
-    AnaliseCategoriaComponent
+    AnaliseCategoriaComponent,
+    ResumoExtratoComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),

@@ -31,18 +31,20 @@ export class ExtratoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
-
     this.analiseService.getExtrato(true);
     this.analiseService.extratoObservable.subscribe(data => {
       this.extrato = data;
       if (this.extrato.length > 0) {
-        this.saldoAtual = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoEfetivado).reduce((a, b) => a + b);
-        this.saldoPrevisto = this.extrato.filter(o => o.tipo == TipoConta.CC).map(n => n.saldoPrevisto).reduce((a, b) => a + b);
+        this.calcularTotais();
       }
     });
+  }
 
+  calcularTotais() {
+    let contaCorrente = this.extrato.filter(o => o.tipo == TipoConta.CC);
+    this.saldoAtual = contaCorrente.map(n => n.saldoEfetivado).reduce((a, b) => a + b);
+    this.saldoPrevisto = contaCorrente.map(n => n.saldoPrevisto).reduce((a, b) => a + b);
   }
 
   editar(idLancamento: number) {
@@ -97,12 +99,12 @@ export class ExtratoComponent implements OnInit {
 
   processarLabels(conta: any) {
     let obj = { idPlanilha: this.planilhaSelecionada.id, idConta: conta.id };
-    this.lancamentoService.processarLabels(obj).subscribe(()=>{
+    this.lancamentoService.processarLabels(obj).subscribe(() => {
       this.analiseService.getExtrato(true);
     });
   }
 
-  filtrarSemLabels(){
+  filtrarSemLabels() {
     this.analiseService.filtrarExtratoPorCategoria(undefined);
   }
 
@@ -113,4 +115,10 @@ export class OrdemExtrato {
   indexConta?: number;
   lancamentos?: Lancamento[];
   coluna?: string;
+}
+
+export class Totais {
+  entradas: number = 0;
+  saidas: number = 0;
+  fixos: number = 0;
 }

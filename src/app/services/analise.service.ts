@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { AnaliseCategoria } from '../models/analise-categoria';
 import { ExtratoDTO } from '../models/extrato';
 import { PlanilhaService } from './planilha.service';
+import { ResumoExtrato } from '../models/resumo-extrato';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,10 @@ export class AnaliseService {
 
   getAnaliseCategoria(ano: number, mes: number): Observable<AnaliseCategoria[]> {
     return this.http.get<AnaliseCategoria[]>(`${environment.url}/analise/categoria/${ano}/${mes}`);
+  }
+
+  getResumoExtrato(ano: number, mes: number): Observable<ResumoExtrato[]> {
+    return this.http.get<ResumoExtrato[]>(`${environment.url}/analise/resumoextrato/${ano}/${mes}`);
   }
 
   getExtrato(setBehavior: boolean) {
