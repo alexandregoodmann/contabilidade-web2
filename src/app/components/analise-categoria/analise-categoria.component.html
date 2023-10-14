@@ -1,24 +1,31 @@
-<div *ngIf="datasource.length > 0">
-    <google-chart #chart [title]="title" [type]="type" [data]="datasource" [columns]="columnNames" [options]="options"
-        (select)="filter($event)" [width]="width" [height]="height">
-    </google-chart>
-
-    <table>
-        <tr>
-            <th>Categoria</th>
-            <th>Total</th>
-            <th>%</th>
-        </tr>
-        <tr *ngFor="let item of datasourceTable">
-            <td>{{item.descricao}}</td>
-            <td>R$ {{item.soma | number: '1.2-2'}}</td>
-            <td>{{item.porcentagem | number: '1.2-2'}}</td>
-        </tr>
-        <tfoot>
-            <tr>
-                <td>Total</td>
-                <td>R$ {{total | number: '1.2-2'}}</td>
-            </tr>
-        </tfoot>
-    </table>
+<div style="padding: 10px;">
+    <mat-card *ngIf="datasource.length > 0">
+        <div class="w3-row">
+            <div class="w3-col l6">
+                <google-chart #chart [title]="title" [type]="type" [data]="datasource" [columns]="columnNames"
+                    [options]="options" (select)="filter($event)" [width]="width" [height]="height">
+                </google-chart>
+            </div>
+            <div class="w3-col l6">
+                <table class="resumo-table" matSort (matSortChange)="sortData($event)">
+                    <tr>
+                        <th mat-sort-header="descricao">Categoria</th>
+                        <th mat-sort-header="soma">Total</th>
+                        <th mat-sort-header="porcentagem">Porcentagem</th>
+                    </tr>
+                    <tr *ngFor="let item of datasourceTable">
+                        <td>{{item.descricao}}</td>
+                        <td>R$ {{item.soma | number: '1.2-2'}}</td>
+                        <td>{{item.porcentagem | number: '1.2-2'}}%</td>
+                    </tr>
+                    <tfoot>
+                        <tr>
+                            <td>Total</td>
+                            <td>R$ {{total | number: '1.2-2'}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </mat-card>
 </div>

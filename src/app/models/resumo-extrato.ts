@@ -3,4 +3,5 @@ export interface ResumoExtrato {
     lancamento: string;
     valor: number;
     porcentagem: number;
+    fixo: string;
 }

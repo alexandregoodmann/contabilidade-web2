@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Sort } from '@angular/material/sort';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseCategoria } from 'src/app/models/analise-categoria';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
   selector: 'app-analise-categoria',
@@ -21,8 +23,8 @@ export class AnaliseCategoriaComponent implements OnInit {
   options = {
     is3D: true
   };
-  width = 500;
-  height = 500;
+  width = 400;
+  height = 300;
 
   //table
   datasourceTable: AnaliseCategoria[] = [];
@@ -55,6 +57,22 @@ export class AnaliseCategoriaComponent implements OnInit {
       let label = this.datasource[i][0] as string;
       this.analiseService.filtrarExtratoPorCategoria(label);
     }
+  }
+
+  sortData(sort: Sort) {
+    this.datasourceTable = this.datasourceTable.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'descricao':
+          return compare(a.descricao, b.descricao, isAsc);
+        case 'soma':
+          return compare(a.soma, b.soma, isAsc);
+        case 'porcentagem':
+          return compare(a.porcentagem, b.porcentagem, isAsc);
+        default:
+          return 0;
+      }
+    });
   }
 
 }

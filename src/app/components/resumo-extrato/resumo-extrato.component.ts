@@ -1,7 +1,5 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { Planilha } from 'src/app/models/planilha';
 import { ResumoExtrato } from 'src/app/models/resumo-extrato';
 import { AnaliseService } from 'src/app/services/analise.service';
@@ -14,30 +12,70 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class ResumoExtratoComponent implements OnInit {
 
-  displayedColumns: string[] = ['conta', 'lancamento', 'valor', 'porcentagem'];
-  dataSource = new MatTableDataSource<ResumoExtrato>();
-
   planilhaSelecionada!: Planilha;
-  resumoExtrato: ResumoExtrato[] = [];
+  datasource: ResumoExtrato[] = [];
+  filtrado: ResumoExtrato[] = [];
+  label!: string;
+  total!: number;
 
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private analiseService: AnaliseService,
     private planilhaService: PlanilhaService,
-    private _liveAnnouncer: LiveAnnouncer
   ) { }
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
     this.analiseService.getResumoExtrato(this.planilhaSelecionada.ano, this.planilhaSelecionada.mes).subscribe(data => {
-      this.resumoExtrato = data;
-      this.dataSource = new MatTableDataSource(this.resumoExtrato);
+      this.datasource = data;
+      this.filtrarTabela('entrada');
     });
   }
 
-  announceSortChange(sortState: Sort) {
-    this.dataSource.sort = this.sort;
+  filtrarTabela(item: string) {
+    switch (item) {
+      case 'entrada':
+        this.label = 'Total em entradas';
+        this.filtrado = this.datasource.filter(o => o.valor >= 0);
+        break;
+      case 'saida':
+        this.label = 'Total em saídas';
+        this.filtrado = this.datasource.filter(o => o.valor <= 0);
+        break;
+      case 'fixo':
+        this.label = 'Total em gastos fixos';
+        this.filtrado = this.datasource.filter(o => o.fixo && o.valor <= 0 && o.lancamento != 'Saldo Anterior');
+        break;
+      default:
+        break;
+    }
+    this.total = this.filtrado.map(n => n.valor).reduce((a, b) => a + b);
+    this.filtrado.forEach(e => {
+      e.porcentagem = e.valor / this.total * 100;
+    });
   }
 
+  sortData(sort: Sort) {
+    this.filtrado = this.filtrado.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'conta':
+          return compare(a.conta, b.conta, isAsc);
+        case 'lancamento':
+          return compare(a.lancamento, b.lancamento, isAsc);
+        case 'valor':
+          return compare(a.valor, b.valor, isAsc);
+        case 'porcentagem':
+          return compare(a.porcentagem, b.porcentagem, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
+
+}
+
+export function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

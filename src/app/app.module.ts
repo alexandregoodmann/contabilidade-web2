@@ -50,6 +50,7 @@ import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilh
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
 import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
 
+
 registerLocaleData(localePt, 'pt-BR');
 
 const routes: Routes = [
