@@ -9,7 +9,7 @@ export class Lancamento {
     data!: Date;
     descricao!: string;
     valor!: number;
-    fixo!: boolean;
+    fixo!: string;
     concluido!: boolean;
     numeroBradesco!: boolean;
     tipo!: TipoLancamento;

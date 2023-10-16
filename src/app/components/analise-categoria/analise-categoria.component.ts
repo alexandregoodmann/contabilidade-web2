@@ -4,7 +4,7 @@ import { ChartType } from 'angular-google-charts';
 import { AnaliseCategoria } from 'src/app/models/analise-categoria';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
-import { compare } from '../resumo-extrato/resumo-extrato.component';
+import { compare } from '../extrato/extrato.component';
 
 @Component({
   selector: 'app-analise-categoria',
