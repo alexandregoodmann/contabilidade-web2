@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ExtratoDTO } from '../models/extrato';
+import { Lancamento } from '../models/lancamento';
 import { Planilha } from '../models/planilha';
 import { PlanilhasAno } from '../models/planilhasano';
 import { BasicCrudService } from './basic-crud.service';
@@ -30,12 +30,12 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     this.planilhaSelecionadaB.next(planilha);
   }
 
-  getMapa() {
-    return this.http.get<Array<PlanilhasAno>>(`${environment.url}/planilhas/mapa`);
+  getLancamentos(idPlanilha: number): Observable<Lancamento[]> {
+    return this.http.get<Lancamento[]>(`${environment.url}/planilhas/${idPlanilha}/lancamentos`);
   }
 
-  getExtrato(idPlanilha: number): Observable<ExtratoDTO[]> {
-    return this.http.get<ExtratoDTO[]>(`${environment.url}/planilhas/${idPlanilha}/extrato`);
+  getMapa() {
+    return this.http.get<Array<PlanilhasAno>>(`${environment.url}/planilhas/mapa`);
   }
 
   duplicarPlanilha(idPlanilha: number): Observable<any> {
@@ -72,5 +72,5 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
   processar(): Observable<any> {
     return this.http.post(`${environment.url}/planilhas/processar`, {});
   }
-  
+
 }

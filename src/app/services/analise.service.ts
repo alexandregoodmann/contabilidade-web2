@@ -3,19 +3,19 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AnaliseCategoria } from '../models/analise-categoria';
-import { ExtratoDTO } from '../models/extrato';
-import { PlanilhaService } from './planilha.service';
+import { Lancamento } from '../models/lancamento';
 import { ResumoExtrato } from '../models/resumo-extrato';
+import { PlanilhaService } from './planilha.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnaliseService {
 
-  private extratoBehavior = new BehaviorSubject<Array<ExtratoDTO>>(new Array<ExtratoDTO>());
+  private extratoBehavior = new BehaviorSubject<Array<Lancamento>>(new Array<Lancamento>());
   extratoObservable = this.extratoBehavior.asObservable();
 
-  private extratoDataSource!: ExtratoDTO[];
+  private extratoDataSource!: Lancamento[];
 
   constructor(
     private http: HttpClient,
@@ -32,8 +32,8 @@ export class AnaliseService {
 
   getExtrato(setBehavior: boolean) {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-      this.planilhaService.getExtrato(planilha.id).subscribe(extrato => {
-        this.extratoDataSource = extrato;
+      this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
+        this.extratoDataSource = lancamentos;
         if (setBehavior)
           this.extratoBehavior.next(this.extratoDataSource);
       });
@@ -44,12 +44,12 @@ export class AnaliseService {
     this.getExtrato(false);
     this.extratoDataSource.forEach(conta => {
       if (label == undefined) {
-        conta.lancamentos = conta.lancamentos.filter(l => l.labels.length == 0);
+        // conta.lancamentos = conta.lancamentos.filter(l => l.labels.length == 0);
       } else {
-        conta.lancamentos = conta.lancamentos.filter(l => l.labels.includes(label));
+        // conta.lancamentos = conta.lancamentos.filter(l => l.labels.includes(label));
       }
     });
-    this.extratoDataSource = this.extratoDataSource.filter(e => e.lancamentos.length > 0);
+    //this.extratoDataSource = this.extratoDataSource.filter(e => e.lancamentos.length > 0);
     this.extratoBehavior.next(this.extratoDataSource);
   }
 

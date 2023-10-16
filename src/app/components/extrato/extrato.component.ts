@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import { TipoConta } from 'src/app/models/conta';
-import { ExtratoDTO } from 'src/app/models/extrato';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
@@ -16,12 +15,10 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 export class ExtratoComponent implements OnInit {
 
   displayedColumns: string[] = ['data', 'descricao', 'valor', 'fixo', 'concluido'];
-  extrato: ExtratoDTO[] = [];
+  lancamentos: Lancamento[] = [];
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
-  expandidos: Map<number, boolean> = new Map<number, boolean>();
-  ordem: OrdemExtrato = new OrdemExtrato();
 
   constructor(
     private lancamentoService: LancamentoService,
@@ -31,20 +28,11 @@ export class ExtratoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
+    this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data; });
     this.analiseService.getExtrato(true);
     this.analiseService.extratoObservable.subscribe(data => {
-      this.extrato = data;
-      if (this.extrato.length > 0) {
-        this.calcularTotais();
-      }
+      this.lancamentos = data;
     });
-  }
-
-  calcularTotais() {
-    let contaCorrente = this.extrato.filter(o => o.tipo == TipoConta.CC);
-    this.saldoAtual = contaCorrente.map(n => n.saldoEfetivado).reduce((a, b) => a + b);
-    this.saldoPrevisto = contaCorrente.map(n => n.saldoPrevisto).reduce((a, b) => a + b);
   }
 
   editar(idLancamento: number) {
@@ -52,25 +40,6 @@ export class ExtratoComponent implements OnInit {
       this.router.navigate(['/lancamento'], { queryParams: { backto: '/extrato', idLancamento: idLancamento } });
     else
       this.router.navigate(['/lancamento']);
-  }
-
-  sortBy(indexConta: number, lancamentos: Lancamento[], coluna: string) {
-    let ret = this.ordem.sort;
-
-    lancamentos.sort(function (x: any, y: any) {
-      x[coluna] = (x[coluna] == null) ? '' : x[coluna];
-      y[coluna] = (y[coluna] == null) ? '' : y[coluna];
-      if (x[coluna] > y[coluna]) {
-        return ret;
-      }
-      if (x[coluna] < y[coluna]) {
-        return ret * (-1);
-      }
-      return 0;
-    });
-
-    this.extrato[indexConta].lancamentos = Array.from(lancamentos);
-    this.ordem.sort = this.ordem.sort * (-1);
   }
 
   update(acao: string, event: any, item: Lancamento) {
@@ -84,19 +53,6 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-  isExpanded(id: number) {
-    return this.expandidos.get(id);
-  }
-
-  expand(conta: ExtratoDTO) {
-    if (this.expandidos.has(conta.id)) {
-      let e = this.expandidos.get(conta.id);
-      this.expandidos.set(conta.id, !e);
-    } else {
-      this.expandidos.set(conta.id, true);
-    }
-  }
-
   processarLabels(conta: any) {
     let obj = { idPlanilha: this.planilhaSelecionada.id, idConta: conta.id };
     this.lancamentoService.processarLabels(obj).subscribe(() => {
@@ -108,17 +64,29 @@ export class ExtratoComponent implements OnInit {
     this.analiseService.filtrarExtratoPorCategoria(undefined);
   }
 
+  sortData(sort: Sort) {
+    this.lancamentos = this.lancamentos.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'data':
+          return compare(a.data, b.data, isAsc);
+        case 'conta':
+          return compare(a.conta.descricao, b.conta.descricao, isAsc);
+        case 'lancamento':
+          return compare(a.descricao, b.descricao, isAsc);
+        case 'fixo':
+          return compare(a.fixo, b.fixo, isAsc);
+        case 'valor':
+          return compare(a.valor, b.valor, isAsc);
+          case 'concluido':
+            return compare(a.concluido, b.concluido, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
 }
 
-export class OrdemExtrato {
-  sort: number = 1;
-  indexConta?: number;
-  lancamentos?: Lancamento[];
-  coluna?: string;
-}
-
-export class Totais {
-  entradas: number = 0;
-  saidas: number = 0;
-  fixos: number = 0;
+export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
