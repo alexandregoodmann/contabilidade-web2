@@ -50,9 +50,7 @@ export class ExtratoComponent implements OnInit {
     } else if (acao == 'concluido') {
       item.concluido = !item.concluido;
     }
-    this.lancamentoService.update(item).subscribe(data => {
-      console.log(data);
-    });
+    this.lancamentoService.update(item).subscribe();
   }
 
   processarLabels(conta: any) {
