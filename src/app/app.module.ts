@@ -49,6 +49,7 @@ import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.comp
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
 import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
+import { CheckComponent } from './shared/check/check.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -101,7 +102,8 @@ const routes: Routes = [
     CargaComponent,
     ChipsComponent,
     AnaliseCategoriaComponent,
-    ResumoExtratoComponent
+    ResumoExtratoComponent,
+    CheckComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
