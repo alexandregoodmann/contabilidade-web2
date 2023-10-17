@@ -1,27 +1,25 @@
-<div style="padding: 10px;">
-    <mat-card>
-        <mat-card-actions>
-            <button mat-button (click)="filtrarTabela('entrada')">Entradas</button>
-            <button mat-button (click)="filtrarTabela('saida')">Saídas</button>
-            <button mat-button (click)="filtrarTabela('fixo')">Fixos</button>
-        </mat-card-actions>
-        <mat-card-title>R$ {{total | number: '1.2-2'}}</mat-card-title>
-        <mat-card-subtitle>{{label}}</mat-card-subtitle>
-        <mat-card-content>
-            <table class="resumo-table" matSort (matSortChange)="sortData($event)">
-                <tr>
-                    <th mat-sort-header="conta">Conta</th>
-                    <th mat-sort-header="lancamento">Lançamento</th>
-                    <th mat-sort-header="valor">Valor</th>
-                    <th mat-sort-header="porcentagem" class="table-valor">Porcentagem</th>
-                </tr>
-                <tr *ngFor="let item of filtrado">
-                    <td>{{item.conta}}</td>
-                    <td>{{item.lancamento}}</td>
-                    <td>R$ {{item.valor | number: '1.2-2'}}</td>
-                    <td>{{item.porcentagem | number: '1.2-2'}}%</td>
-                </tr>
-            </table>
-        </mat-card-content>
-    </mat-card>
-</div>
+<mat-card>
+    <mat-card-actions>
+        <button mat-button (click)="filtrarTabela('entrada')">Entradas</button>
+        <button mat-button (click)="filtrarTabela('saida')">Saídas</button>
+        <button mat-button (click)="filtrarTabela('fixo')">Fixos</button>
+    </mat-card-actions>
+    <mat-card-title>R$ {{total | number: '1.2-2'}}</mat-card-title>
+    <mat-card-subtitle>{{label}}</mat-card-subtitle>
+    <mat-card-content>
+        <table class="resumo-table" matSort (matSortChange)="sortData($event)">
+            <tr>
+                <th mat-sort-header="conta">Conta</th>
+                <th mat-sort-header="lancamento">Lançamento</th>
+                <th mat-sort-header="valor">Valor</th>
+                <th mat-sort-header="porcentagem" class="table-valor">Porcentagem</th>
+            </tr>
+            <tr *ngFor="let item of filtrado">
+                <td>{{item.conta}}</td>
+                <td>{{item.lancamento}}</td>
+                <td>R$ {{item.valor | number: '1.2-2'}}</td>
+                <td>{{item.porcentagem | number: '1.2-2'}}%</td>
+            </tr>
+        </table>
+    </mat-card-content>
+</mat-card>
