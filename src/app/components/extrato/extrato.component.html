@@ -10,9 +10,9 @@
                             <th mat-sort-header="data">Data</th>
                             <th mat-sort-header="conta">Conta</th>
                             <th mat-sort-header="lancamento">Lançamento</th>
-                            <th mat-sort-header="fixo">Fixo</th>
-                            <th mat-sort-header="valor">Valor</th>
-                            <th mat-sort-header="concluido">Concluído</th>
+                            <th mat-sort-header="fixo" style="width: 21px;">Fixo</th>
+                            <th mat-sort-header="valor" style="padding-left: 25px;">Valor</th>
+                            <th mat-sort-header="concluido" style="width: 31px;">Concluído</th>
                         </tr>
                         <tr *ngFor="let lancamento of lancamentos">
                             <td>{{lancamento.data | date:'dd/MM'}}</td>
@@ -22,14 +22,16 @@
                                 <span class="extratoLabel" *ngFor="let label of lancamento.labels">{{label}}</span>
                             </td>
                             <td style="text-align: center;">
-                                <span *ngIf="lancamento.fixo">Sim</span>
+                                <app-check (click)="update('fixo',lancamento)"
+                                    [checked]="(lancamento.fixo == null || lancamento.fixo == 'false') ? false : true"></app-check>
                             </td>
                             <td class="valor" [ngStyle]="{'color':lancamento.valor < 0 ? 'red' : 'black' }">R$
                                 {{lancamento.valor |
                                 number: '1.2-2'}}
                             </td>
                             <td style="text-align: center;">
-                                <span *ngIf="lancamento.concluido">Sim</span>
+                                <app-check (click)="update('concluido',lancamento)"
+                                    [checked]="lancamento.concluido"></app-check>
                             </td>
                         </tr>
                     </table>

@@ -31,6 +31,8 @@ export class ExtratoComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data; });
     this.analiseService.getExtrato(true);
     this.analiseService.extratoObservable.subscribe(data => {
+      console.log('lancamentos', data);
+
       this.lancamentos = data;
     });
   }
@@ -42,14 +44,14 @@ export class ExtratoComponent implements OnInit {
       this.router.navigate(['/lancamento']);
   }
 
-  update(acao: string, event: any, item: Lancamento) {
-    this.lancamentoService.findById(item.id).subscribe(data => {
-      if (acao == 'fixo') {
-        data.fixo = event._checked;
-      } else if (acao == 'concluido') {
-        data.concluido = event._checked;
-      }
-      this.lancamentoService.update(data).subscribe();
+  update(acao: string, item: Lancamento) {
+    if (acao == 'fixo') {
+      item.fixo = (item.fixo == null || item.fixo == 'false') ? 'true' : 'false';
+    } else if (acao == 'concluido') {
+      item.concluido = !item.concluido;
+    }
+    this.lancamentoService.update(item).subscribe(data => {
+      console.log(data);
     });
   }
 
@@ -78,8 +80,8 @@ export class ExtratoComponent implements OnInit {
           return compare(a.fixo, b.fixo, isAsc);
         case 'valor':
           return compare(a.valor, b.valor, isAsc);
-          case 'concluido':
-            return compare(a.concluido, b.concluido, isAsc);
+        case 'concluido':
+          return compare(a.concluido, b.concluido, isAsc);
         default:
           return 0;
       }
