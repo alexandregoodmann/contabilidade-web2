@@ -4,7 +4,6 @@ import { Conta } from 'src/app/models/conta';
 import { Label } from 'src/app/models/label';
 import { Menu } from 'src/app/models/menu';
 import { PlanilhasAno } from 'src/app/models/planilhasano';
-import { ContaService } from 'src/app/services/conta.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 
 @Component({
@@ -28,7 +27,6 @@ export class PrincipalComponent implements OnInit {
 
   constructor(
     private planilhaService: PlanilhaService,
-    private contaService: ContaService,
     private _snackBar: MatSnackBar
   ) { }
 

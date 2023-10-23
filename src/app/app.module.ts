@@ -43,13 +43,14 @@ import { LabelComponent } from './components/label/label.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
+import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
 import { InterceptorService } from './services/interceptor.service';
+import { CheckComponent } from './shared/check/check.component';
 import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
-import { CheckComponent } from './shared/check/check.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -143,7 +144,8 @@ const routes: Routes = [
     MatSortModule,
     MatExpansionModule,
     MatDividerModule,
-    MatListModule
+    MatListModule,
+    MatTooltipModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },
