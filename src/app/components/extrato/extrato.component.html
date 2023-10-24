@@ -11,6 +11,15 @@
                         <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                             <mat-icon class="icon">add_shopping_cart</mat-icon>
                         </div>
+                        <mat-form-field>
+                            <mat-label>Filtrar por conta</mat-label>
+                            <mat-select>
+                                <mat-option *ngFor="let conta of contas" [value]="conta"
+                                    (onSelectionChange)="filtrarPorConta(conta)">
+                                    {{conta}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
 
                     <table class="resumo-table" matSort (matSortChange)="sortData($event)">

@@ -67,10 +67,6 @@ const routes: Routes = [
     component: ExtratoComponent
   },
   {
-    path: 'lancamento',
-    component: LancamentoComponent,
-  },
-  {
     path: 'conta',
     component: ContaComponent
   },

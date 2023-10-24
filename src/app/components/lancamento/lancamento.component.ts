@@ -2,11 +2,12 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Conta } from 'src/app/models/conta';
 import { Label } from 'src/app/models/label';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
+import { AnaliseService } from 'src/app/services/analise.service';
 import { ContaService } from 'src/app/services/conta.service';
 import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
@@ -38,9 +39,9 @@ export class LancamentoComponent implements OnInit {
     private labelService: LabelService,
     private lancamentoService: LancamentoService,
     private planilhaService: PlanilhaService,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private analiseService: AnaliseService
   ) { }
 
   ngOnInit(): void {
@@ -103,12 +104,14 @@ export class LancamentoComponent implements OnInit {
         this.router.navigate([this.backto]);
       }, (err) => { }, () => {
         this.chips.group.reset();
+        this.analiseService.getExtrato(true);
       });
 
     } else { //new
       this.lancamentoService.create(model).subscribe(() => { }, (err) => { }, () => {
         this.chips.group.reset();
         this.chips.labels = [];
+        this.analiseService.getExtrato(true);
       });
     }
 
@@ -118,6 +121,8 @@ export class LancamentoComponent implements OnInit {
     this.lancamentoService.delete(this.lancamento.id).subscribe(() => {
       this.snackBar.open('Lançamento apagado', undefined, { duration: environment.tempoSnackBar });
       this.router.navigate(['/extrato'],);
+    }, (err) => { }, () => {
+      this.analiseService.getExtrato(true);
     });
   }
 

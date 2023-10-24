@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
-import { Router } from '@angular/router';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
@@ -21,10 +20,10 @@ export class ExtratoComponent implements OnInit {
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
+  contas: String[] = [];
 
   constructor(
     private lancamentoService: LancamentoService,
-    private router: Router,
     private analiseService: AnaliseService,
     private planilhaService: PlanilhaService,
     private dialog: MatDialog
@@ -35,6 +34,9 @@ export class ExtratoComponent implements OnInit {
     this.analiseService.getExtrato(true);
     this.analiseService.extratoObservable.subscribe(data => {
       this.lancamentos = data;
+      this.contas = [...new Set<String>(this.lancamentos.map(o => o.conta.descricao))].sort();
+      console.log(this.lancamentos);
+
     });
   }
 
@@ -52,6 +54,11 @@ export class ExtratoComponent implements OnInit {
     this.lancamentoService.processarLabels(obj).subscribe(() => {
       this.analiseService.getExtrato(true);
     });
+  }
+
+  filtrarPorConta(conta: String) {
+    this.analiseService.getExtrato(true);
+    this.lancamentos = this.lancamentos.filter(l => l.conta.descricao == conta);
   }
 
   filtrarSemLabels() {
