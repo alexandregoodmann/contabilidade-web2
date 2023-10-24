@@ -31,7 +31,7 @@
                             <th mat-sort-header="valor" style="padding-left: 25px;">Valor</th>
                             <th mat-sort-header="concluido" style="width: 31px;">Concluído</th>
                         </tr>
-                        <tr *ngFor="let lancamento of lancamentos">
+                        <tr *ngFor="let lancamento of extrato">
                             <td (click)="openLancamento(lancamento.id)">{{lancamento.data | date:'dd/MM'}}</td>
                             <td (click)="openLancamento(lancamento.id)">{{lancamento.conta.descricao}}</td>
                             <td (click)="openLancamento(lancamento.id)">

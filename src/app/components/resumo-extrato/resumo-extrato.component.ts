@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Planilha } from 'src/app/models/planilha';
 import { ResumoExtrato } from 'src/app/models/resumo-extrato';
-import { AnaliseService } from 'src/app/services/analise.service';
+import { ExtratoService } from 'src/app/services/extrato.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { compare } from '../extrato/extrato.component';
 
@@ -22,13 +22,13 @@ export class ResumoExtratoComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private analiseService: AnaliseService,
+    private extratoService: ExtratoService,
     private planilhaService: PlanilhaService,
   ) { }
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
-    this.analiseService.getResumoExtrato(this.planilhaSelecionada.ano, this.planilhaSelecionada.mes).subscribe(data => {
+    this.extratoService.getResumoExtrato(this.planilhaSelecionada.ano, this.planilhaSelecionada.mes).subscribe(data => {
       this.datasource = data;
       this.filtrarTabela('entrada');
     });
