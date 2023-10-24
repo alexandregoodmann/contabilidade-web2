@@ -18,22 +18,8 @@ export class ExtratoService {
   datasource!: Lancamento[];
 
   constructor(
-    private http: HttpClient,
-    private planilhaService: PlanilhaService
+    private http: HttpClient
   ) { }
-
-  updateDatasource() {
-    console.log('extrato - update datasource');
-    this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-      this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
-        this.datasource = lancamentos;
-      });
-    });
-  }
-
-  setExtrato() {
-    this.datasourceBehavior.next(this.datasource);
-  }
 
   getAnaliseCategoria(ano: number, mes: number): Observable<AnaliseCategoria[]> {
     return this.http.get<AnaliseCategoria[]>(`${environment.url}/analise/categoria/${ano}/${mes}`);

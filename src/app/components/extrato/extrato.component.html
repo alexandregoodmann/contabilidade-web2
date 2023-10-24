@@ -11,15 +11,23 @@
                         <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                             <mat-icon class="icon">add_shopping_cart</mat-icon>
                         </div>
-                        <mat-form-field>
-                            <mat-label>Filtrar por conta</mat-label>
-                            <mat-select>
-                                <mat-option *ngFor="let conta of contas" [value]="conta"
-                                    (onSelectionChange)="filtrarPorConta(conta)">
-                                    {{conta}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <div>
+
+                            <mat-form-field>
+                                <mat-label>Filtrar por conta</mat-label>
+                                <mat-select (selectionChange)="filtrarPorConta($event)">
+                                    <mat-option *ngFor="let conta of contas" [value]="conta" >
+                                        {{conta}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <span>Saldo Previsto R$ {{totalPrevisto | number: '1.2-2'}}</span>
+                        </div>
+                        <div>
+                            <span>Saldo Concluído R$ {{totalConcluido | number: '1.2-2'}}</span>
+                        </div>
                     </div>
 
                     <table class="resumo-table" matSort (matSortChange)="sortData($event)">
@@ -43,8 +51,7 @@
                                     [checked]="(lancamento.fixo == null || lancamento.fixo == 'false') ? false : true"></app-check>
                             </td>
                             <td class="valor" [ngStyle]="{'color':lancamento.valor < 0 ? 'red' : 'black' }">R$
-                                {{lancamento.valor |
-                                number: '1.2-2'}}
+                                {{lancamento.valor | number: '1.2-2'}}
                             </td>
                             <td style="text-align: center;">
                                 <app-check (click)="update('concluido',lancamento)"

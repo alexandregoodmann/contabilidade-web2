@@ -5,6 +5,7 @@ import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
+import { PlanilhaService } from 'src/app/services/planilha.service';
 import { LancamentoDialogComponent } from '../lancamento-dialog/lancamento-dialog.component';
 
 @Component({
@@ -20,18 +21,30 @@ export class ExtratoComponent implements OnInit {
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   contas: String[] = [];
+  totalPrevisto: number = 0;
+  totalConcluido: number = 0;
 
   constructor(
     private lancamentoService: LancamentoService,
     private extratoService: ExtratoService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private planilhaService: PlanilhaService
   ) { }
 
   ngOnInit() {
-    this.extratoService.updateDatasource();
-    this.extratoService.setExtrato();
-    this.extratoService.extrato.subscribe(data => { this.extrato = data; });
-    this.contas = [... new Set(this.extrato.map(l => l.conta.descricao))].sort();
+
+    this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+      this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
+        this.extrato = lancamentos;
+        this.extratoService.datasource = lancamentos;
+        this.contas = [... new Set(lancamentos.map(l => l.conta.descricao))].sort();
+      });
+    });
+
+    this.extratoService.extrato.subscribe(data => {
+      this.extrato = data;
+    });
+
   }
 
   update(acao: string, item: Lancamento) {
@@ -43,8 +56,10 @@ export class ExtratoComponent implements OnInit {
     this.lancamentoService.update(item).subscribe();
   }
 
-  filtrarPorConta(conta: String) {
-    let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == conta))].sort();
+  filtrarPorConta(e: any) {
+    let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == e.value))];
+    this.totalPrevisto = data.map(o => o.valor).reduce((a, b) => (a + b));
+    this.totalConcluido = data.filter(o => o.concluido).map(o => o.valor).reduce((a, b) => (a + b));
     this.extratoService.datasourceBehavior.next(data);
   }
 
