@@ -8,7 +8,7 @@
 
                     <!-- button bar -->
                     <div class="button-bar">
-                        <div class="button" matTooltip="Lançamento">
+                        <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                             <mat-icon class="icon">add_shopping_cart</mat-icon>
                         </div>
                     </div>
@@ -23,9 +23,9 @@
                             <th mat-sort-header="concluido" style="width: 31px;">Concluído</th>
                         </tr>
                         <tr *ngFor="let lancamento of lancamentos">
-                            <td>{{lancamento.data | date:'dd/MM'}}</td>
-                            <td>{{lancamento.conta.descricao}}</td>
-                            <td>
+                            <td (click)="openLancamento(lancamento.id)">{{lancamento.data | date:'dd/MM'}}</td>
+                            <td (click)="openLancamento(lancamento.id)">{{lancamento.conta.descricao}}</td>
+                            <td (click)="openLancamento(lancamento.id)">
                                 {{lancamento.descricao}}
                                 <span class="extratoLabel" *ngFor="let label of lancamento.labels">{{label}}</span>
                             </td>

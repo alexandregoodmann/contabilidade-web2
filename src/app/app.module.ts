@@ -11,6 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,6 +30,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -40,6 +42,7 @@ import { CargaComponent } from './components/carga/carga.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
 import { LabelComponent } from './components/label/label.component';
+import { LancamentoDialogComponent } from './components/lancamento-dialog/lancamento-dialog.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
@@ -50,7 +53,6 @@ import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -104,7 +106,8 @@ const routes: Routes = [
     ChipsComponent,
     AnaliseCategoriaComponent,
     ResumoExtratoComponent,
-    CheckComponent
+    CheckComponent,
+    LancamentoDialogComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
@@ -145,7 +148,8 @@ const routes: Routes = [
     MatExpansionModule,
     MatDividerModule,
     MatListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },

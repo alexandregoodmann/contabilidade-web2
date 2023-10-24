@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,6 +20,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./lancamento.component.scss']
 })
 export class LancamentoComponent implements OnInit {
+
+  @Input() idLancamento: number | undefined = 0;
 
   group!: FormGroup;
   contas!: Array<Conta>;
@@ -67,26 +69,19 @@ export class LancamentoComponent implements OnInit {
       this.planilhaSelecionada = data;
     });
 
-    this.activatedRoute.queryParamMap.subscribe(param => {
-
-      this.backto = param.get('backto');
-      let idLancamento = param.get('idLancamento') as unknown as number;
-
-      if (idLancamento){
-        this.lancamentoService.findById(idLancamento).subscribe(data => {
-          this.lancamento = data as Lancamento;
-          this.group?.patchValue(this.lancamento);
-          this.group?.get('data')?.setValue(new Date(this.lancamento.data));
-          this.group?.get('conta')?.setValue(this.lancamento.conta.id);
-          this.group?.get('fixo')?.setValue(this.lancamento.fixo);
-          this.group?.get('concluido')?.setValue(this.lancamento.concluido);
-          this.group?.get('labels')?.setValue(this.lancamento.labels);
-          this.chips.group.get('labels')?.setValue(this.lancamento.labels);
-          this.chips.labels = this.lancamento.labels;
-        });
-      }
-
-    });
+    if (this.idLancamento) {
+      this.lancamentoService.findById(this.idLancamento).subscribe(data => {
+        this.lancamento = data as Lancamento;
+        this.group?.patchValue(this.lancamento);
+        this.group?.get('data')?.setValue(new Date(this.lancamento.data));
+        this.group?.get('conta')?.setValue(this.lancamento.conta.id);
+        this.group?.get('fixo')?.setValue(this.lancamento.fixo);
+        this.group?.get('concluido')?.setValue(this.lancamento.concluido);
+        this.group?.get('labels')?.setValue(this.lancamento.labels);
+        this.chips.group.get('labels')?.setValue(this.lancamento.labels);
+        this.chips.labels = this.lancamento.labels;
+      });
+    }
   }
 
   salvar() {

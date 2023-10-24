@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { Lancamento } from 'src/app/models/lancamento';
@@ -6,6 +7,7 @@ import { Planilha } from 'src/app/models/planilha';
 import { AnaliseService } from 'src/app/services/analise.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { LancamentoDialogComponent } from '../lancamento-dialog/lancamento-dialog.component';
 
 @Component({
   selector: 'app-extrato',
@@ -24,24 +26,16 @@ export class ExtratoComponent implements OnInit {
     private lancamentoService: LancamentoService,
     private router: Router,
     private analiseService: AnaliseService,
-    private planilhaService: PlanilhaService
+    private planilhaService: PlanilhaService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data; });
     this.analiseService.getExtrato(true);
     this.analiseService.extratoObservable.subscribe(data => {
-      console.log('lancamentos', data);
-
       this.lancamentos = data;
     });
-  }
-
-  editar(idLancamento: number) {
-    if (idLancamento > 0)
-      this.router.navigate(['/lancamento'], { queryParams: { backto: '/extrato', idLancamento: idLancamento } });
-    else
-      this.router.navigate(['/lancamento']);
   }
 
   update(acao: string, item: Lancamento) {
@@ -83,6 +77,14 @@ export class ExtratoComponent implements OnInit {
         default:
           return 0;
       }
+    });
+  }
+
+  openLancamento(idLancamento: number) {
+    const dialogRef = this.dialog.open(LancamentoDialogComponent, {
+      data: {
+        idLancamento: idLancamento,
+      },
     });
   }
 }
