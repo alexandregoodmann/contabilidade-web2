@@ -35,19 +35,18 @@
 }
 
 .saldo {
+    padding-right: 10px;
     width: 100%;
-    background-color: red;
     display: inline-grid;
     text-align: right;
 
     .valor {
-        background-color: yellow;
         float: right;
-        font-size: 14px;
+        font-size: 20px;
+        width: 100%;
     }
 
     .label {
-        font-size: 8px;
-        color: gray;
+        font-size: 10px;
     }
 }

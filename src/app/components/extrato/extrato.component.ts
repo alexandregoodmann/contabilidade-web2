@@ -21,8 +21,6 @@ export class ExtratoComponent implements OnInit {
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   contas: String[] = [];
-  totalPrevisto: number = 0;
-  totalConcluido: number = 0;
 
   constructor(
     private lancamentoService: LancamentoService,
@@ -36,6 +34,7 @@ export class ExtratoComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
         this.extrato = lancamentos;
+        this.calcularTotais(this.extrato);
         this.extratoService.datasource = lancamentos;
         this.contas = [... new Set(lancamentos.map(l => l.conta.descricao))].sort();
       });
@@ -58,13 +57,31 @@ export class ExtratoComponent implements OnInit {
 
   filtrarPorConta(e: any) {
     let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == e.value))];
-    this.totalPrevisto = data.map(o => o.valor).reduce((a, b) => (a + b));
-    this.totalConcluido = data.filter(o => o.concluido).map(o => o.valor).reduce((a, b) => (a + b));
+    this.calcularTotais(data);
     this.extratoService.datasourceBehavior.next(data);
   }
 
   filtrarSemLabels() {
     this.extratoService.filtrarExtratoPorCategoria(undefined);
+  }
+
+  filtrarDescricao(e: any) {
+    let descricao = e.target.value.toLowerCase();
+    console.log(descricao);
+    
+    let data = [... new Set(this.extratoService.datasource.filter(l => l.descricao.toLowerCase().includes(descricao)))];
+    this.calcularTotais(data);
+    this.extratoService.datasourceBehavior.next(data);
+  }
+
+  calcularTotais(lancamentos: Lancamento[]) {
+    if (lancamentos.length > 0) {
+      this.saldoPrevisto = lancamentos.map(o => o.valor).reduce((a, b) => (a + b));
+      this.saldoAtual = lancamentos.filter(o => o.concluido).map(o => o.valor).reduce((a, b) => (a + b));
+    } else {
+      this.saldoAtual = 0;
+      this.saldoPrevisto = 0
+    }
   }
 
   sortData(sort: Sort) {
@@ -76,9 +93,9 @@ export class ExtratoComponent implements OnInit {
         case 'conta':
           return compare(a.conta.descricao, b.conta.descricao, isAsc);
         case 'lancamento':
-          return compare(a.descricao, b.descricao, isAsc);
+          return compare(a.descricao.toLowerCase(), b.descricao.toLowerCase(), isAsc);
         case 'fixo':
-          return compare(a.fixo, b.fixo, isAsc);
+          return compare((a.fixo != null ? true : false), (b.fixo != null ? true : false), isAsc);
         case 'valor':
           return compare(a.valor, b.valor, isAsc);
         case 'concluido':
