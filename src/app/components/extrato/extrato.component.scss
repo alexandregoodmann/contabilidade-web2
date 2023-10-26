@@ -17,22 +17,37 @@
     background-color: #efefef;
 }
 
-.button-bar {
-    margin-bottom: 15px;
+.button {
+    margin-right: 10px;
+    height: 38px;
+    width: 38px;
+    background-color: rgb(221 221 221);
+    border-radius: 3px;
+    cursor: pointer;
 
-    .button {
-        height: 38px;
-        width: 38px;
-        background-color: rgb(221 221 221);
-        border-radius: 3px;
-        cursor: pointer;
+    .icon {
+        color: black;
+        font-size: 25px;
+        position: relative;
+        top: 15%;
+        left: 16%;
+    }
+}
 
-        .icon {
-            color: black;
-            font-size: 25px;
-            position: relative;
-            top: 15%;
-            left: 16%;
-        }
+.saldo {
+    width: 100%;
+    background-color: red;
+    display: inline-grid;
+    text-align: right;
+
+    .valor {
+        background-color: yellow;
+        float: right;
+        font-size: 14px;
+    }
+
+    .label {
+        font-size: 8px;
+        color: gray;
     }
 }

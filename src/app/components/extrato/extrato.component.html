@@ -7,25 +7,29 @@
                 <mat-card-content style="overflow-y: auto; height: 100%;">
 
                     <!-- button bar -->
-                    <div class="button-bar">
-                        <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
-                            <mat-icon class="icon">add_shopping_cart</mat-icon>
+                    <div class="w3-row">
+                        <div class="w3-col l3">
+                            <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
+                                <mat-icon class="icon">add_shopping_cart</mat-icon>
+                            </div>
                         </div>
-                        <div>
-
+                        <div class="w3-col l3">
                             <mat-form-field>
                                 <mat-label>Filtrar por conta</mat-label>
                                 <mat-select (selectionChange)="filtrarPorConta($event)">
-                                    <mat-option *ngFor="let conta of contas" [value]="conta" >
+                                    <mat-option *ngFor="let conta of contas" [value]="conta">
                                         {{conta}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div>
-                            <span>Saldo Previsto R$ {{totalPrevisto | number: '1.2-2'}}</span>
+                        <div class="w3-col l3">
+                            <div class="saldo">
+                                <span class="valor">R$ {{totalPrevisto | number: '1.2-2'}}</span>
+                                <span class="label">Saldo Previsto</span>
+                            </div>
                         </div>
-                        <div>
+                        <div class="w3-col l3">
                             <span>Saldo Concluído R$ {{totalConcluido | number: '1.2-2'}}</span>
                         </div>
                     </div>
