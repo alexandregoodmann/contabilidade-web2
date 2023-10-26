@@ -21,6 +21,7 @@ export class ExtratoComponent implements OnInit {
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   contas: String[] = [];
+  constaSelecionada!: string | undefined;
   lastSort!: Sort;
 
   constructor(
@@ -44,9 +45,20 @@ export class ExtratoComponent implements OnInit {
     this.extratoService.extrato.subscribe(data => {
       this.extrato = data;
       this.calcularTotais(data);
-      this.sortData(this.lastSort);
+
+      if (this.lastSort != undefined)
+        this.sortData(this.lastSort);
+
+      if (this.constaSelecionada != undefined)
+        this.filtrarPorConta(this.constaSelecionada);
     });
 
+  }
+
+  reload() {
+    this.constaSelecionada = undefined;
+    this.extratoService.updateDatasource();
+    this.calcularTotais(this.extrato);
   }
 
   update(acao: string, item: Lancamento) {
@@ -60,8 +72,9 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-  filtrarPorConta(e: any) {
-    let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == e.value))];
+  filtrarPorConta(conta: string) {
+    this.constaSelecionada = conta;
+    let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == conta))];
     this.calcularTotais(data);
     this.extratoService.datasourceBehavior.next(data);
   }
@@ -118,6 +131,8 @@ export class ExtratoComponent implements OnInit {
       },
     });
   }
+
+
 }
 
 export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
