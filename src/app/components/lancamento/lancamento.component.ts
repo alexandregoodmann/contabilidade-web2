@@ -101,12 +101,14 @@ export class LancamentoComponent implements OnInit {
       this.lancamentoService.update(this.lancamento).subscribe(() => {
       }, (err) => { }, () => {
         this.chips.group.reset();
+        this.extratoService.updateDatasource();
       });
 
     } else { //new
       this.lancamentoService.create(model).subscribe(() => { }, (err) => { }, () => {
         this.chips.group.reset();
         this.chips.labels = [];
+        this.extratoService.updateDatasource();
       });
     }
 
@@ -116,6 +118,7 @@ export class LancamentoComponent implements OnInit {
     this.lancamentoService.delete(this.lancamento.id).subscribe(() => {
       this.snackBar.open('Lançamento apagado', undefined, { duration: environment.tempoSnackBar });
     }, (err) => { }, () => {
+      this.extratoService.updateDatasource();
     });
   }
 

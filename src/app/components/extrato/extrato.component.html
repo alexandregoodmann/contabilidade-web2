@@ -4,10 +4,10 @@
     <div class="w3-row" style="height: 81%;">
         <div class="w3-col l6" style="height: 100%;">
             <mat-card style="margin-left: 10px; height: 100%;">
-                <mat-card-content style="overflow-y: auto; height: 100%;">
 
-                    <!-- button bar -->
-                    <div class="w3-row">
+                <!-- button bar -->
+                <mat-card-actions>
+                    <div class="w3-row" style="margin: 0px 10px 0 10px;">
                         <div class="w3-col l2">
                             <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                                 <mat-icon class="icon">add_shopping_cart</mat-icon>
@@ -41,7 +41,9 @@
                             </div>
                         </div>
                     </div>
+                </mat-card-actions>
 
+                <mat-card-content style="overflow-y: auto; height: 100%;">
                     <table class="resumo-table" matSort (matSortChange)="sortData($event)">
                         <tr>
                             <th mat-sort-header="data">Data</th>

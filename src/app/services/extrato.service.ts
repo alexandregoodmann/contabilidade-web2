@@ -18,8 +18,18 @@ export class ExtratoService {
   datasource!: Lancamento[];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private planilhaService: PlanilhaService
   ) { }
+
+  updateDatasource() {
+    this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+      this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
+        this.datasource = lancamentos;
+        this.datasourceBehavior.next(this.datasource);
+      });
+    });
+  }
 
   getAnaliseCategoria(ano: number, mes: number): Observable<AnaliseCategoria[]> {
     return this.http.get<AnaliseCategoria[]>(`${environment.url}/analise/categoria/${ano}/${mes}`);
@@ -36,7 +46,7 @@ export class ExtratoService {
 
 
   filtrarExtratoPorCategoria(label?: string) {
-   // this.getExtrato(false);
+    // this.getExtrato(false);
     this.datasource.forEach(conta => {
       if (label == undefined) {
         // conta.lancamentos = conta.lancamentos.filter(l => l.labels.length == 0);

@@ -21,6 +21,7 @@ export class ExtratoComponent implements OnInit {
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   contas: String[] = [];
+  lastSort!: Sort;
 
   constructor(
     private lancamentoService: LancamentoService,
@@ -42,6 +43,8 @@ export class ExtratoComponent implements OnInit {
 
     this.extratoService.extrato.subscribe(data => {
       this.extrato = data;
+      this.calcularTotais(data);
+      this.sortData(this.lastSort);
     });
 
   }
@@ -52,7 +55,9 @@ export class ExtratoComponent implements OnInit {
     } else if (acao == 'concluido') {
       item.concluido = !item.concluido;
     }
-    this.lancamentoService.update(item).subscribe();
+    this.lancamentoService.update(item).subscribe(() => {
+      this.calcularTotais(this.extrato);
+    });
   }
 
   filtrarPorConta(e: any) {
@@ -68,23 +73,23 @@ export class ExtratoComponent implements OnInit {
   filtrarDescricao(e: any) {
     let descricao = e.target.value.toLowerCase();
     console.log(descricao);
-    
+
     let data = [... new Set(this.extratoService.datasource.filter(l => l.descricao.toLowerCase().includes(descricao)))];
     this.calcularTotais(data);
     this.extratoService.datasourceBehavior.next(data);
   }
 
   calcularTotais(lancamentos: Lancamento[]) {
-    if (lancamentos.length > 0) {
+    this.saldoAtual = 0;
+    this.saldoPrevisto = 0
+    if (lancamentos.length > 1) {
       this.saldoPrevisto = lancamentos.map(o => o.valor).reduce((a, b) => (a + b));
       this.saldoAtual = lancamentos.filter(o => o.concluido).map(o => o.valor).reduce((a, b) => (a + b));
-    } else {
-      this.saldoAtual = 0;
-      this.saldoPrevisto = 0
     }
   }
 
   sortData(sort: Sort) {
+    this.lastSort = sort;
     this.extrato = this.extrato.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
