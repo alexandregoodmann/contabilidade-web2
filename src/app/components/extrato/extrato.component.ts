@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
-import { Router } from '@angular/router';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
-import { AnaliseService } from 'src/app/services/analise.service';
+import { ExtratoService } from 'src/app/services/extrato.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { LancamentoDialogComponent } from '../lancamento-dialog/lancamento-dialog.component';
 
 @Component({
   selector: 'app-extrato',
@@ -15,33 +16,49 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 export class ExtratoComponent implements OnInit {
 
   displayedColumns: string[] = ['data', 'descricao', 'valor', 'fixo', 'concluido'];
-  lancamentos: Lancamento[] = [];
+  extrato: Lancamento[] = [];
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
+  contas: String[] = [];
+  constaSelecionada!: string | undefined;
+  lastSort!: Sort;
 
   constructor(
     private lancamentoService: LancamentoService,
-    private router: Router,
-    private analiseService: AnaliseService,
+    private extratoService: ExtratoService,
+    private dialog: MatDialog,
     private planilhaService: PlanilhaService
   ) { }
 
   ngOnInit() {
-    this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data; });
-    this.analiseService.getExtrato(true);
-    this.analiseService.extratoObservable.subscribe(data => {
-      console.log('lancamentos', data);
 
-      this.lancamentos = data;
+    this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+      this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
+        this.extrato = lancamentos;
+        this.calcularTotais(this.extrato);
+        this.extratoService.datasource = lancamentos;
+        this.contas = [... new Set(lancamentos.map(l => l.conta.descricao))].sort();
+      });
     });
+
+    this.extratoService.extrato.subscribe(data => {
+      this.extrato = data;
+      this.calcularTotais(data);
+
+      if (this.lastSort != undefined)
+        this.sortData(this.lastSort);
+
+      if (this.constaSelecionada != undefined)
+        this.filtrarPorConta(this.constaSelecionada);
+    });
+
   }
 
-  editar(idLancamento: number) {
-    if (idLancamento > 0)
-      this.router.navigate(['/lancamento'], { queryParams: { backto: '/extrato', idLancamento: idLancamento } });
-    else
-      this.router.navigate(['/lancamento']);
+  reload() {
+    this.constaSelecionada = undefined;
+    this.extratoService.updateDatasource();
+    this.calcularTotais(this.extrato);
   }
 
   update(acao: string, item: Lancamento) {
@@ -50,22 +67,43 @@ export class ExtratoComponent implements OnInit {
     } else if (acao == 'concluido') {
       item.concluido = !item.concluido;
     }
-    this.lancamentoService.update(item).subscribe();
-  }
-
-  processarLabels(conta: any) {
-    let obj = { idPlanilha: this.planilhaSelecionada.id, idConta: conta.id };
-    this.lancamentoService.processarLabels(obj).subscribe(() => {
-      this.analiseService.getExtrato(true);
+    this.lancamentoService.update(item).subscribe(() => {
+      this.calcularTotais(this.extrato);
     });
   }
 
+  filtrarPorConta(conta: string) {
+    this.constaSelecionada = conta;
+    let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == conta))];
+    this.calcularTotais(data);
+    this.extratoService.datasourceBehavior.next(data);
+  }
+
   filtrarSemLabels() {
-    this.analiseService.filtrarExtratoPorCategoria(undefined);
+    this.extratoService.filtrarExtratoPorCategoria(undefined);
+  }
+
+  filtrarDescricao(e: any) {
+    let descricao = e.target.value.toLowerCase();
+    console.log(descricao);
+
+    let data = [... new Set(this.extratoService.datasource.filter(l => l.descricao.toLowerCase().includes(descricao)))];
+    this.calcularTotais(data);
+    this.extratoService.datasourceBehavior.next(data);
+  }
+
+  calcularTotais(lancamentos: Lancamento[]) {
+    this.saldoAtual = 0;
+    this.saldoPrevisto = 0
+    if (lancamentos.length > 1) {
+      this.saldoPrevisto = lancamentos.map(o => o.valor).reduce((a, b) => (a + b));
+      this.saldoAtual = lancamentos.filter(o => o.concluido).map(o => o.valor).reduce((a, b) => (a + b));
+    }
   }
 
   sortData(sort: Sort) {
-    this.lancamentos = this.lancamentos.sort((a, b) => {
+    this.lastSort = sort;
+    this.extrato = this.extrato.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'data':
@@ -73,9 +111,9 @@ export class ExtratoComponent implements OnInit {
         case 'conta':
           return compare(a.conta.descricao, b.conta.descricao, isAsc);
         case 'lancamento':
-          return compare(a.descricao, b.descricao, isAsc);
+          return compare(a.descricao.toLowerCase(), b.descricao.toLowerCase(), isAsc);
         case 'fixo':
-          return compare(a.fixo, b.fixo, isAsc);
+          return compare((a.fixo != null ? true : false), (b.fixo != null ? true : false), isAsc);
         case 'valor':
           return compare(a.valor, b.valor, isAsc);
         case 'concluido':
@@ -85,6 +123,16 @@ export class ExtratoComponent implements OnInit {
       }
     });
   }
+
+  openLancamento(idLancamento: number) {
+    const dialogRef = this.dialog.open(LancamentoDialogComponent, {
+      data: {
+        idLancamento: idLancamento,
+      },
+    });
+  }
+
+
 }
 
 export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {

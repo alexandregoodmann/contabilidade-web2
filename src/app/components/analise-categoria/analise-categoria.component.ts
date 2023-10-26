@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseCategoria } from 'src/app/models/analise-categoria';
-import { AnaliseService } from 'src/app/services/analise.service';
+import { ExtratoService } from 'src/app/services/extrato.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { compare } from '../extrato/extrato.component';
 
@@ -32,12 +32,12 @@ export class AnaliseCategoriaComponent implements OnInit {
 
   constructor(
     private planilhaService: PlanilhaService,
-    private analiseService: AnaliseService
+    private extratoService: ExtratoService
   ) { }
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-      this.analiseService.getAnaliseCategoria(planilha.ano, planilha.mes).subscribe(data => {
+      this.extratoService.getAnaliseCategoria(planilha.ano, planilha.mes).subscribe(data => {
         this.datasourceTable = data;
         this.total = this.datasourceTable.map(o => o.soma).reduce((a, b) => a + b);
         this.datasourceTable.forEach(e => {
@@ -55,7 +55,7 @@ export class AnaliseCategoriaComponent implements OnInit {
     if (e.selection.length > 0) {
       let i: number = e.selection[0].row as number;
       let label = this.datasource[i][0] as string;
-      this.analiseService.filtrarExtratoPorCategoria(label);
+      this.extratoService.filtrarExtratoPorCategoria(label);
     }
   }
 

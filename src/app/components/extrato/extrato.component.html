@@ -4,7 +4,49 @@
     <div class="w3-row" style="height: 81%;">
         <div class="w3-col l6" style="height: 100%;">
             <mat-card style="margin-left: 10px; height: 100%;">
-                <mat-card-content style="overflow-y: auto; height: 100%;">
+
+                <!-- button bar -->
+                <mat-card-actions>
+                    <div class="w3-row" style="margin: 0px 10px 0 10px;">
+                        <div class="w3-col l2" style="display: flex;">
+                            <div class="button" matTooltip="Reload" (click)="reload()">
+                                <mat-icon class="icon">refresh</mat-icon>
+                            </div>
+                            <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
+                                <mat-icon class="icon">add_shopping_cart</mat-icon>
+                            </div>
+                        </div>
+                        <div class="w3-col l4" style="display: flex;">
+                            <mat-form-field>
+                                <mat-label>Filtrar pela conta</mat-label>
+                                <mat-select (selectionChange)="filtrarPorConta($event.value)">
+                                    <mat-option *ngFor="let conta of contas" [value]="conta">
+                                        {{conta}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field style="margin-left: 10px;">
+                                <mat-label>Filtrar pela descrição</mat-label>
+                                <input matInput (keyup)="filtrarDescricao($event)" #input>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="w3-col l3">
+                            <div class="saldo">
+                                <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
+                                <span class="label">Saldo Atual</span>
+                            </div>
+                        </div>
+                        <div class="w3-col l3">
+                            <div class="saldo">
+                                <span class="valor">R$ {{saldoPrevisto | number: '1.2-2'}}</span>
+                                <span class="label">Saldo Previsto</span>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-actions>
+
+                <mat-card-content style="overflow-y: auto; height: 88%;">
                     <table class="resumo-table" matSort (matSortChange)="sortData($event)">
                         <tr>
                             <th mat-sort-header="data">Data</th>
@@ -14,10 +56,10 @@
                             <th mat-sort-header="valor" style="padding-left: 25px;">Valor</th>
                             <th mat-sort-header="concluido" style="width: 31px;">Concluído</th>
                         </tr>
-                        <tr *ngFor="let lancamento of lancamentos">
-                            <td>{{lancamento.data | date:'dd/MM'}}</td>
-                            <td>{{lancamento.conta.descricao}}</td>
-                            <td>
+                        <tr *ngFor="let lancamento of extrato">
+                            <td (click)="openLancamento(lancamento.id)">{{lancamento.data | date:'dd/MM'}}</td>
+                            <td (click)="openLancamento(lancamento.id)">{{lancamento.conta.descricao}}</td>
+                            <td (click)="openLancamento(lancamento.id)">
                                 {{lancamento.descricao}}
                                 <span class="extratoLabel" *ngFor="let label of lancamento.labels">{{label}}</span>
                             </td>
@@ -26,8 +68,7 @@
                                     [checked]="(lancamento.fixo == null || lancamento.fixo == 'false') ? false : true"></app-check>
                             </td>
                             <td class="valor" [ngStyle]="{'color':lancamento.valor < 0 ? 'red' : 'black' }">R$
-                                {{lancamento.valor |
-                                number: '1.2-2'}}
+                                {{lancamento.valor | number: '1.2-2'}}
                             </td>
                             <td style="text-align: center;">
                                 <app-check (click)="update('concluido',lancamento)"

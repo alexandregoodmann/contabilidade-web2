@@ -39,7 +39,7 @@ export class ChipsComponent implements OnInit {
 
     this.group.get('labels')?.valueChanges.subscribe(data => {
       let search = (data == null || data == undefined) ? '' : data;
-      if (search.id == undefined)
+      if (search && search.id == undefined)
         this.filteredLabels = this.allLabels.filter(o => o.toLowerCase().includes(search.toLowerCase()));
     });
   }
