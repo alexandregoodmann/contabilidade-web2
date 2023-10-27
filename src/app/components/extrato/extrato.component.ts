@@ -48,9 +48,6 @@ export class ExtratoComponent implements OnInit {
 
       if (this.lastSort != undefined)
         this.sortData(this.lastSort);
-
-      if (this.constaSelecionada != undefined)
-        this.filtrarPorConta(this.constaSelecionada);
     });
 
   }
@@ -85,8 +82,6 @@ export class ExtratoComponent implements OnInit {
 
   filtrarDescricao(e: any) {
     let descricao = e.target.value.toLowerCase();
-    console.log(descricao);
-
     let data = [... new Set(this.extratoService.datasource.filter(l => l.descricao.toLowerCase().includes(descricao)))];
     this.calcularTotais(data);
     this.extratoService.datasourceBehavior.next(data);
