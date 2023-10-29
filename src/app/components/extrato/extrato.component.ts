@@ -76,10 +76,6 @@ export class ExtratoComponent implements OnInit {
     this.extratoService.datasourceBehavior.next(data);
   }
 
-  filtrarSemLabels() {
-    this.extratoService.filtrarExtratoPorCategoria(undefined);
-  }
-
   filtrarDescricao(e: any) {
     let descricao = e.target.value.toLowerCase();
     let data = [... new Set(this.extratoService.datasource.filter(l => l.descricao.toLowerCase().includes(descricao)))];

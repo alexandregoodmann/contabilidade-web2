@@ -13,7 +13,6 @@ export class LancamentoDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('dialog', this.data);
   }
 
 }

@@ -45,17 +45,9 @@ export class ExtratoService {
   }
 
 
-  filtrarExtratoPorCategoria(label?: string) {
-    // this.getExtrato(false);
-    this.datasource.forEach(conta => {
-      if (label == undefined) {
-        // conta.lancamentos = conta.lancamentos.filter(l => l.labels.length == 0);
-      } else {
-        // conta.lancamentos = conta.lancamentos.filter(l => l.labels.includes(label));
-      }
-    });
-    //this.extratoDataSource = this.extratoDataSource.filter(e => e.lancamentos.length > 0);
-    this.datasourceBehavior.next(this.datasource);
+  filtrarExtratoPorCategoria(label: string) {
+    let labels = this.datasource.filter(lancamento => lancamento.labels.includes(label));
+    this.datasourceBehavior.next(labels);
   }
 
 }
