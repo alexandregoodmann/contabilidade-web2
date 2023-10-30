@@ -17,7 +17,6 @@ import { environment } from 'src/environments/environment';
 export class CargaComponent implements OnInit {
 
   group!: FormGroup;
-  bancos = ['Bradesco', 'C6', 'Itaú'];
   contas!: Conta[];
   planilhaSelecionada!: Planilha;
   fileName = '';
@@ -36,7 +35,7 @@ export class CargaComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
 
     this.contaService.findAll().subscribe(data => {
-      this.contas = data.filter(o => o.banco.carga);
+      this.contas = data;
     });
 
     this.group = this.fb.group({
