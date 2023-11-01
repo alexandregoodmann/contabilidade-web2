@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
+import { Conta } from 'src/app/models/conta';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
+import { ContaService } from 'src/app/services/conta.service';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
@@ -21,6 +23,7 @@ export class ExtratoComponent implements OnInit {
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
   contas: String[] = [];
+  listConta!: Conta[];
   constaSelecionada!: string | undefined;
   lastSort!: Sort;
 
@@ -28,12 +31,16 @@ export class ExtratoComponent implements OnInit {
     private lancamentoService: LancamentoService,
     private extratoService: ExtratoService,
     private dialog: MatDialog,
-    private planilhaService: PlanilhaService
+    private planilhaService: PlanilhaService,
+    private contaService: ContaService
   ) { }
 
   ngOnInit() {
 
+    this.contaService.findAll().subscribe(data => { this.listConta = data });
+
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+      this.planilhaSelecionada = planilha;
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
         this.extrato = lancamentos;
         this.calcularTotais(this.extrato);
@@ -70,6 +77,10 @@ export class ExtratoComponent implements OnInit {
   }
 
   filtrarPorConta(conta: string) {
+    if (conta == undefined) {
+      this.reload();
+      return;
+    }
     this.constaSelecionada = conta;
     let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == conta))];
     this.calcularTotais(data);
@@ -123,7 +134,11 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-
+  processarLabels() {
+    let conta = this.listConta.find(o => o.descricao === this.constaSelecionada);
+    let dto = { idPlanilha: this.planilhaSelecionada.id, idConta: conta?.id };
+    this.lancamentoService.processarLabels(dto).subscribe(() => { this.reload() });
+  }
 }
 
 export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
