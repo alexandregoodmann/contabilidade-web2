@@ -31,13 +31,10 @@ export class CargaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.planilhaService.planilhaSelecionada.subscribe(data => { this.planilhaSelecionada = data });
-
     this.contaService.findAll().subscribe(data => {
       this.contas = data;
     });
-
     this.group = this.fb.group({
       conta: [null, [Validators.required]],
       cargaArquivo: [null, [Validators.required]]

@@ -1,36 +1,28 @@
 <div class="extrato-content">
     <app-top-bar titulo="Extrato"></app-top-bar>
     <app-select-planilha></app-select-planilha>
-    <div class="w3-row" style="height: 81%;">
+    <div class="w3-row" style="height: 82%;">
         <div class="w3-col l6" style="height: 100%;">
             <mat-card style="margin-left: 10px; height: 100%;">
 
                 <!-- button bar -->
                 <mat-card-actions>
                     <div class="w3-row" style="margin: 0px 10px 0 10px;">
-                        <div class="w3-col l2" style="display: flex;">
+                        <div class="w3-col l6" style="display: flex;">
                             <div class="button" matTooltip="Reload" (click)="reload()">
                                 <mat-icon class="icon">refresh</mat-icon>
                             </div>
                             <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                                 <mat-icon class="icon">add_shopping_cart</mat-icon>
                             </div>
+                            <div class="button" matTooltip="Processar labels" (click)="processarLabels()">
+                                <mat-icon class="icon">label</mat-icon>
+                            </div>
+                            <div class="button" matTooltip="Filtrar sem labels"
+                                (click)="group.get('semLabel')?.setValue(true)">
+                                <mat-icon class="icon">filter_list</mat-icon>
+                            </div>
                         </div>
-                        <div class="w3-col l4" style="display: flex;">
-                            <mat-form-field>
-                                <mat-label>Filtrar pela conta</mat-label>
-                                <mat-select (selectionChange)="filtrarPorConta($event.value)">
-                                    <mat-option *ngFor="let conta of contas" [value]="conta">
-                                        {{conta}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field style="margin-left: 10px;">
-                                <mat-label>Filtrar pela descrição</mat-label>
-                                <input matInput (keyup)="filtrarDescricao($event)" #input>
-                            </mat-form-field>
-                        </div>
-
                         <div class="w3-col l3">
                             <div class="saldo">
                                 <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
@@ -44,9 +36,30 @@
                             </div>
                         </div>
                     </div>
+                    <form class="form" #form [formGroup]="group" autocomplete="off">
+                        <div class="w3-row">
+                            <div class="w3-col l6">
+                                <mat-form-field>
+                                    <mat-label>Filtrar pela conta</mat-label>
+                                    <mat-select formControlName="conta">
+                                        <mat-option value="">Nenhum</mat-option>
+                                        <mat-option *ngFor="let conta of contas" [value]="conta">
+                                            {{conta.descricao}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="w3-col l6">
+                                <mat-form-field style="margin-left: 10px;">
+                                    <mat-label>Filtrar pela descrição</mat-label>
+                                    <input matInput formControlName="descricao" #input>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </form>
                 </mat-card-actions>
 
-                <mat-card-content style="overflow-y: auto; height: 88%;">
+                <mat-card-content style="overflow-y: auto; height: 80%;">
                     <table class="resumo-table" matSort (matSortChange)="sortData($event)">
                         <tr>
                             <th mat-sort-header="data">Data</th>

@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
+import { Conta } from 'src/app/models/conta';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
+import { ContaService } from 'src/app/services/conta.service';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
@@ -20,25 +23,41 @@ export class ExtratoComponent implements OnInit {
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
-  contas: String[] = [];
-  constaSelecionada!: string | undefined;
-  lastSort!: Sort;
+  contas!: Conta[];
+  group!: FormGroup;
+  sort!: Sort;
 
   constructor(
+    private fb: FormBuilder,
     private lancamentoService: LancamentoService,
     private extratoService: ExtratoService,
     private dialog: MatDialog,
-    private planilhaService: PlanilhaService
+    private planilhaService: PlanilhaService,
+    private contaService: ContaService
   ) { }
 
   ngOnInit() {
 
+    this.group = this.fb.group({
+      conta: [null],
+      descricao: [null],
+      semLabel: [false]
+    });
+
+    //aplicar filtros do extrato
+    this.group.valueChanges.subscribe(group => {
+      this.extratoService.filtro = group;
+      this.extratoService.filtrarExtrato();
+    });
+
+    this.contaService.findAll().subscribe(data => { this.contas = data });
+
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
+      this.planilhaSelecionada = planilha;
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
         this.extrato = lancamentos;
         this.calcularTotais(this.extrato);
         this.extratoService.datasource = lancamentos;
-        this.contas = [... new Set(lancamentos.map(l => l.conta.descricao))].sort();
       });
     });
 
@@ -46,16 +65,17 @@ export class ExtratoComponent implements OnInit {
       this.extrato = data;
       this.calcularTotais(data);
 
-      if (this.lastSort != undefined)
-        this.sortData(this.lastSort);
+      if (this.sort != null) {
+        this.sortData(this.sort);
+      }
     });
 
   }
 
   reload() {
-    this.constaSelecionada = undefined;
     this.extratoService.updateDatasource();
     this.calcularTotais(this.extrato);
+    this.group.reset();
   }
 
   update(acao: string, item: Lancamento) {
@@ -69,20 +89,6 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-  filtrarPorConta(conta: string) {
-    this.constaSelecionada = conta;
-    let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == conta))];
-    this.calcularTotais(data);
-    this.extratoService.datasourceBehavior.next(data);
-  }
-
-  filtrarDescricao(e: any) {
-    let descricao = e.target.value.toLowerCase();
-    let data = [... new Set(this.extratoService.datasource.filter(l => l.descricao.toLowerCase().includes(descricao)))];
-    this.calcularTotais(data);
-    this.extratoService.datasourceBehavior.next(data);
-  }
-
   calcularTotais(lancamentos: Lancamento[]) {
     this.saldoAtual = 0;
     this.saldoPrevisto = 0
@@ -93,7 +99,7 @@ export class ExtratoComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    this.lastSort = sort;
+    this.sort = sort;
     this.extrato = this.extrato.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
@@ -123,9 +129,19 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-
+  processarLabels() {
+    let cc: any = this.group.get('conta')?.value;
+    if (cc == null || cc == '') {
+      alert('Informe a conta')
+      return;
+    }
+    let conta = this.contas.find(o => o.id === cc.id);
+    let dto = { idPlanilha: this.planilhaSelecionada.id, idConta: conta?.id };
+    this.lancamentoService.processarLabels(dto).subscribe(() => { this.reload() });
+  }
 }
 
 export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
+
