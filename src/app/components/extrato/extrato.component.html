@@ -1,7 +1,7 @@
 <div class="extrato-content">
     <app-top-bar titulo="Extrato"></app-top-bar>
     <app-select-planilha></app-select-planilha>
-    <div class="w3-row" style="height: 81%;">
+    <div class="w3-row" style="height: 82%;">
         <div class="w3-col l6" style="height: 100%;">
             <mat-card style="margin-left: 10px; height: 100%;">
 
@@ -18,7 +18,8 @@
                             <div class="button" matTooltip="Processar labels" (click)="processarLabels()">
                                 <mat-icon class="icon">label</mat-icon>
                             </div>
-                            <div class="button" matTooltip="Filtrar sem labels" (click)="filtrarSemLabels()">
+                            <div class="button" matTooltip="Filtrar sem labels"
+                                (click)="group.get('semLabel')?.setValue(true)">
                                 <mat-icon class="icon">filter_list</mat-icon>
                             </div>
                         </div>
@@ -58,7 +59,7 @@
                     </form>
                 </mat-card-actions>
 
-                <mat-card-content style="overflow-y: auto; height: 82%;">
+                <mat-card-content style="overflow-y: auto; height: 80%;">
                     <table class="resumo-table" matSort (matSortChange)="sortData($event)">
                         <tr>
                             <th mat-sort-header="data">Data</th>

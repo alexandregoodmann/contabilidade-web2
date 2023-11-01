@@ -14,7 +14,7 @@ export class ExtratoService {
 
   datasourceBehavior = new BehaviorSubject<Array<Lancamento>>(new Array<Lancamento>());
   extrato = this.datasourceBehavior.asObservable();
-
+  filtro: any;
   datasource!: Lancamento[];
 
   constructor(
@@ -23,12 +23,32 @@ export class ExtratoService {
   ) { }
 
   updateDatasource() {
+    console.log('update');
+    
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
         this.datasource = lancamentos;
         this.datasourceBehavior.next(this.datasource);
+        this.filtrarExtrato();
       });
     });
+  }
+
+  filtrarExtrato() {
+    console.log('filtrar', this.filtro );
+    
+    let data = [... new Set(this.datasource)];
+
+    if (this.filtro.conta != null && this.filtro.conta != '')
+      data = [...data.filter(l => l.conta.id == this.filtro.conta.id)];
+
+    if (this.filtro.descricao != null && this.filtro.descricao != '')
+      data = [...data.filter(l => l.descricao.toLowerCase().includes(this.filtro.descricao))];
+
+    if (this.filtro.semLabel)
+      data = [...data.filter(l => l.labels.length == 0)];
+
+    this.datasourceBehavior.next(data);
   }
 
   getAnaliseCategoria(ano: number, mes: number): Observable<AnaliseCategoria[]> {

@@ -25,6 +25,7 @@ export class ExtratoComponent implements OnInit {
   planilhaSelecionada!: Planilha;
   contas!: Conta[];
   group!: FormGroup;
+  sort!: Sort;
 
   constructor(
     private fb: FormBuilder,
@@ -39,20 +40,14 @@ export class ExtratoComponent implements OnInit {
 
     this.group = this.fb.group({
       conta: [null],
-      descricao: [null]
+      descricao: [null],
+      semLabel: [false]
     });
 
     //aplicar filtros do extrato
     this.group.valueChanges.subscribe(group => {
-      let data = [... new Set(this.extratoService.datasource)];
-
-      if (group.conta != null && group.conta != '')
-        data = [...data.filter(l => l.conta.id == group.conta.id)];
-
-      if (group.descricao != null && group.descricao != '')
-        data = [...data.filter(l => l.descricao.toLowerCase().includes(group.descricao))];
-
-      this.extratoService.datasourceBehavior.next(data);
+      this.extratoService.filtro = group;
+      this.extratoService.filtrarExtrato();
     });
 
     this.contaService.findAll().subscribe(data => { this.contas = data });
@@ -69,6 +64,10 @@ export class ExtratoComponent implements OnInit {
     this.extratoService.extrato.subscribe(data => {
       this.extrato = data;
       this.calcularTotais(data);
+
+      if (this.sort != null) {
+        this.sortData(this.sort);
+      }
     });
 
   }
@@ -90,12 +89,6 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-  filtrarSemLabels() {
-    let data = [... new Set(this.extratoService.datasource.filter(l => l.labels.length == 0))];
-    this.calcularTotais(data);
-    this.extratoService.datasourceBehavior.next(data);
-  }
-
   calcularTotais(lancamentos: Lancamento[]) {
     this.saldoAtual = 0;
     this.saldoPrevisto = 0
@@ -106,7 +99,7 @@ export class ExtratoComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    // this.filtro.sort = sort;
+    this.sort = sort;
     this.extrato = this.extrato.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
@@ -137,7 +130,12 @@ export class ExtratoComponent implements OnInit {
   }
 
   processarLabels() {
-    let conta = this.contas.find(o => o.id === this.group.get('conta')?.value.conta?.id);
+    let cc: any = this.group.get('conta')?.value;
+    if (cc == null || cc == '') {
+      alert('Informe a conta')
+      return;
+    }
+    let conta = this.contas.find(o => o.id === cc.id);
     let dto = { idPlanilha: this.planilhaSelecionada.id, idConta: conta?.id };
     this.lancamentoService.processarLabels(dto).subscribe(() => { this.reload() });
   }
