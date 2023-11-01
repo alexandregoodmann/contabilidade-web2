@@ -18,6 +18,9 @@
                             <div class="button" matTooltip="Processar labels" (click)="processarLabels()">
                                 <mat-icon class="icon">label</mat-icon>
                             </div>
+                            <div class="button" matTooltip="Filtrar sem labels" (click)="filtrarSemLabels()">
+                                <mat-icon class="icon">filter_list</mat-icon>
+                            </div>
                         </div>
                         <div class="w3-col l3">
                             <div class="saldo">
@@ -32,27 +35,27 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w3-row" style="margin: 0px 10px 0 10px;">
-                        <div class="w3-col l4">
-                            <mat-form-field>
-                                <mat-label>Filtrar pela conta</mat-label>
-                                <mat-select (selectionChange)="filtrarPorConta($event.value)">
-                                    <mat-option [value]="">
-                                        Nenhum
-                                    </mat-option>
-                                    <mat-option *ngFor="let conta of contas" [value]="conta">
-                                        {{conta}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                    <form class="form" #form [formGroup]="group" autocomplete="off">
+                        <div class="w3-row">
+                            <div class="w3-col l6">
+                                <mat-form-field>
+                                    <mat-label>Filtrar pela conta</mat-label>
+                                    <mat-select formControlName="conta">
+                                        <mat-option value="">Nenhum</mat-option>
+                                        <mat-option *ngFor="let conta of contas" [value]="conta">
+                                            {{conta.descricao}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="w3-col l6">
+                                <mat-form-field style="margin-left: 10px;">
+                                    <mat-label>Filtrar pela descrição</mat-label>
+                                    <input matInput formControlName="descricao" #input>
+                                </mat-form-field>
+                            </div>
                         </div>
-                        <div class="w3-col l8">
-                            <mat-form-field style="margin-left: 10px;">
-                                <mat-label>Filtrar pela descrição</mat-label>
-                                <input matInput (keyup)="filtrarDescricao($event)" #input>
-                            </mat-form-field>
-                        </div>
-                    </div>
+                    </form>
                 </mat-card-actions>
 
                 <mat-card-content style="overflow-y: auto; height: 82%;">

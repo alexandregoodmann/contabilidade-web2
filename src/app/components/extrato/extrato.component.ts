@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { Conta } from 'src/app/models/conta';
@@ -22,12 +23,11 @@ export class ExtratoComponent implements OnInit {
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
   planilhaSelecionada!: Planilha;
-  contas: String[] = [];
-  listConta!: Conta[];
-  constaSelecionada!: string | undefined;
-  lastSort!: Sort;
+  contas!: Conta[];
+  group!: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private lancamentoService: LancamentoService,
     private extratoService: ExtratoService,
     private dialog: MatDialog,
@@ -37,7 +37,25 @@ export class ExtratoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.contaService.findAll().subscribe(data => { this.listConta = data });
+    this.group = this.fb.group({
+      conta: [null],
+      descricao: [null]
+    });
+
+    //aplicar filtros do extrato
+    this.group.valueChanges.subscribe(group => {
+      let data = [... new Set(this.extratoService.datasource)];
+
+      if (group.conta != null && group.conta != '')
+        data = [...data.filter(l => l.conta.id == group.conta.id)];
+
+      if (group.descricao != null && group.descricao != '')
+        data = [...data.filter(l => l.descricao.toLowerCase().includes(group.descricao))];
+
+      this.extratoService.datasourceBehavior.next(data);
+    });
+
+    this.contaService.findAll().subscribe(data => { this.contas = data });
 
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
@@ -45,24 +63,20 @@ export class ExtratoComponent implements OnInit {
         this.extrato = lancamentos;
         this.calcularTotais(this.extrato);
         this.extratoService.datasource = lancamentos;
-        this.contas = [... new Set(lancamentos.map(l => l.conta.descricao))].sort();
       });
     });
 
     this.extratoService.extrato.subscribe(data => {
       this.extrato = data;
       this.calcularTotais(data);
-
-      if (this.lastSort != undefined)
-        this.sortData(this.lastSort);
     });
 
   }
 
   reload() {
-    this.constaSelecionada = undefined;
     this.extratoService.updateDatasource();
     this.calcularTotais(this.extrato);
+    this.group.reset();
   }
 
   update(acao: string, item: Lancamento) {
@@ -76,20 +90,8 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-  filtrarPorConta(conta: string) {
-    if (conta == undefined) {
-      this.reload();
-      return;
-    }
-    this.constaSelecionada = conta;
-    let data = [... new Set(this.extratoService.datasource.filter(l => l.conta.descricao == conta))];
-    this.calcularTotais(data);
-    this.extratoService.datasourceBehavior.next(data);
-  }
-
-  filtrarDescricao(e: any) {
-    let descricao = e.target.value.toLowerCase();
-    let data = [... new Set(this.extratoService.datasource.filter(l => l.descricao.toLowerCase().includes(descricao)))];
+  filtrarSemLabels() {
+    let data = [... new Set(this.extratoService.datasource.filter(l => l.labels.length == 0))];
     this.calcularTotais(data);
     this.extratoService.datasourceBehavior.next(data);
   }
@@ -104,7 +106,7 @@ export class ExtratoComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    this.lastSort = sort;
+    // this.filtro.sort = sort;
     this.extrato = this.extrato.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
@@ -135,7 +137,7 @@ export class ExtratoComponent implements OnInit {
   }
 
   processarLabels() {
-    let conta = this.listConta.find(o => o.descricao === this.constaSelecionada);
+    let conta = this.contas.find(o => o.id === this.group.get('conta')?.value.conta?.id);
     let dto = { idPlanilha: this.planilhaSelecionada.id, idConta: conta?.id };
     this.lancamentoService.processarLabels(dto).subscribe(() => { this.reload() });
   }
@@ -144,3 +146,4 @@ export class ExtratoComponent implements OnInit {
 export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
+

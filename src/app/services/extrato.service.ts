@@ -39,16 +39,9 @@ export class ExtratoService {
     return this.http.get<ResumoExtrato[]>(`${environment.url}/analise/resumoextrato/${ano}/${mes}`);
   }
 
-  filtrarPorConta(conta: String) {
-    let data = [... new Set(this.datasource.filter(l => l.conta.descricao == conta))].sort();
-    this.datasourceBehavior.next(data);
-  }
-
-
   filtrarExtratoPorCategoria(label: string) {
     let labels = this.datasource.filter(lancamento => lancamento.labels.includes(label));
     this.datasourceBehavior.next(labels);
   }
 
 }
-
