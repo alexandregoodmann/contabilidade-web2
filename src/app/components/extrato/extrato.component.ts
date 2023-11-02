@@ -92,7 +92,7 @@ export class ExtratoComponent implements OnInit {
   calcularTotais(lancamentos: Lancamento[]) {
     this.saldoAtual = 0;
     this.saldoPrevisto = 0
-    if (lancamentos.length > 1) {
+    if (lancamentos.length >= 1) {
       this.saldoPrevisto = lancamentos.map(o => o.valor).reduce((a, b) => (a + b));
       this.saldoAtual = lancamentos.filter(o => o.concluido).map(o => o.valor).reduce((a, b) => (a + b));
     }
