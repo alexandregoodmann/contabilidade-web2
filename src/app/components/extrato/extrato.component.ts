@@ -41,7 +41,9 @@ export class ExtratoComponent implements OnInit {
     this.group = this.fb.group({
       conta: [null],
       descricao: [null],
-      semLabel: [false]
+      semLabel: [false],
+      fixo: [false],
+      concluido: [false]
     });
 
     //aplicar filtros do extrato
