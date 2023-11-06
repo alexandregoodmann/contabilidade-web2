@@ -24,7 +24,7 @@ export class ExtratoService {
 
   updateDatasource() {
     console.log('update');
-    
+
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
         this.datasource = lancamentos;
@@ -35,7 +35,6 @@ export class ExtratoService {
   }
 
   filtrarExtrato() {
-    console.log('filtrar', this.filtro );
     
     let data = [... new Set(this.datasource)];
 
@@ -47,6 +46,12 @@ export class ExtratoService {
 
     if (this.filtro.semLabel)
       data = [...data.filter(l => l.labels.length == 0)];
+
+    if (this.filtro.fixo)
+      data = [...data.filter(l => l.fixo != null)];
+
+    if (this.filtro.concluido)
+      data = [...data.filter(l => l.concluido == true)];
 
     this.datasourceBehavior.next(data);
   }
