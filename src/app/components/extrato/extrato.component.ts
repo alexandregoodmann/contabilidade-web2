@@ -5,7 +5,6 @@ import { Sort } from '@angular/material/sort';
 import { Conta } from 'src/app/models/conta';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
-import { ContaService } from 'src/app/services/conta.service';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
@@ -33,7 +32,6 @@ export class ExtratoComponent implements OnInit {
     private extratoService: ExtratoService,
     private dialog: MatDialog,
     private planilhaService: PlanilhaService,
-    private contaService: ContaService
   ) { }
 
   ngOnInit() {
@@ -52,11 +50,10 @@ export class ExtratoComponent implements OnInit {
       this.extratoService.filtrarExtrato();
     });
 
-    this.contaService.findAll().subscribe(data => { this.contas = data });
-
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
+        this.getContas(lancamentos);
         this.extrato = lancamentos;
         this.calcularTotais(this.extrato);
         this.extratoService.datasource = lancamentos;
@@ -72,6 +69,24 @@ export class ExtratoComponent implements OnInit {
       }
     });
 
+  }
+
+  getContas(lancamentos: Lancamento[]) {
+    this.contas = [];
+    let mapa = new Map<number, Conta>();
+    lancamentos.map(n => n.conta).forEach(conta => {
+      mapa.set(conta.id, conta);
+    });
+    mapa.forEach((v, k) => {
+      this.contas.push(v);
+    });
+    this.contas.sort((a, b) => {
+      if (a.descricao > b.descricao)
+        return 1;
+      if (a.descricao < b.descricao)
+        return -1;
+      return 0;
+    });
   }
 
   reload() {
@@ -104,22 +119,7 @@ export class ExtratoComponent implements OnInit {
     this.sort = sort;
     this.extrato = this.extrato.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'data':
-          return compare(a.data, b.data, isAsc);
-        case 'conta':
-          return compare(a.conta.descricao, b.conta.descricao, isAsc);
-        case 'lancamento':
-          return compare(a.descricao.toLowerCase(), b.descricao.toLowerCase(), isAsc);
-        case 'fixo':
-          return compare((a.fixo != null ? true : false), (b.fixo != null ? true : false), isAsc);
-        case 'valor':
-          return compare(a.valor, b.valor, isAsc);
-        case 'concluido':
-          return compare(a.concluido, b.concluido, isAsc);
-        default:
-          return 0;
-      }
+      return sortColumn(a, b, sort.active, isAsc);
     });
   }
 
@@ -143,7 +143,41 @@ export class ExtratoComponent implements OnInit {
   }
 }
 
-export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+export function sortColumn(a: any, b: any, coluna: string, isAsc: boolean) {
+
+  switch (coluna) {
+    case 'data':
+      let d1 = new Date(a.data);
+      let d2 = new Date(b.data);
+      return (d1 < d2 ? -1 : 1) * (isAsc ? 1 : -1);
+
+    case 'conta':
+      if (a.conta.descricao === b.conta.descricao)
+        return (a.valor - b.valor) * (isAsc ? 1 : -1);
+      return (a.conta.descricao as string).localeCompare((b.conta.descricao as string)) * (isAsc ? 1 : -1);
+
+    case 'lancamento':
+      if (a.descricao === b.descricao)
+        return (a.valor - b.valor) * (isAsc ? 1 : -1);
+      return (a.descricao as string).localeCompare((b.descricao as string)) * (isAsc ? 1 : -1);
+
+    case 'fixo':
+      let a_ = (a.fixo != null ? true : false);
+      let b_ = (b.fixo != null ? true : false);
+      if (a_ === b_)
+        return (a.valor - b.valor) * (isAsc ? 1 : -1);
+      return (a_ < b_ ? -1 : 1) * (isAsc ? 1 : -1);
+
+    case 'valor':
+      return (a.valor - b.valor) * (isAsc ? 1 : -1);
+
+    case 'concluido':
+      if (a.concluido === b.concluido)
+        return (a.valor - b.valor) * (isAsc ? 1 : -1);
+      return (a.concluido < b.concluido ? -1 : 1) * (isAsc ? 1 : -1);
+
+    default:
+      return 0;
+  }
 }
 

@@ -4,7 +4,6 @@ import { Planilha } from 'src/app/models/planilha';
 import { ResumoExtrato } from 'src/app/models/resumo-extrato';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
-import { compare } from '../extrato/extrato.component';
 
 @Component({
   selector: 'app-resumo-extrato',
@@ -77,3 +76,6 @@ export class ResumoExtratoComponent implements OnInit {
 
 }
 
+export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
