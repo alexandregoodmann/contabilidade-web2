@@ -23,8 +23,6 @@ export class ExtratoService {
   ) { }
 
   updateDatasource() {
-    console.log('update');
-
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
         this.datasource = lancamentos;

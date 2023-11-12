@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class CheckComponent implements OnInit {
 
+  @Input() icon!: string;
   @Input() checked: boolean = false;
 
   constructor() { }

@@ -23,7 +23,7 @@
                                 <mat-icon class="icon">filter_list</mat-icon>
                             </div>
                             <div class="button" matTooltip="Filtrar fixos" (click)="group.get('fixo')?.setValue(true)">
-                                <mat-icon class="icon">double_arrow</mat-icon>
+                                <mat-icon class="icon">chevron_right</mat-icon>
                             </div>
                             <div class="button" matTooltip="Filtrar concluidos"
                                 (click)="group.get('concluido')?.setValue(true)">
@@ -84,14 +84,14 @@
                                 <span class="extratoLabel" *ngFor="let label of lancamento.labels">{{label}}</span>
                             </td>
                             <td style="text-align: center;">
-                                <app-check (click)="update('fixo',lancamento)"
+                                <app-check (click)="update('fixo',lancamento)" icon="chevron_right"
                                     [checked]="(lancamento.fixo == null || lancamento.fixo == 'false') ? false : true"></app-check>
                             </td>
                             <td class="valor" [ngStyle]="{'color':lancamento.valor < 0 ? 'red' : 'black' }">R$
                                 {{lancamento.valor | number: '1.2-2'}}
                             </td>
                             <td style="text-align: center;">
-                                <app-check (click)="update('concluido',lancamento)"
+                                <app-check (click)="update('concluido',lancamento)" icon="check"
                                     [checked]="lancamento.concluido"></app-check>
                             </td>
                         </tr>
@@ -104,11 +104,12 @@
                 <app-analise-categoria></app-analise-categoria>
             </div>
             <div style="margin: 0px 10px 0px 10px">
-                <!--
-
-                    <app-resumo-extrato></app-resumo-extrato>
-                -->
+                <app-resumo-extrato></app-resumo-extrato>
             </div>
         </div>
     </div>
 </div>
+double_arrow
+<span class="material-symbols-outlined">
+    
+    </span>
