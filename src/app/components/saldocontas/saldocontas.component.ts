@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Sort } from '@angular/material/sort';
 import { ChartType } from 'angular-google-charts';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
   selector: 'app-saldocontas',
@@ -18,7 +20,7 @@ export class SaldocontasComponent implements OnInit {
   ];
   columnNames = ['Conta', 'Saldo'];
   options = {
-    bar: { groupWidth: "20%" },
+    bar: { groupWidth: "40%" },
     legend: { position: "none" }
   };
   width = 500;
@@ -38,6 +40,10 @@ export class SaldocontasComponent implements OnInit {
         });
       });
     });
+  }
+
+  sortData(sort: Sort) {
+
   }
 
 }
