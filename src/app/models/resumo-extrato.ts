@@ -5,3 +5,8 @@ export interface ResumoExtrato {
     porcentagem: number;
     fixo: string;
 }
+
+export interface SaldoContas {
+    conta: string;
+    saldo: number;
+}

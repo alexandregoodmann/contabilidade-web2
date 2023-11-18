@@ -53,6 +53,7 @@ import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
+import { SaldocontasComponent } from './components/saldocontas/saldocontas.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -103,7 +104,8 @@ const routes: Routes = [
     AnaliseCategoriaComponent,
     ResumoExtratoComponent,
     CheckComponent,
-    LancamentoDialogComponent
+    LancamentoDialogComponent,
+    SaldocontasComponent
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),

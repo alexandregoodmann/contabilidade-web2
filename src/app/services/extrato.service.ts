@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AnaliseCategoria } from '../models/analise-categoria';
 import { Lancamento } from '../models/lancamento';
-import { ResumoExtrato } from '../models/resumo-extrato';
+import { ResumoExtrato, SaldoContas } from '../models/resumo-extrato';
 import { PlanilhaService } from './planilha.service';
 
 @Injectable({
@@ -60,6 +60,10 @@ export class ExtratoService {
 
   getResumoExtrato(ano: number, mes: number): Observable<ResumoExtrato[]> {
     return this.http.get<ResumoExtrato[]>(`${environment.url}/analise/resumoextrato/${ano}/${mes}`);
+  }
+
+  getSaldoContas(ano: number, mes: number): Observable<SaldoContas[]> {
+    return this.http.get<SaldoContas[]>(`${environment.url}/analise/saldocontas/${ano}/${mes}`);
   }
 
   filtrarExtratoPorCategoria(label: string) {
