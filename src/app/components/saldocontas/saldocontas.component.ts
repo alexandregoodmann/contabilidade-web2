@@ -16,9 +16,9 @@ export class SaldocontasComponent implements OnInit {
   title = 'Saldo das Contas';
   type = ChartType.BarChart;
   datasource = [
-    ['', 0]
+    ['', 0, 0]
   ];
-  columnNames = ['Conta', 'Saldo'];
+  columnNames = ['Conta', 'Saldo', { role: 'annotation' }];
   options = {
     bar: { groupWidth: "40%" },
     legend: { position: "none" }
@@ -36,14 +36,10 @@ export class SaldocontasComponent implements OnInit {
       this.extratoService.getSaldoContas(planilha.ano, planilha.mes).subscribe(saldos => {
         this.datasource = [];
         saldos.forEach(d => {
-          this.datasource.push([d.conta, d.saldo]);
+          this.datasource.push([d.conta, d.saldo, d.saldo]);
         });
       });
     });
-  }
-
-  sortData(sort: Sort) {
-
   }
 
 }

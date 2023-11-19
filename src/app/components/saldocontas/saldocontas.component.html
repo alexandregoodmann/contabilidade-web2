@@ -1,9 +1,10 @@
 <mat-card>
     <mat-card-content>
         <google-chart #chart [title]="title" [type]="type" [data]="datasource" [columns]="columnNames"
-            [options]="options" [width]="width" [height]="height" >
+            [options]="options" [width]="width" [height]="height">
         </google-chart>
     </mat-card-content>
+    <!--
 
     <table matSort (matSortChange)="sortData($event)">
         <tr>
@@ -15,4 +16,5 @@
             <td>R$ {{item[1] | number: '1.2-2'}}</td>
         </tr>
     </table>
+-->
 </mat-card>
