@@ -3,4 +3,6 @@ export class Label {
     descricao!: string;
     analisar!: boolean;
     chaves!: string;
+    valorLimite!: number;
+    cor!: string;
 }
