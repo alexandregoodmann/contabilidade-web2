@@ -81,7 +81,10 @@
                             <td (click)="openLancamento(lancamento.id)">{{lancamento.conta.descricao}}</td>
                             <td (click)="openLancamento(lancamento.id)">
                                 {{lancamento.descricao}}
-                                <span class="extratoLabel" *ngFor="let label of lancamento.labels">{{label}}</span>
+                                <span class="appLabel" *ngFor="let label of lancamento.labels">{{label}}</span>
+                                <!--
+                                    <span *ngFor="let label of lancamento.labels" class="appLabel" [ngStyle]="{'background-color': label.cor}"> {{i}} </span>
+                                -->
                             </td>
                             <td style="text-align: center;">
                                 <app-check (click)="update('fixo',lancamento)" icon="chevron_right"

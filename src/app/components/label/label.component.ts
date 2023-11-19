@@ -16,7 +16,7 @@ export class LabelComponent implements OnInit {
   datasource: Label[] = [];
   categoria?: Label;
   group!: FormGroup;
-  displayedColumns: string[] = ['descricao', 'analisar', 'chaves', 'delete'];
+  displayedColumns: string[] = ['descricao', 'analisar', 'limite', 'chaves', 'delete'];
   chaves: Set<string> = new Set<string>();
 
   constructor(
@@ -29,7 +29,9 @@ export class LabelComponent implements OnInit {
     this.group = this.fb.group({
       descricao: [null, [Validators.required]],
       analisar: [null],
-      chaves: [null]
+      chaves: [null],
+      valorLimite: [null],
+      cor: [null]
     });
     this.findAll();
   }
@@ -105,5 +107,12 @@ export class LabelComponent implements OnInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  getChaves(item: Label) {
+    if (item.chaves == null || item.chaves == undefined || item.chaves == '')
+      return [];
+    else
+      return item.chaves.split(';');
   }
 }
