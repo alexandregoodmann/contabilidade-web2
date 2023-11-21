@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { Sort } from '@angular/material/sort';
-import { ChartType } from 'angular-google-charts';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ChartType, GoogleChartComponent } from 'angular-google-charts';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
-import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
   selector: 'app-saldocontas',
   templateUrl: './saldocontas.component.html',
   styleUrls: ['./saldocontas.component.scss']
 })
-export class SaldocontasComponent implements OnInit {
+export class SaldocontasComponent implements OnInit, AfterViewInit {
+
+  @ViewChild(GoogleChartComponent) chart!: GoogleChartComponent;
 
   //grafico
   title = 'Saldo das Contas';
@@ -30,6 +30,10 @@ export class SaldocontasComponent implements OnInit {
     private extratoService: ExtratoService,
     private planilhaService: PlanilhaService
   ) { }
+
+  ngAfterViewInit(): void {
+    //console.log('child', this.chart);
+  }
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {

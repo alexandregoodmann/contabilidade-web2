@@ -47,13 +47,13 @@ import { LancamentoComponent } from './components/lancamento/lancamento.componen
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
+import { SaldocontasComponent } from './components/saldocontas/saldocontas.component';
 import { InterceptorService } from './services/interceptor.service';
 import { CheckComponent } from './shared/check/check.component';
 import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { SaldocontasComponent } from './components/saldocontas/saldocontas.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -106,6 +106,7 @@ const routes: Routes = [
     CheckComponent,
     LancamentoDialogComponent,
     SaldocontasComponent
+
   ],
   imports: [
     RouterModule.forRoot(routes, { useHash: true }),
