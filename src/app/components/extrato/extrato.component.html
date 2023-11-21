@@ -2,7 +2,7 @@
     <app-top-bar titulo="Extrato"></app-top-bar>
     <app-select-planilha></app-select-planilha>
     <div class="w3-row" style="height: 82%;">
-        <div class="w3-col l6" style="height: 100%;">
+        <div class="w3-col l5" style="height: 100%;">
             <mat-card style="margin-left: 10px; height: 100%;">
 
                 <!-- button bar -->
@@ -102,15 +102,23 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="w3-col l6" style="height: 100%;">
+        <div class="w3-col l7" style="height: 100%;">
             <div style="margin: 0px 10px 10px 10px">
                 <app-analise-categoria></app-analise-categoria>
             </div>
             <div style="margin: 0px 10px 0px 10px">
+
+                <div class="w3-row">
+                    <div class="w3-col l6">
+                        <app-saldocontas></app-saldocontas>
+                    </div>
+                    <div class="w3-col l6">
+                       
+                    </div>
+                </div>
                 <!--
                     <app-resumo-extrato></app-resumo-extrato>
                 -->
-                <app-saldocontas></app-saldocontas>
             </div>
         </div>
     </div>

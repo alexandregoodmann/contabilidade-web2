@@ -13,22 +13,34 @@ import { compare } from '../resumo-extrato/resumo-extrato.component';
 })
 export class AnaliseCategoriaComponent implements OnInit {
 
-  // grafic
-  title = 'Gastos em categorias';
-  columnNames = ['Categoria', 'Percentage'];
-  type = ChartType.PieChart;
-  datasource = [
-    ['Alimentação', 14.40]
-  ];
-  options = {
-    is3D: true
-  };
-  width = 400;
-  height = 300;
-
   //table
   datasourceTable: AnaliseCategoria[] = [];
   total: number = 0;
+
+  graficoPizza = {
+    datasource: [['Alimentação', 14.40]],
+    title: 'Gastos em categorias',
+    columnNames: ['Categoria', 'Percentage'],
+    type: ChartType.PieChart,
+    options: {
+      chartArea: { left: '10', width:'350'},
+      is3D: true
+    }
+  };
+
+  graficoBarra = {
+    columnNames: ['Categoria', 'Valor', 'Limite'],
+    type: ChartType.BarChart,
+    datasource: [['2014', 1000, 400]],
+    title: 'Limite de Gastos',
+    options: {
+      legend: { position: "none" },
+      chart: {
+        subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+      },
+      bars: 'horizontal' // Required for Material Bar Charts.
+    }
+  };
 
   constructor(
     private planilhaService: PlanilhaService,
@@ -38,15 +50,22 @@ export class AnaliseCategoriaComponent implements OnInit {
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.extratoService.getAnaliseCategoria(planilha.ano, planilha.mes).subscribe(data => {
+
+        //dados tabela
         this.datasourceTable = data;
         this.total = this.datasourceTable.map(o => o.soma).reduce((a, b) => a + b);
         this.datasourceTable.forEach(e => {
           e.porcentagem = e.soma / this.total * 100;
         });
-        this.datasource = [];
+
+        //dados graficos
+        this.graficoPizza.datasource = [];
+        this.graficoBarra.datasource = [];
         data.forEach(obj => {
-          this.datasource.push([obj.descricao, obj.soma]);
+          this.graficoPizza.datasource.push([obj.descricao, obj.soma]);
+          this.graficoBarra.datasource.push([obj.descricao, obj.soma, obj.limite]);
         });
+
       });
     });
   }
@@ -54,7 +73,7 @@ export class AnaliseCategoriaComponent implements OnInit {
   filter(e: any) {
     if (e.selection.length > 0) {
       let i: number = e.selection[0].row as number;
-      let label = this.datasource[i][0] as string;
+      let label = this.graficoPizza.datasource[i][0] as string;
       this.extratoService.filtrarExtratoPorCategoria(label);
     }
   }
@@ -69,6 +88,8 @@ export class AnaliseCategoriaComponent implements OnInit {
           return compare(a.soma, b.soma, isAsc);
         case 'porcentagem':
           return compare(a.porcentagem, b.porcentagem, isAsc);
+        case 'limite':
+          return compare(a.limite, b.limite, isAsc);
         default:
           return 0;
       }

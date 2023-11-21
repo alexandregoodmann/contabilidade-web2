@@ -1,20 +1,7 @@
 <mat-card>
     <mat-card-content>
-        <google-chart #chart [title]="title" [type]="type" [data]="datasource" [columns]="columnNames"
+        <google-chart #chart [title]="title" [type]="type" [data]="datasource" [columns]="columnNames" 
             [options]="options" [width]="width" [height]="height">
         </google-chart>
     </mat-card-content>
-    <!--
-
-    <table matSort (matSortChange)="sortData($event)">
-        <tr>
-            <th mat-sort-header="conta">Conta</th>
-            <th mat-sort-header="lancamento">Saldo</th>
-        </tr>
-        <tr *ngFor="let item of datasource">
-            <td>{{item[0]}}</td>
-            <td>R$ {{item[1] | number: '1.2-2'}}</td>
-        </tr>
-    </table>
--->
 </mat-card>
