@@ -16,6 +16,7 @@ export class ExtratoService {
   extrato = this.datasourceBehavior.asObservable();
   filtro: any;
   datasource!: Lancamento[];
+  datasourceGraficoLimite: any;
 
   constructor(
     private http: HttpClient,
