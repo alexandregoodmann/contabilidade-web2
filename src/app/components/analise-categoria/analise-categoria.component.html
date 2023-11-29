@@ -1,18 +1,12 @@
 <mat-card>
     <div class="w3-row">
-        <div class="w3-col l5">
+        <div class="w3-col l6">
             <google-chart #chart [title]="graficoPizza.title" [type]="graficoPizza.type"
                 [data]="graficoPizza.datasource" [columns]="graficoPizza.columnNames" [options]="graficoPizza.options"
                 (select)="filter($event)" [height]="350">
             </google-chart>
         </div>
-        <div class="w3-col l4">
-            <google-chart #chart [type]="graficoBarra.type" [data]="graficoBarra.datasource"
-                [title]="graficoBarra.title" [options]="graficoBarra.options" [width]="350" [height]="300"
-                [columns]="graficoBarra.columnNames">
-            </google-chart>
-        </div>
-        <div class="w3-col l3" style="padding-left: 20px;">
+        <div class="w3-col l6" style="padding-left: 20px;">
             <table class="resumo-table" matSort (matSortChange)="sortData($event)">
                 <tr>
                     <th mat-sort-header="descricao">Categoria</th>

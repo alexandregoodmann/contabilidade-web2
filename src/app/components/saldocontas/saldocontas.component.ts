@@ -23,8 +23,6 @@ export class SaldocontasComponent implements OnInit, AfterViewInit {
     bar: { groupWidth: "40%" },
     legend: { position: "none" }
   };
-  width = 500;
-  height = 250;
 
   constructor(
     private extratoService: ExtratoService,

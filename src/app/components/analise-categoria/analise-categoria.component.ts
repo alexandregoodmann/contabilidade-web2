@@ -23,22 +23,8 @@ export class AnaliseCategoriaComponent implements OnInit {
     columnNames: ['Categoria', 'Percentage'],
     type: ChartType.PieChart,
     options: {
-      chartArea: { left: '10', width:'350'},
+      chartArea: { left: '10', width: '350' },
       is3D: true
-    }
-  };
-
-  graficoBarra = {
-    columnNames: ['Categoria', 'Valor', 'Limite'],
-    type: ChartType.BarChart,
-    datasource: [['2014', 1000, 400]],
-    title: 'Limite de Gastos',
-    options: {
-      legend: { position: "none" },
-      chart: {
-        subtitle: 'Sales, Expenses, and Profit: 2014-2017',
-      },
-      bars: 'horizontal' // Required for Material Bar Charts.
     }
   };
 
@@ -60,10 +46,10 @@ export class AnaliseCategoriaComponent implements OnInit {
 
         //dados graficos
         this.graficoPizza.datasource = [];
-        this.graficoBarra.datasource = [];
+        this.extratoService.datasourceGraficoLimite = [];
         data.forEach(obj => {
           this.graficoPizza.datasource.push([obj.descricao, obj.soma]);
-          this.graficoBarra.datasource.push([obj.descricao, obj.soma, obj.limite]);
+          this.extratoService.datasourceGraficoLimite.push([obj.descricao, obj.soma, obj.limite]);
         });
 
       });
