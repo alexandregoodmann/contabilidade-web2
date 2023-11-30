@@ -111,7 +111,10 @@ export class ExtratoComponent implements OnInit {
     this.saldoPrevisto = 0
     if (lancamentos.length >= 1) {
       this.saldoPrevisto = lancamentos.map(o => o.valor).reduce((a, b) => (a + b));
-      this.saldoAtual = lancamentos.filter(o => o.concluido).map(o => o.valor).reduce((a, b) => (a + b));
+
+      let concluidos = lancamentos.filter(o => o.concluido);
+      if (concluidos.length > 0)
+        this.saldoAtual = concluidos.map(o => o.valor).reduce((a, b) => (a + b));
     }
   }
 

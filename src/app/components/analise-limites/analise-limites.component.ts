@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ChartType } from 'angular-google-charts';
 import { ExtratoService } from 'src/app/services/extrato.service';
 
@@ -7,13 +7,13 @@ import { ExtratoService } from 'src/app/services/extrato.service';
   templateUrl: './analise-limites.component.html',
   styleUrls: ['./analise-limites.component.scss']
 })
-export class AnaliseLimitesComponent implements AfterViewInit {
+export class AnaliseLimitesComponent implements OnInit {
 
   constructor(
     private extratoService: ExtratoService
   ) { }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.graficoBarra.datasource = this.extratoService.datasourceGraficoLimite;
   }
 
