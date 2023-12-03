@@ -18,10 +18,10 @@ export class AnaliseLimitesComponent implements OnInit {
   }
 
   graficoBarra = {
+    title: 'Limite de Gastos',
     columnNames: ['Categoria', 'Valor', 'Limite'],
     type: ChartType.BarChart,
     datasource: [['2014', 1000, 400]],
-    title: 'Limite de Gastos',
     options: {
       legend: { position: "none" },
       chart: {

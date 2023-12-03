@@ -63,8 +63,8 @@ export class ExtratoService {
     return this.http.get<ResumoExtrato[]>(`${environment.url}/analise/resumoextrato/${ano}/${mes}`);
   }
 
-  getSaldoContas(ano: number, mes: number): Observable<SaldoContas[]> {
-    return this.http.get<SaldoContas[]>(`${environment.url}/analise/saldocontas/${ano}/${mes}`);
+  getSaldoContas(idPlanilha: number): Observable<SaldoContas[]> {
+    return this.http.get<SaldoContas[]>(`${environment.url}/analise/saldocontas/${idPlanilha}`);
   }
 
   filtrarExtratoPorCategoria(label: string) {

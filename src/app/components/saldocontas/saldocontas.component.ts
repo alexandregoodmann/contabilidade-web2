@@ -35,10 +35,11 @@ export class SaldocontasComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
-      this.extratoService.getSaldoContas(planilha.ano, planilha.mes).subscribe(saldos => {
+      this.extratoService.getSaldoContas(planilha.id).subscribe(saldos => {
         this.datasource = [];
         saldos.forEach(d => {
-          this.datasource.push([d.conta, d.saldo, d.saldo]);
+          if (d.saldo != null)
+            this.datasource.push([d.conta, d.saldo, d.saldo]);
         });
       });
     });

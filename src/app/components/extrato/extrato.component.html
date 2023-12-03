@@ -30,16 +30,22 @@
                                 <mat-icon class="icon">done</mat-icon>
                             </div>
                         </div>
-                        <div class="w3-col l3">
+                        <div class="w3-col l2">
                             <div class="saldo">
                                 <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
                                 <span class="label">Saldo Atual</span>
                             </div>
                         </div>
-                        <div class="w3-col l3">
+                        <div class="w3-col l2">
                             <div class="saldo">
                                 <span class="valor">R$ {{saldoPrevisto | number: '1.2-2'}}</span>
                                 <span class="label">Saldo Previsto</span>
+                            </div>
+                        </div>
+                        <div class="w3-col l2">
+                            <div class="saldo">
+                                <span class="valor">R$ {{diferenca | number: '1.2-2'}}</span>
+                                <span class="label">Diferença</span>
                             </div>
                         </div>
                     </div>
