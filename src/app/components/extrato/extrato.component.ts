@@ -115,9 +115,9 @@ export class ExtratoComponent implements OnInit {
     this.diferenca = 0;
 
     if (lancamentos.length >= 1) {
-      this.saldoPrevisto = lancamentos.map(o => o.valor).reduce((a, b) => (a + b));
+      this.saldoPrevisto = lancamentos.filter(p => p.conta.tipo == 'CC').map(o => o.valor).reduce((a, b) => (a + b));
 
-      let concluidos = lancamentos.filter(o => o.concluido);
+      let concluidos = lancamentos.filter(o => o.concluido && o.conta.tipo == 'CC');
       if (concluidos.length > 0)
         this.saldoAtual = concluidos.map(o => o.valor).reduce((a, b) => (a + b));
 
