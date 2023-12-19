@@ -1,0 +1,37 @@
+<app-top-bar titulo="Extrato"></app-top-bar>
+<p>analise-anual works!</p>
+
+<table>
+    <tr>
+        <th>Conta</th>
+        <th>Descrição</th>
+        <th>Janeiro</th>
+        <th>Fevereiro</th>
+        <th>Março</th>
+        <th>Abril</th>
+        <th>Maio</th>
+        <th>Junho</th>
+        <th>Julho</th>
+        <th>Agosto</th>
+        <th>Setembro</th>
+        <th>Outubro</th>
+        <th>Novembro</th>
+        <th>Dezembro</th>
+    </tr>
+    <tr *ngFor="let item of planilhaAnual">
+        <td>{{item.conta}}</td>
+        <td>{{item.descricao}}</td>
+        <td>{{item.valor1 | number: '1.2-2'}}</td>
+        <td>{{item.valor2 | number: '1.2-2'}}</td>
+        <td>{{item.valor3 | number: '1.2-2'}}</td>
+        <td>{{item.valor4 | number: '1.2-2'}}</td>
+        <td>{{item.valor5 | number: '1.2-2'}}</td>
+        <td>{{item.valor6 | number: '1.2-2'}}</td>
+        <td>{{item.valor7 | number: '1.2-2'}}</td>
+        <td>{{item.valor8 | number: '1.2-2'}}</td>
+        <td>{{item.valor9 | number: '1.2-2'}}</td>
+        <td>{{item.valor10 | number: '1.2-2'}}</td>
+        <td>{{item.valor11 | number: '1.2-2'}}</td>
+        <td>{{item.valor12 | number: '1.2-2'}}</td>
+    </tr>
+</table>

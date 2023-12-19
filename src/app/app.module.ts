@@ -37,7 +37,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { AppComponent } from './app.component';
+import { AnaliseAnualComponent } from './components/analise-anual/analise-anual.component';
 import { AnaliseCategoriaComponent } from './components/analise-categoria/analise-categoria.component';
+import { AnaliseLimitesComponent } from './components/analise-limites/analise-limites.component';
 import { CargaComponent } from './components/carga/carga.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
@@ -54,7 +56,6 @@ import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { AnaliseLimitesComponent } from './components/analise-limites/analise-limites.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -79,6 +80,10 @@ const routes: Routes = [
   {
     path: 'planilha',
     component: PlanilhaComponent
+  },
+  {
+    path: 'analise',
+    component: AnaliseAnualComponent
   },
   {
     path: '',
@@ -107,7 +112,8 @@ const routes: Routes = [
     CheckComponent,
     LancamentoDialogComponent,
     SaldocontasComponent,
-    AnaliseLimitesComponent
+    AnaliseLimitesComponent,
+    AnaliseAnualComponent
 
   ],
   imports: [

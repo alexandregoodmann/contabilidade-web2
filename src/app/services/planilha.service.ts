@@ -6,6 +6,7 @@ import { Lancamento } from '../models/lancamento';
 import { Planilha } from '../models/planilha';
 import { PlanilhasAno } from '../models/planilhasano';
 import { BasicCrudService } from './basic-crud.service';
+import { PlanilhaAnual } from '../models/analise-categoria';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,10 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
 
   duplicarPlanilha(idPlanilha: number): Observable<any> {
     return this.http.post(`${environment.url}/planilhas/${idPlanilha}/duplicar`, {});
+  }
+
+  getPlanilhaAnual(): Observable<PlanilhaAnual> {
+    return this.http.get<PlanilhaAnual>(`${environment.url}/analise/planilhaanual`);
   }
 
   initPlanilha(planilhas: PlanilhasAno[]): void {

@@ -22,7 +22,6 @@ export class ExtratoComponent implements OnInit {
 
   saldoPrevisto: number = 0;
   saldoAtual: number = 0;
-  diferenca: number = 0;
 
   planilhaSelecionada!: Planilha;
   contas!: Conta[];
@@ -112,7 +111,6 @@ export class ExtratoComponent implements OnInit {
   calcularTotais(lancamentos: Lancamento[]) {
     this.saldoAtual = 0;
     this.saldoPrevisto = 0;
-    this.diferenca = 0;
 
     if (lancamentos.length >= 1) {
       this.saldoPrevisto = lancamentos.filter(p => p.conta.tipo == 'CC').map(o => o.valor).reduce((a, b) => (a + b));
@@ -120,8 +118,6 @@ export class ExtratoComponent implements OnInit {
       let concluidos = lancamentos.filter(o => o.concluido && o.conta.tipo == 'CC');
       if (concluidos.length > 0)
         this.saldoAtual = concluidos.map(o => o.valor).reduce((a, b) => (a + b));
-
-      this.diferenca = this.saldoPrevisto - this.saldoAtual;
     }
   }
 
