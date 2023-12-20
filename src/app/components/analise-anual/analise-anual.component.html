@@ -1,5 +1,13 @@
 <app-top-bar titulo="Extrato"></app-top-bar>
-<p>analise-anual works!</p>
+
+<div style="display: flex;">
+    <div class="button" matTooltip="Reload" (click)="process()">
+        <mat-icon class="icon">trending_up</mat-icon>
+    </div>
+    <div class="button" matTooltip="Reload" (click)="reload()">
+        <mat-icon class="icon">refresh</mat-icon>
+    </div>
+</div>
 
 <table>
     <tr>

@@ -14,9 +14,16 @@ export class AnaliseAnualComponent implements OnInit {
   planilhaAnual: PlanilhaAnual[] = [];
 
   ngOnInit(): void {
+    this.reload();
+  }
+
+  reload() {
     this.planilhaService.getPlanilhaAnual().subscribe(data => {
       this.planilhaAnual = data as unknown as PlanilhaAnual[];
     });
   }
 
+  process(){
+    this.planilhaService.processPlanilhaAnual().subscribe();
+  }
 }

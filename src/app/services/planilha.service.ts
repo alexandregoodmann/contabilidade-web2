@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { PlanilhaAnual } from '../models/analise-categoria';
 import { Lancamento } from '../models/lancamento';
 import { Planilha } from '../models/planilha';
 import { PlanilhasAno } from '../models/planilhasano';
 import { BasicCrudService } from './basic-crud.service';
-import { PlanilhaAnual } from '../models/analise-categoria';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +45,10 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
 
   getPlanilhaAnual(): Observable<PlanilhaAnual> {
     return this.http.get<PlanilhaAnual>(`${environment.url}/analise/planilhaanual`);
+  }
+
+  processPlanilhaAnual() {
+    return this.http.post(`${environment.url}/analise/processarPlanilhaAnual`, {});
   }
 
   initPlanilha(planilhas: PlanilhasAno[]): void {
