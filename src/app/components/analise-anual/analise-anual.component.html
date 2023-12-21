@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<table>
+<table class="table-analise">
     <tr>
         <th>Conta</th>
         <th>Descrição</th>
@@ -27,19 +27,13 @@
         <th>Dezembro</th>
     </tr>
     <tr *ngFor="let item of planilhaAnual">
-        <td>{{item.conta}}</td>
-        <td>{{item.descricao}}</td>
-        <td>{{item.valor1 | number: '1.2-2'}}</td>
-        <td>{{item.valor2 | number: '1.2-2'}}</td>
-        <td>{{item.valor3 | number: '1.2-2'}}</td>
-        <td>{{item.valor4 | number: '1.2-2'}}</td>
-        <td>{{item.valor5 | number: '1.2-2'}}</td>
-        <td>{{item.valor6 | number: '1.2-2'}}</td>
-        <td>{{item.valor7 | number: '1.2-2'}}</td>
-        <td>{{item.valor8 | number: '1.2-2'}}</td>
-        <td>{{item.valor9 | number: '1.2-2'}}</td>
-        <td>{{item.valor10 | number: '1.2-2'}}</td>
-        <td>{{item.valor11 | number: '1.2-2'}}</td>
-        <td>{{item.valor12 | number: '1.2-2'}}</td>
+        <td style="text-align: left;">{{item.conta}}</td>
+        <td style="text-align: left;">{{item.descricao}}</td>
+        <td *ngIf="item.vetValores == null">
+            {{item.valor| number: '1.2-2'}}
+        </td>
+        <td *ngFor="let valor of item.vetValores">
+            {{valor | number: '1.2-2'}}
+        </td>
     </tr>
 </table>

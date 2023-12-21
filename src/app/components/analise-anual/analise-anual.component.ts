@@ -19,11 +19,20 @@ export class AnaliseAnualComponent implements OnInit {
 
   reload() {
     this.planilhaService.getPlanilhaAnual().subscribe(data => {
+      
       this.planilhaAnual = data as unknown as PlanilhaAnual[];
+      this.planilhaAnual.forEach(e => {
+        if (e.valores != null) {
+          let vet = e.valores.split(';') as unknown as number[];
+          e.vetValores = vet;
+        }
+      });
+
     });
   }
 
-  process(){
+  process() {
     this.planilhaService.processPlanilhaAnual().subscribe();
   }
+
 }
