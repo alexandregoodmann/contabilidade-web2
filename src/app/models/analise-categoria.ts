@@ -14,5 +14,5 @@ export interface PlanilhaAnual {
     parcelas: string;
     valor: number;
     valores: string;
-    vetValores: number[];
+    listValores: number[];
 }

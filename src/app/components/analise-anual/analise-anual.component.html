@@ -1,9 +1,6 @@
 <app-top-bar titulo="Extrato"></app-top-bar>
 
 <div style="display: flex;">
-    <div class="button" matTooltip="Reload" (click)="process()">
-        <mat-icon class="icon">trending_up</mat-icon>
-    </div>
     <div class="button" matTooltip="Reload" (click)="reload()">
         <mat-icon class="icon">refresh</mat-icon>
     </div>
@@ -26,13 +23,32 @@
         <th>Novembro</th>
         <th>Dezembro</th>
     </tr>
+    <!--
+    <tr>
+        <td></td>
+        <td></td>
+        <td>{{totais[0] | number: '1.2-2'}}</td>
+        <td>{{totais[1] | number: '1.2-2'}}</td>
+        <td>{{totais[2] | number: '1.2-2'}}</td>
+        <td>{{totais[3] | number: '1.2-2'}}</td>
+        <td>{{totais[4] | number: '1.2-2'}}</td>
+        <td>{{totais[5] | number: '1.2-2'}}</td>
+        <td>{{totais[6] | number: '1.2-2'}}</td>
+        <td>{{totais[7] | number: '1.2-2'}}</td>
+        <td>{{totais[8] | number: '1.2-2'}}</td>
+        <td>{{totais[9] | number: '1.2-2'}}</td>
+        <td>{{totais[10] | number: '1.2-2'}}</td>
+        <td>{{totais[11] | number: '1.2-2'}}</td>
+        <td>{{totais[12] | number: '1.2-2'}}</td>
+    </tr>
+    -->
     <tr *ngFor="let item of planilhaAnual">
         <td style="text-align: left;">{{item.conta}}</td>
         <td style="text-align: left;">{{item.descricao}}</td>
-        <td *ngIf="item.vetValores == null">
+        <td *ngIf="item.listValores == null">
             {{item.valor| number: '1.2-2'}}
         </td>
-        <td *ngFor="let valor of item.vetValores">
+        <td *ngFor="let valor of item.listValores">
             {{valor | number: '1.2-2'}}
         </td>
     </tr>

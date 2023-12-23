@@ -12,22 +12,16 @@ export class AnaliseAnualComponent implements OnInit {
   constructor(private planilhaService: PlanilhaService) { }
 
   planilhaAnual: PlanilhaAnual[] = [];
+  totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit(): void {
     this.reload();
   }
 
   reload() {
-    this.planilhaService.getPlanilhaAnual().subscribe(data => {
-      
+    this.planilhaService.processPlanilhaAnual().subscribe(data => {
       this.planilhaAnual = data as unknown as PlanilhaAnual[];
-      this.planilhaAnual.forEach(e => {
-        if (e.valores != null) {
-          let vet = e.valores.split(';') as unknown as number[];
-          e.vetValores = vet;
-        }
-      });
-
+      console.log(this.planilhaAnual);
     });
   }
 
