@@ -1,8 +1,21 @@
+.div-container {
+    padding: 10px;
+}
+
 .table-analise {
     width: 100%;
-    font-size: 14px;
+    font-size: 13px;
+
+    .header {
+        background-color: yellow;
+        font-weight: bold;
+    }
 
     td {
         text-align: right;
+    }
+
+    tr:hover {
+        background-color: rgb(230, 230, 230);
     }
 }

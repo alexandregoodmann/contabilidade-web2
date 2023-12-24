@@ -1,55 +1,47 @@
 <app-top-bar titulo="Extrato"></app-top-bar>
-
-<div style="display: flex;">
-    <div class="button" matTooltip="Reload" (click)="reload()">
-        <mat-icon class="icon">refresh</mat-icon>
-    </div>
+<div class="div-container">
+    <table class="table-analise" matSort (matSortChange)="sortData($event)">
+        <tr class="header">
+            <th mat-sort-header="conta">Conta</th>
+            <th mat-sort-header="descricao">Descrição</th>
+            <th mat-sort-header="0">Janeiro</th>
+            <th mat-sort-header="1">Fevereiro</th>
+            <th mat-sort-header="2">Março</th>
+            <th mat-sort-header="3">Abril</th>
+            <th mat-sort-header="4">Maio</th>
+            <th mat-sort-header="5">Junho</th>
+            <th mat-sort-header="6">Julho</th>
+            <th mat-sort-header="7">Agosto</th>
+            <th mat-sort-header="8">Setembro</th>
+            <th mat-sort-header="9">Outubro</th>
+            <th mat-sort-header="10">Novembro</th>
+            <th mat-sort-header="11">Dezembro</th>
+        </tr>
+        <tr class="header">
+            <td></td>
+            <td></td>
+            <td>{{totais[0] | number: '1.2-2'}}</td>
+            <td>{{totais[1] | number: '1.2-2'}}</td>
+            <td>{{totais[2] | number: '1.2-2'}}</td>
+            <td>{{totais[3] | number: '1.2-2'}}</td>
+            <td>{{totais[4] | number: '1.2-2'}}</td>
+            <td>{{totais[5] | number: '1.2-2'}}</td>
+            <td>{{totais[6] | number: '1.2-2'}}</td>
+            <td>{{totais[7] | number: '1.2-2'}}</td>
+            <td>{{totais[8] | number: '1.2-2'}}</td>
+            <td>{{totais[9] | number: '1.2-2'}}</td>
+            <td>{{totais[10] | number: '1.2-2'}}</td>
+            <td>{{totais[11] | number: '1.2-2'}}</td>
+            <td>{{totais[12] | number: '1.2-2'}}</td>
+        </tr>
+        <tr *ngFor="let item of datasourceTable">
+            <td style="text-align: left;">{{item.conta}}</td>
+            <td style="text-align: left;">{{item.descricao}}</td>
+            <td *ngFor="let valor of item.listValores">
+                <span *ngIf="valor != 0">
+                    {{valor | number: '1.2-2'}}
+                </span>
+            </td>
+        </tr>
+    </table>
 </div>
-
-<table class="table-analise">
-    <tr>
-        <th>Conta</th>
-        <th>Descrição</th>
-        <th>Janeiro</th>
-        <th>Fevereiro</th>
-        <th>Março</th>
-        <th>Abril</th>
-        <th>Maio</th>
-        <th>Junho</th>
-        <th>Julho</th>
-        <th>Agosto</th>
-        <th>Setembro</th>
-        <th>Outubro</th>
-        <th>Novembro</th>
-        <th>Dezembro</th>
-    </tr>
-    <!--
-    <tr>
-        <td></td>
-        <td></td>
-        <td>{{totais[0] | number: '1.2-2'}}</td>
-        <td>{{totais[1] | number: '1.2-2'}}</td>
-        <td>{{totais[2] | number: '1.2-2'}}</td>
-        <td>{{totais[3] | number: '1.2-2'}}</td>
-        <td>{{totais[4] | number: '1.2-2'}}</td>
-        <td>{{totais[5] | number: '1.2-2'}}</td>
-        <td>{{totais[6] | number: '1.2-2'}}</td>
-        <td>{{totais[7] | number: '1.2-2'}}</td>
-        <td>{{totais[8] | number: '1.2-2'}}</td>
-        <td>{{totais[9] | number: '1.2-2'}}</td>
-        <td>{{totais[10] | number: '1.2-2'}}</td>
-        <td>{{totais[11] | number: '1.2-2'}}</td>
-        <td>{{totais[12] | number: '1.2-2'}}</td>
-    </tr>
-    -->
-    <tr *ngFor="let item of planilhaAnual">
-        <td style="text-align: left;">{{item.conta}}</td>
-        <td style="text-align: left;">{{item.descricao}}</td>
-        <td *ngIf="item.listValores == null">
-            {{item.valor| number: '1.2-2'}}
-        </td>
-        <td *ngFor="let valor of item.listValores">
-            {{valor | number: '1.2-2'}}
-        </td>
-    </tr>
-</table>

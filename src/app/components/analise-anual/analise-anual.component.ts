@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Sort } from '@angular/material/sort';
 import { PlanilhaAnual } from 'src/app/models/analise-categoria';
 import { PlanilhaService } from 'src/app/services/planilha.service';
+import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
   selector: 'app-analise-anual',
@@ -9,9 +11,11 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class AnaliseAnualComponent implements OnInit {
 
-  constructor(private planilhaService: PlanilhaService) { }
+  constructor(
+    private planilhaService: PlanilhaService
+  ) { }
 
-  planilhaAnual: PlanilhaAnual[] = [];
+  datasourceTable: PlanilhaAnual[] = [];
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit(): void {
@@ -20,13 +24,29 @@ export class AnaliseAnualComponent implements OnInit {
 
   reload() {
     this.planilhaService.processPlanilhaAnual().subscribe(data => {
-      this.planilhaAnual = data as unknown as PlanilhaAnual[];
-      console.log(this.planilhaAnual);
+      this.datasourceTable = data as unknown as PlanilhaAnual[];
+      for (let i = 0; i < 12; i++) {
+        this.datasourceTable.forEach(e => {
+          if (e.listValores != null && e.listValores[i] != null) {
+            this.totais[i] = this.totais[i] + e.listValores[i];
+          }
+        });
+      }
     });
   }
 
-  process() {
-    this.planilhaService.processPlanilhaAnual().subscribe();
+  sortData(sort: Sort) {
+    this.datasourceTable = this.datasourceTable.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      let i = sort.active as unknown as number;
+      switch (sort.active) {
+        case 'conta':
+          return compare(a.conta, b.conta, isAsc);
+        case 'descricao':
+          return compare(a.descricao, b.descricao, isAsc);
+        default:
+          return compare(a.listValores[i], b.listValores[i], isAsc);
+      }
+    });
   }
-
 }

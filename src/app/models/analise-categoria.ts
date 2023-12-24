@@ -12,7 +12,5 @@ export interface PlanilhaAnual {
     descricao: string;
     fixo: string;
     parcelas: string;
-    valor: number;
-    valores: string;
     listValores: number[];
 }

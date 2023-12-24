@@ -58,6 +58,7 @@ export class LancamentoComponent implements OnInit {
       data: [null, [Validators.required]],
       descricao: [null, [Validators.required]],
       valor: [null, [Validators.required]],
+      parcelas: [],
       fixo: [null],
       concluido: [null]
     });
@@ -77,6 +78,7 @@ export class LancamentoComponent implements OnInit {
         this.group?.get('fixo')?.setValue(this.lancamento.fixo);
         this.group?.get('concluido')?.setValue(this.lancamento.concluido);
         this.group?.get('labels')?.setValue(this.lancamento.labels);
+        this.group?.get('parcelas')?.setValue(this.lancamento.parcelas);
         this.chips.group.get('labels')?.setValue(this.lancamento.labels);
         this.chips.labels = this.lancamento.labels;
       });
@@ -97,6 +99,7 @@ export class LancamentoComponent implements OnInit {
       this.lancamento.concluido = model.concluido;
       this.lancamento.fixo = model.fixo;
       this.lancamento.descricao = model.descricao;
+      this.lancamento.parcelas = model.parcelas;
 
       this.lancamentoService.update(this.lancamento).subscribe(() => {
       }, (err) => { }, () => {
