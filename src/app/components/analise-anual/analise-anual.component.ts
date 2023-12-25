@@ -19,20 +19,20 @@ export class AnaliseAnualComponent implements OnInit {
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit(): void {
-    this.reload();
-  }
-
-  reload() {
     this.planilhaService.processPlanilhaAnual().subscribe(data => {
       this.datasourceTable = data as unknown as PlanilhaAnual[];
-      for (let i = 0; i < 12; i++) {
-        this.datasourceTable.forEach(e => {
-          if (e.listValores != null && e.listValores[i] != null) {
-            this.totais[i] = this.totais[i] + e.listValores[i];
-          }
-        });
-      }
+      this.calcularTotais();
     });
+  }
+
+  calcularTotais() {
+    for (let i = 0; i < 12; i++) {
+      this.datasourceTable.forEach(e => {
+        if (e.tipoLancamento != 'FATURA' && e.listValores != null && e.listValores[i] != null) {
+          this.totais[i] = this.totais[i] + e.listValores[i];
+        }
+      });
+    }
   }
 
   sortData(sort: Sort) {
@@ -45,7 +45,12 @@ export class AnaliseAnualComponent implements OnInit {
         case 'descricao':
           return compare(a.descricao, b.descricao, isAsc);
         default:
-          return compare(a.listValores[i], b.listValores[i], isAsc);
+          let m = a.listValores[i];
+          let n = b.listValores[i];
+          if (m != null && m != 0 && n != null && n != 0)
+            return compare(a.listValores[i], b.listValores[i], isAsc);
+          else
+            return 0;
       }
     });
   }
