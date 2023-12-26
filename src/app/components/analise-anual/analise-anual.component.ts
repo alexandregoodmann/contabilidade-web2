@@ -17,6 +17,7 @@ export class AnaliseAnualComponent implements OnInit {
 
   datasourceTable: PlanilhaAnual[] = [];
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  total_acumulado: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit(): void {
     this.planilhaService.processPlanilhaAnual().subscribe(data => {
@@ -32,6 +33,9 @@ export class AnaliseAnualComponent implements OnInit {
           this.totais[i] = this.totais[i] + e.listValores[i];
         }
       });
+      this.total_acumulado[0] = this.totais[0];
+      if (i > 0)
+        this.total_acumulado[i] = this.total_acumulado[i - 1] + this.totais[i];
     }
   }
 
@@ -44,6 +48,12 @@ export class AnaliseAnualComponent implements OnInit {
           return compare(a.conta, b.conta, isAsc);
         case 'descricao':
           return compare(a.descricao, b.descricao, isAsc);
+        case 'fixo':
+          let a_fixo = (a.fixo != null && a.fixo != '') ? true : false;
+          let b_fixo = (b.fixo != null && b.fixo != '') ? true : false;
+          return compare(a_fixo, b_fixo, isAsc);
+        case 'tipo':
+          return compare(a.tipoLancamento, b.tipoLancamento, isAsc);
         default:
           let m = a.listValores[i];
           let n = b.listValores[i];
