@@ -1,5 +1,6 @@
 <div class="form">
     <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
+
         <div class="chips-container">
             <label class="mini-label" style="margin-left: 10px;">Selecione a Conta Corrente</label>
             <mat-chip-list #chipList selectable formControlName="conta">
@@ -35,14 +36,20 @@
         </mat-form-field>
 
         <div class="w3-row" style="margin-bottom: 40px;">
-            <div class="w3-col s6">
+            <div class="w3-col s4">
                 <mat-slide-toggle formControlName="concluido">Concluído</mat-slide-toggle>
             </div>
-            <div class="w3-col s6">
+            <div class="w3-col s4">
                 <mat-slide-toggle formControlName="fixo">Fixo</mat-slide-toggle>
             </div>
+            <div class="w3-col s4">
+                <label>Tipo de Lançamento</label>
+                <mat-radio-group formControlName="tipo">
+                    <mat-radio-button [value]="'SALDO'">SALDO</mat-radio-button>
+                    <mat-radio-button [value]="'FATURA'">FATURA</mat-radio-button>
+                </mat-radio-group>
+            </div>
         </div>
-
         <div class="w3-display-container" style="height: 40px;">
             <div class="w3-display-left">
                 <button mat-raised-button mat-dialog-close color="primary" type="submit"

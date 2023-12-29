@@ -53,14 +53,13 @@ export class AnaliseAnualComponent implements OnInit {
           let b_fixo = (b.fixo != null && b.fixo != '') ? true : false;
           return compare(a_fixo, b_fixo, isAsc);
         case 'tipo':
-          return compare(a.tipoLancamento, b.tipoLancamento, isAsc);
+          let aa = (a.tipoLancamento == null) ? '' : a.tipoLancamento;
+          let bb = (b.tipoLancamento == null) ? '' : b.tipoLancamento;
+          return compare(aa, bb, isAsc);
         default:
-          let m = a.listValores[i];
-          let n = b.listValores[i];
-          if (m != null && m != 0 && n != null && n != 0)
-            return compare(a.listValores[i], b.listValores[i], isAsc);
-          else
-            return 0;
+          let m = (a.listValores[i] == null) ? 0 : a.listValores[i];
+          let n = (b.listValores[i] == null) ? 0 : b.listValores[i];
+          return compare(m, n, isAsc);
       }
     });
   }
