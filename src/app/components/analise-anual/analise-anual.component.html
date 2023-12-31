@@ -1,73 +1,95 @@
 <app-top-bar titulo="Extrato"></app-top-bar>
+
+<div class="analise_container">
+    <div class="esquerdo">
+        <div class="button">
+            <mat-icon class="icon">chevron_right</mat-icon>
+        </div>
+        <div class="button" matTooltip="Criar Planilha" (click)="criarPlanilha()">
+            <mat-icon class="icon">add_shopping_cart</mat-icon>
+        </div>
+        <mat-selection-list #plans multiple="false">
+            <mat-list-option *ngFor="let planilha of planilhas" (click)="getPlanilha(planilha)">
+                {{planilha}}
+            </mat-list-option>
+        </mat-selection-list>
+    </div>
+    <div class="direito">
+        <table class="table-analise" matSort (matSortChange)="sortData($event)">
+            <!-- HEADER -->
+            <tr class="header">
+                <th mat-sort-header="conta">Conta</th>
+                <th mat-sort-header="descricao">Descrição</th>
+                <th mat-sort-header="fixo">Fixo</th>
+                <th mat-sort-header="tipo">Tipo</th>
+                <th mat-sort-header="0">Janeiro</th>
+                <th mat-sort-header="1">Fevereiro</th>
+                <th mat-sort-header="2">Março</th>
+                <th mat-sort-header="3">Abril</th>
+                <th mat-sort-header="4">Maio</th>
+                <th mat-sort-header="5">Junho</th>
+                <th mat-sort-header="6">Julho</th>
+                <th mat-sort-header="7">Agosto</th>
+                <th mat-sort-header="8">Setembro</th>
+                <th mat-sort-header="9">Outubro</th>
+                <th mat-sort-header="10">Novembro</th>
+                <th mat-sort-header="11">Dezembro</th>
+            </tr>
+            <!-- SALDO MES -->
+            <tr class="header">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{totais[0] | number: '1.2-2'}}</td>
+                <td>{{totais[1] | number: '1.2-2'}}</td>
+                <td>{{totais[2] | number: '1.2-2'}}</td>
+                <td>{{totais[3] | number: '1.2-2'}}</td>
+                <td>{{totais[4] | number: '1.2-2'}}</td>
+                <td>{{totais[5] | number: '1.2-2'}}</td>
+                <td>{{totais[6] | number: '1.2-2'}}</td>
+                <td>{{totais[7] | number: '1.2-2'}}</td>
+                <td>{{totais[8] | number: '1.2-2'}}</td>
+                <td>{{totais[9] | number: '1.2-2'}}</td>
+                <td>{{totais[10] | number: '1.2-2'}}</td>
+                <td>{{totais[11] | number: '1.2-2'}}</td>
+            </tr>
+            <!-- SALDO ACUMULADO -->
+            <tr class="header">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{total_acumulado[0] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[1] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[2] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[3] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[4] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[5] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[6] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[7] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[8] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[9] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[10] | number: '1.2-2'}}</td>
+                <td>{{total_acumulado[11] | number: '1.2-2'}}</td>
+            </tr>
+            <tr *ngFor="let item of datasourceTable">
+                <td style="text-align: left;">{{item.conta}}</td>
+                <td style="text-align: left;">{{item.descricao}}</td>
+                <td><span *ngIf="item.fixo">Sim</span></td>
+                <td>{{item.tipoLancamento}}</td>
+                <td *ngFor="let valor of item.listValores">
+                    <span *ngIf="valor != 0">
+                        {{valor | number: '1.2-2'}}
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="button" matTooltip="Lançamento" (click)="criarPlanilha()">
+    <mat-icon class="icon">add_shopping_cart</mat-icon>
+</div>
 <div class="div-container">
-    <table class="table-analise" matSort (matSortChange)="sortData($event)">
-        <!-- HEADER -->
-        <tr class="header">
-            <th mat-sort-header="conta">Conta</th>
-            <th mat-sort-header="descricao">Descrição</th>
-            <th mat-sort-header="fixo">Fixo</th>
-            <th mat-sort-header="tipo">Tipo</th>
-            <th mat-sort-header="0">Janeiro</th>
-            <th mat-sort-header="1">Fevereiro</th>
-            <th mat-sort-header="2">Março</th>
-            <th mat-sort-header="3">Abril</th>
-            <th mat-sort-header="4">Maio</th>
-            <th mat-sort-header="5">Junho</th>
-            <th mat-sort-header="6">Julho</th>
-            <th mat-sort-header="7">Agosto</th>
-            <th mat-sort-header="8">Setembro</th>
-            <th mat-sort-header="9">Outubro</th>
-            <th mat-sort-header="10">Novembro</th>
-            <th mat-sort-header="11">Dezembro</th>
-        </tr>
-        <!-- SALDO MES -->
-        <tr class="header">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{totais[0] | number: '1.2-2'}}</td>
-            <td>{{totais[1] | number: '1.2-2'}}</td>
-            <td>{{totais[2] | number: '1.2-2'}}</td>
-            <td>{{totais[3] | number: '1.2-2'}}</td>
-            <td>{{totais[4] | number: '1.2-2'}}</td>
-            <td>{{totais[5] | number: '1.2-2'}}</td>
-            <td>{{totais[6] | number: '1.2-2'}}</td>
-            <td>{{totais[7] | number: '1.2-2'}}</td>
-            <td>{{totais[8] | number: '1.2-2'}}</td>
-            <td>{{totais[9] | number: '1.2-2'}}</td>
-            <td>{{totais[10] | number: '1.2-2'}}</td>
-            <td>{{totais[11] | number: '1.2-2'}}</td>
-        </tr>
-        <!-- SALDO ACUMULADO -->
-        <tr class="header">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{total_acumulado[0] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[1] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[2] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[3] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[4] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[5] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[6] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[7] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[8] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[9] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[10] | number: '1.2-2'}}</td>
-            <td>{{total_acumulado[11] | number: '1.2-2'}}</td>
-        </tr>
-        <tr *ngFor="let item of datasourceTable">
-            <td style="text-align: left;">{{item.conta}}</td>
-            <td style="text-align: left;">{{item.descricao}}</td>
-            <td><span *ngIf="item.fixo">Sim</span></td>
-            <td>{{item.tipoLancamento}}</td>
-            <td *ngFor="let valor of item.listValores">
-                <span *ngIf="valor != 0">
-                    {{valor | number: '1.2-2'}}
-                </span>
-            </td>
-        </tr>
-    </table>
+
 </div>

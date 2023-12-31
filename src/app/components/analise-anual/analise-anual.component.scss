@@ -19,3 +19,17 @@
         background-color: rgb(230, 230, 230);
     }
 }
+
+.analise_container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    .esquerdo {
+        width: 255px;
+    }
+
+    .direito {
+        width: 100%;
+    }
+}

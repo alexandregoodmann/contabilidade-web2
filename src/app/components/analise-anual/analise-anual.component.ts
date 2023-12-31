@@ -15,13 +15,26 @@ export class AnaliseAnualComponent implements OnInit {
     private planilhaService: PlanilhaService
   ) { }
 
+  planilhas = [];
   datasourceTable: PlanilhaAnual[] = [];
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   total_acumulado: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit(): void {
-    this.planilhaService.processPlanilhaAnual().subscribe(data => {
+    this.planilhaService.listPlanilhaAtual().subscribe(data => {
+      this.planilhas = data;
+    });
+  }
+
+  criarPlanilha() {
+    this.planilhaService.criarPlanilhaAnual(9455, 'Planilha_2024').subscribe(data => {
       this.datasourceTable = data as unknown as PlanilhaAnual[];
+    });
+  }
+
+  getPlanilha(planilha: string) {
+    this.planilhaService.getPlanilhaAnualByTitulo(planilha).subscribe(data => {
+      this.datasourceTable = data;
       this.calcularTotais();
     });
   }

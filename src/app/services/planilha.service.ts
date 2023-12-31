@@ -43,8 +43,16 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
     return this.http.post(`${environment.url}/planilhas/${idPlanilha}/duplicar`, {});
   }
 
-  processPlanilhaAnual():Observable<PlanilhaAnual> {
-    return this.http.post<PlanilhaAnual>(`${environment.url}/analise/processarPlanilhaAnual`, {});
+  criarPlanilhaAnual(idPlanilha: number, titulo: string): Observable<PlanilhaAnual> {
+    return this.http.post<PlanilhaAnual>(`${environment.url}/analise/planilhaanual/processar/${idPlanilha}/${titulo}`, {});
+  }
+
+  listPlanilhaAtual(): Observable<any> {
+    return this.http.get<Array<string>>(`${environment.url}/analise/planilhaanual`);
+  }
+
+  getPlanilhaAnualByTitulo(titulo: string): Observable<any> {
+    return this.http.get<Array<PlanilhaAnual>>(`${environment.url}/analise/planilhaanual/${titulo}`);
   }
 
   initPlanilha(planilhas: PlanilhasAno[]): void {
