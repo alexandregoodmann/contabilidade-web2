@@ -4,35 +4,33 @@
     <div class="esquerdo">
         <mat-selection-list #plans multiple="false">
             <mat-list-option *ngFor="let planilha of listPlanilhas">
-                <div style="display: flex; width: 100%;">
-                    <div style="width: 100%; padding-top: 10px;" (click)="selectPlanilha(planilha)">
-                        <span> {{planilha}}</span>
-                    </div>
-                    <div style="float: right;">
-                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="duplicar(planilha)">
-                                <mat-icon>edit</mat-icon>
-                                <span>Duplicar</span>
-                            </button>
-                            <button mat-menu-item (click)="delete(planilha)">
-                                <mat-icon>trash</mat-icon>
-                                <span>Delete</span>
-                            </button>
-                        </mat-menu>
-                    </div>
+                <div style="width: 100%; padding-top: 10px;" (click)="selectPlanilha(planilha)">
+                    <span> {{planilha}}</span>
                 </div>
             </mat-list-option>
         </mat-selection-list>
     </div>
     <div class="direito">
-        <div>
+        <div class="input-container">
             <mat-form-field class="example-full-width">
                 <mat-label>Nome da Planilha</mat-label>
                 <input matInput [value]="tituloPlanilha" (blur)="update($event)">
             </mat-form-field>
+            <div style="float: right;">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="duplicar()">
+                        <mat-icon>edit</mat-icon>
+                        <span>Duplicar</span>
+                    </button>
+                    <button mat-menu-item (click)="delete()">
+                        <mat-icon>delete</mat-icon>
+                        <span>Delete</span>
+                    </button>
+                </mat-menu>
+            </div>
         </div>
         <table class="table-analise" matSort (matSortChange)="sortData($event)">
             <!-- HEADER -->
@@ -105,10 +103,4 @@
             </tr>
         </table>
     </div>
-</div>
-<div class="button" matTooltip="Lançamento" (click)="criarPlanilha()">
-    <mat-icon class="icon">add_shopping_cart</mat-icon>
-</div>
-<div class="div-container">
-
 </div>

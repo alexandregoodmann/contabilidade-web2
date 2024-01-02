@@ -26,10 +26,17 @@
     display: flex;
 
     .esquerdo {
-        width: 255px;
+        background-color: rgb(221, 221, 221);
+        width: 350px;
     }
 
     .direito {
+        padding: 10px;
         width: 100%;
     }
+}
+
+.input-container {
+    width: 500px;
+    display: flex;
 }

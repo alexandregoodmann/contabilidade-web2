@@ -35,6 +35,8 @@ export class AnaliseAnualComponent implements OnInit {
     this.planilhaAnualService.getPlanilhaAnualByTitulo(planilha).subscribe(data => {
       this.tituloPlanilha = planilha;
       this.datasourceTable = data;
+      console.log(this.datasourceTable);
+      
       this.calcularTotais();
     });
   }
@@ -97,8 +99,8 @@ export class AnaliseAnualComponent implements OnInit {
     });
   }
 
-  duplicar(planilha: string) {
-    this.planilhaAnualService.duplicar(planilha).subscribe(() => {
+  duplicar() {
+    this.planilhaAnualService.duplicar(this.tituloPlanilha).subscribe(() => {
       this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       this.tituloPlanilha = '';
@@ -107,8 +109,8 @@ export class AnaliseAnualComponent implements OnInit {
     });
   }
 
-  delete(planilha: string) {
-    this.planilhaAnualService.delete(planilha).subscribe(() => {
+  delete() {
+    this.planilhaAnualService.delete(this.tituloPlanilha).subscribe(() => {
       this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       this.tituloPlanilha = '';
