@@ -56,6 +56,7 @@ import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
+import { PlanilhaanualComponent } from './components/planilhaanual/planilhaanual.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -113,7 +114,8 @@ const routes: Routes = [
     LancamentoDialogComponent,
     SaldocontasComponent,
     AnaliseLimitesComponent,
-    AnaliseAnualComponent
+    AnaliseAnualComponent,
+    PlanilhaanualComponent
 
   ],
   imports: [

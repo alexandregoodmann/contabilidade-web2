@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { PlanilhaAnual } from '../models/analise-categoria';
 import { Lancamento } from '../models/lancamento';
 import { Planilha } from '../models/planilha';
 import { PlanilhasAno } from '../models/planilhasano';
@@ -41,10 +40,6 @@ export class PlanilhaService extends BasicCrudService<Planilha> {
 
   duplicarPlanilha(idPlanilha: number): Observable<any> {
     return this.http.post(`${environment.url}/planilhas/${idPlanilha}/duplicar`, {});
-  }
-
-  processPlanilhaAnual():Observable<PlanilhaAnual> {
-    return this.http.post<PlanilhaAnual>(`${environment.url}/analise/processarPlanilhaAnual`, {});
   }
 
   initPlanilha(planilhas: PlanilhasAno[]): void {

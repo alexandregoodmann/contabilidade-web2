@@ -133,7 +133,9 @@ export class ExtratoComponent implements OnInit {
     const dialogRef = this.dialog.open(LancamentoDialogComponent, {
       data: {
         idLancamento: idLancamento,
-      },
+        titulo: 'Lançamento',
+        conteudo: 'lancamento'
+      }
     });
   }
 
