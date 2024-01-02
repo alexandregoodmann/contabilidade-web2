@@ -1,0 +1,11 @@
+<div class="form">
+    <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
+        <mat-form-field appearance="fill">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="descricao" minlength="3">
+        </mat-form-field>
+
+        <button mat-raised-button mat-dialog-close color="primary" type="submit"
+            [disabled]="group.invalid">Salvar</button>
+    </form>
+</div>

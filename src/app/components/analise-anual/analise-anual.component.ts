@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { PlanilhaAnual } from 'src/app/models/analise-categoria';
-import { PlanilhaService } from 'src/app/services/planilha.service';
+import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.service';
 import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
@@ -12,30 +12,36 @@ import { compare } from '../resumo-extrato/resumo-extrato.component';
 export class AnaliseAnualComponent implements OnInit {
 
   constructor(
-    private planilhaService: PlanilhaService
+    private planilhaAnualService: PlanilhaanualService,
   ) { }
 
-  planilhas = [];
+  tituloPlanilha = '';
+  listPlanilhas = [];
   datasourceTable: PlanilhaAnual[] = [];
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   total_acumulado: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit(): void {
-    this.planilhaService.listPlanilhaAtual().subscribe(data => {
-      this.planilhas = data;
+    this.listarPlanilhas();
+  }
+
+  listarPlanilhas() {
+    this.planilhaAnualService.listPlanilhaAtual().subscribe(data => {
+      this.listPlanilhas = data;
+    });
+  }
+
+  selectPlanilha(planilha: string) {
+    this.planilhaAnualService.getPlanilhaAnualByTitulo(planilha).subscribe(data => {
+      this.tituloPlanilha = planilha;
+      this.datasourceTable = data;
+      this.calcularTotais();
     });
   }
 
   criarPlanilha() {
-    this.planilhaService.criarPlanilhaAnual(9455, 'Planilha_2024').subscribe(data => {
+    this.planilhaAnualService.criarPlanilhaAnual(9455, 'Planilha_2024').subscribe(data => {
       this.datasourceTable = data as unknown as PlanilhaAnual[];
-    });
-  }
-
-  getPlanilha(planilha: string) {
-    this.planilhaService.getPlanilhaAnualByTitulo(planilha).subscribe(data => {
-      this.datasourceTable = data;
-      this.calcularTotais();
     });
   }
 
@@ -76,4 +82,39 @@ export class AnaliseAnualComponent implements OnInit {
       }
     });
   }
+
+  update(e: any) {
+    let dto = new PlanilhaAnualDTO;
+    dto.novoTitulo = e.target.value;
+    dto.titulo = this.tituloPlanilha;
+
+    this.planilhaAnualService.rename(dto).subscribe(() => {
+      this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      this.tituloPlanilha = '';
+      this.datasourceTable = [];
+      this.listarPlanilhas();
+    });
+  }
+
+  duplicar(planilha: string) {
+    this.planilhaAnualService.duplicar(planilha).subscribe(() => {
+      this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      this.tituloPlanilha = '';
+      this.datasourceTable = [];
+      this.listarPlanilhas();
+    });
+  }
+
+  delete(planilha: string) {
+    this.planilhaAnualService.delete(planilha).subscribe(() => {
+      this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      this.tituloPlanilha = '';
+      this.datasourceTable = [];
+      this.listarPlanilhas();
+    });
+  }
+
 }
