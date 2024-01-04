@@ -1,5 +1,5 @@
 <app-top-bar titulo="Extrato"></app-top-bar>
-
+<app-select-planilha></app-select-planilha>
 <div class="analise_container">
     <div class="esquerdo">
         <mat-selection-list #plans multiple="false">
@@ -11,27 +11,33 @@
         </mat-selection-list>
     </div>
     <div class="direito">
-        <div class="input-container">
-            <mat-form-field class="example-full-width">
-                <mat-label>Nome da Planilha</mat-label>
-                <input matInput [value]="tituloPlanilha" (blur)="update($event)">
-            </mat-form-field>
-            <div style="float: right;">
-                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                    <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="duplicar()">
-                        <mat-icon>edit</mat-icon>
-                        <span>Duplicar</span>
+        <form #form [formGroup]="group" autocomplete="off">
+            <div class="input-container">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Nome da Planilha</mat-label>
+                    <input matInput formControlName="titulo">
+                </mat-form-field>
+                <div style="float: right;">
+                    <button mat-icon-button [disabled]="group.invalid" [matMenuTriggerFor]="menu">
+                        <mat-icon>more_vert</mat-icon>
                     </button>
-                    <button mat-menu-item (click)="delete()">
-                        <mat-icon>delete</mat-icon>
-                        <span>Delete</span>
-                    </button>
-                </mat-menu>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="nova()">
+                            <mat-icon>feed</mat-icon>
+                            <span>Nova</span>
+                        </button>
+                        <button mat-menu-item (click)="duplicar()">
+                            <mat-icon>edit</mat-icon>
+                            <span>Duplicar</span>
+                        </button>
+                        <button mat-menu-item (click)="delete()">
+                            <mat-icon>delete</mat-icon>
+                            <span>Delete</span>
+                        </button>
+                    </mat-menu>
+                </div>
             </div>
-        </div>
+        </form>
         <table class="table-analise" matSort (matSortChange)="sortData($event)">
             <!-- HEADER -->
             <tr class="header">

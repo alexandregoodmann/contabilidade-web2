@@ -11,8 +11,8 @@ export class PlanilhaanualService {
 
   constructor(private http: HttpClient) { }
 
-  criarPlanilhaAnual(idPlanilha: number, titulo: string): Observable<PlanilhaAnual> {
-    return this.http.post<PlanilhaAnual>(`${environment.url}/planilhaanual/processar/${idPlanilha}/${titulo}`, {});
+  criarPlanilhaAnual(dto: PlanilhaAnualDTO): Observable<void> {
+    return this.http.post<void>(`${environment.url}/planilhaanual/criar`, dto);
   }
 
   getPlanilhaAnualByTitulo(titulo: string): Observable<any> {
@@ -37,7 +37,7 @@ export class PlanilhaanualService {
 }
 
 export class PlanilhaAnualDTO {
-  idPlanilha!: string;
+  idPlanilha!: number;
   titulo!: string;
   novoTitulo!: string;
 }
