@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { PlanilhaAnual } from 'src/app/models/analise-categoria';
 import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.service';
+import { PlanilhaService } from 'src/app/services/planilha.service';
 import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
@@ -11,18 +13,36 @@ import { compare } from '../resumo-extrato/resumo-extrato.component';
 })
 export class AnaliseAnualComponent implements OnInit {
 
-  constructor(
-    private planilhaAnualService: PlanilhaanualService,
-  ) { }
-
-  tituloPlanilha = '';
+  group!: FormGroup;
   listPlanilhas = [];
+  planilhaSelecionada!: string | null;
   datasourceTable: PlanilhaAnual[] = [];
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   total_acumulado: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+  constructor(
+    private fb: FormBuilder,
+    private planilhaAnualService: PlanilhaanualService,
+    private planilhaService: PlanilhaService
+  ) { }
+
   ngOnInit(): void {
+    this.group = this.fb.group({
+      titulo: [null, [Validators.required]],
+    });
     this.listarPlanilhas();
+  }
+
+  nova() {
+    this.planilhaService.planilhaSelecionada.subscribe(p => {
+      let dto = new PlanilhaAnualDTO;
+      dto.idPlanilha = p.id;
+      dto.titulo = this.group.get('titulo')?.value;
+      this.planilhaAnualService.criarPlanilhaAnual(dto).subscribe(() => {
+        this.limpar();
+        this.listarPlanilhas();
+      });
+    });
   }
 
   listarPlanilhas() {
@@ -32,18 +52,11 @@ export class AnaliseAnualComponent implements OnInit {
   }
 
   selectPlanilha(planilha: string) {
+    this.planilhaSelecionada = planilha;
+    this.group.get('titulo')?.setValue(planilha);
     this.planilhaAnualService.getPlanilhaAnualByTitulo(planilha).subscribe(data => {
-      this.tituloPlanilha = planilha;
       this.datasourceTable = data;
-      console.log(this.datasourceTable);
-      
       this.calcularTotais();
-    });
-  }
-
-  criarPlanilha() {
-    this.planilhaAnualService.criarPlanilhaAnual(9455, 'Planilha_2024').subscribe(data => {
-      this.datasourceTable = data as unknown as PlanilhaAnual[];
     });
   }
 
@@ -85,38 +98,36 @@ export class AnaliseAnualComponent implements OnInit {
     });
   }
 
-  update(e: any) {
+  rename() {
     let dto = new PlanilhaAnualDTO;
-    dto.novoTitulo = e.target.value;
-    dto.titulo = this.tituloPlanilha;
+    dto.titulo = this.group.get('titulo')?.value;
 
     this.planilhaAnualService.rename(dto).subscribe(() => {
-      this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      this.tituloPlanilha = '';
-      this.datasourceTable = [];
+      this.limpar();
       this.listarPlanilhas();
     });
   }
 
   duplicar() {
-    this.planilhaAnualService.duplicar(this.tituloPlanilha).subscribe(() => {
-      this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      this.tituloPlanilha = '';
-      this.datasourceTable = [];
+    this.planilhaAnualService.duplicar(this.group.get('titulo')?.value).subscribe(() => {
+      this.limpar();
       this.listarPlanilhas();
     });
   }
 
   delete() {
-    this.planilhaAnualService.delete(this.tituloPlanilha).subscribe(() => {
-      this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      this.tituloPlanilha = '';
-      this.datasourceTable = [];
+    this.planilhaAnualService.delete(this.group.get('titulo')?.value).subscribe(() => {
+      this.limpar();
       this.listarPlanilhas();
     });
+  }
+
+  limpar() {
+    this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.planilhaSelecionada = null;
+    this.datasourceTable = [];
+    this.group.reset();
   }
 
 }
