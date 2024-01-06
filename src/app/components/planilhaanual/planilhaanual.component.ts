@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Planilha } from 'src/app/models/planilha';
 import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.service';
@@ -11,6 +11,7 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class PlanilhaanualComponent implements OnInit {
 
+  @Input() conteudo!: string;
   planilhaSelecionada!: Planilha;
   group!: FormGroup;
 
@@ -21,6 +22,9 @@ export class PlanilhaanualComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    console.log('conteudo', this.conteudo);
+    
     this.planilhaService.planilhaSelecionada.subscribe(data => {
       this.planilhaSelecionada = data;
     });
@@ -40,4 +44,5 @@ export class PlanilhaanualComponent implements OnInit {
       })
     });
   }
+
 }

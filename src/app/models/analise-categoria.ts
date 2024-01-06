@@ -5,14 +5,17 @@ export interface AnaliseCategoria {
     limite: number;
 }
 
-export interface PlanilhaAnual {
-    id: number;
-    data: Date;
-    conta: string;
-    tipoConta: string;
-    descricao: string;
-    tipoLancamento: string;
-    fixo: string;
-    parcelas: string;
-    listValores: number[];
+export class PlanilhaAnual {
+    id!: number;
+    idLancamento!: number;
+    titulo!: string;
+    data!: Date;
+    conta!: string;
+    descricao!: string;
+    fixo!: string;
+    parcelas!: string;
+    tipoConta!: string;
+    tipoLancamento!: string;
+    valor!: number;
+    listValores!: number[];
 }

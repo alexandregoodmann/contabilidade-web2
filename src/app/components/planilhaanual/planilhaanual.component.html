@@ -1,4 +1,4 @@
-<div class="form" style="width: 400px;">
+<div *ngIf="conteudo == 'nova_planilha'" class="form" style="width: 400px;">
     <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
         <mat-form-field appearance="fill">
             <mat-label>Descrição</mat-label>
@@ -8,4 +8,8 @@
         <button mat-raised-button mat-dialog-close color="primary" type="submit"
             [disabled]="group.invalid">Salvar</button>
     </form>
+</div>
+
+<div *ngIf="conteudo == 'novo_lancamento'">
+    novo lancamento
 </div>
