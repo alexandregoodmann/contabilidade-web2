@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { PlanilhaAnual } from 'src/app/models/analise-categoria';
 import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.service';
-import { PlanilhaService } from 'src/app/services/planilha.service';
+import { LancamentoDialogComponent } from '../lancamento-dialog/lancamento-dialog.component';
 import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
@@ -13,47 +13,28 @@ import { compare } from '../resumo-extrato/resumo-extrato.component';
 })
 export class AnaliseAnualComponent implements OnInit {
 
-  group!: FormGroup;
   listPlanilhas = [];
-  planilhaSelecionada!: string | null;
+  planilhaSelecionada!: string;
   datasourceTable: PlanilhaAnual[] = [];
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   total_acumulado: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   constructor(
-    private fb: FormBuilder,
     private planilhaAnualService: PlanilhaanualService,
-    private planilhaService: PlanilhaService
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    this.group = this.fb.group({
-      titulo: [null, [Validators.required]],
+    this.planilhaAnualService.findAll().subscribe(data => {
+      this.planilhaAnualService.planilhasBehavior.next(data);
     });
-    this.listarPlanilhas();
-  }
-
-  nova() {
-    this.planilhaService.planilhaSelecionada.subscribe(p => {
-      let dto = new PlanilhaAnualDTO;
-      dto.idPlanilha = p.id;
-      dto.titulo = this.group.get('titulo')?.value;
-      this.planilhaAnualService.criarPlanilhaAnual(dto).subscribe(() => {
-        this.limpar();
-        this.listarPlanilhas();
-      });
-    });
-  }
-
-  listarPlanilhas() {
-    this.planilhaAnualService.listPlanilhaAtual().subscribe(data => {
+    this.planilhaAnualService.planilhas.subscribe(data => {
       this.listPlanilhas = data;
     });
   }
 
   selectPlanilha(planilha: string) {
     this.planilhaSelecionada = planilha;
-    this.group.get('titulo')?.setValue(planilha);
     this.planilhaAnualService.getPlanilhaAnualByTitulo(planilha).subscribe(data => {
       this.datasourceTable = data;
       this.calcularTotais();
@@ -61,6 +42,8 @@ export class AnaliseAnualComponent implements OnInit {
   }
 
   calcularTotais() {
+    this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < 12; i++) {
       this.datasourceTable.forEach(e => {
         if (e.tipoLancamento != 'FATURA' && e.listValores != null && e.listValores[i] != null) {
@@ -100,34 +83,42 @@ export class AnaliseAnualComponent implements OnInit {
 
   rename() {
     let dto = new PlanilhaAnualDTO;
-    dto.titulo = this.group.get('titulo')?.value;
-
+    dto.titulo = this.planilhaSelecionada;
     this.planilhaAnualService.rename(dto).subscribe(() => {
-      this.limpar();
-      this.listarPlanilhas();
     });
   }
 
   duplicar() {
-    this.planilhaAnualService.duplicar(this.group.get('titulo')?.value).subscribe(() => {
-      this.limpar();
-      this.listarPlanilhas();
+    this.planilhaAnualService.duplicar(this.planilhaSelecionada).subscribe(() => {
     });
   }
 
   delete() {
-    this.planilhaAnualService.delete(this.group.get('titulo')?.value).subscribe(() => {
-      this.limpar();
-      this.listarPlanilhas();
+    this.planilhaAnualService.delete(this.planilhaSelecionada).subscribe(() => {
+      this.planilhaAnualService.findAll().subscribe(data => {
+        this.planilhaAnualService.planilhasBehavior.next(data);
+        this.planilhaSelecionada = '';
+        this.datasourceTable = [];
+        this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      })
     });
   }
 
-  limpar() {
-    this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    this.planilhaSelecionada = null;
-    this.datasourceTable = [];
-    this.group.reset();
+  abrirModal(acao: string) {
+    switch (acao) {
+      case 'planilha':
+        const dialogRef = this.dialog.open(LancamentoDialogComponent, {
+          data: {
+            titulo: 'Planilha',
+            conteudo: 'planilhaanual'
+          }
+        });
+        break;
+
+      default:
+        break;
+    }
   }
 
 }

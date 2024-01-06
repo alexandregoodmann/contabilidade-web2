@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PlanilhaAnual } from './models/analise-categoria';
 
@@ -8,6 +8,9 @@ import { PlanilhaAnual } from './models/analise-categoria';
   providedIn: 'root'
 })
 export class PlanilhaanualService {
+
+  planilhasBehavior = new BehaviorSubject<[]>([]);
+  planilhas = this.planilhasBehavior.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -19,7 +22,7 @@ export class PlanilhaanualService {
     return this.http.get<Array<PlanilhaAnual>>(`${environment.url}/planilhaanual/${titulo}`);
   }
 
-  listPlanilhaAtual(): Observable<any> {
+  findAll(): Observable<any> {
     return this.http.get<Array<string>>(`${environment.url}/planilhaanual`);
   }
 
