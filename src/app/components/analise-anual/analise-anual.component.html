@@ -13,14 +13,19 @@
     <div class="direito">
         <div style="display: flex;">
             <mat-button-toggle-group #buttonGroup="matButtonToggleGroup">
-                <mat-button-toggle (click)="abrirModal('nova_planilha')">
+                <mat-button-toggle (click)="novaPlanilha()">
                     <mat-icon>feed</mat-icon>
                 </mat-button-toggle>
-                <mat-button-toggle (click)="abrirModal('novo_lancamento')">
-                    <mat-icon>add_shopping_cart</mat-icon>
-                </mat-button-toggle>
+                <!--
+                    <mat-button-toggle>
+                        <mat-icon>add_shopping_cart</mat-icon>
+                    </mat-button-toggle>
+                -->
                 <mat-button-toggle (click)="delete()">
                     <mat-icon>delete</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle (click)="upload()">
+                    <mat-icon>upload</mat-icon>
                 </mat-button-toggle>
             </mat-button-toggle-group>
             <span class="titulo">

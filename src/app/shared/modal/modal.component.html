@@ -8,6 +8,7 @@
 </div>
 
 <mat-dialog-content class="mat-typography">
-    <app-lancamento *ngIf="data.conteudo == 'lancamento'" [idLancamento]="data.idLancamento"></app-lancamento>
-    <app-planilhaanual *ngIf="data.conteudo == 'planilhaanual'" [conteudo]="data.acao"></app-planilhaanual>
+    <app-planilhaanual *ngIf="data.componente.nome == 'planilhaanual'"
+        [conteudo]="data.componente.conteudo"></app-planilhaanual>
+    <app-carga *ngIf="data.componente.nome == 'carga'"></app-carga>
 </mat-dialog-content>

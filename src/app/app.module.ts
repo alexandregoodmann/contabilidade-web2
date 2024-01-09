@@ -45,7 +45,6 @@ import { CargaComponent } from './components/carga/carga.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
 import { LabelComponent } from './components/label/label.component';
-import { LancamentoDialogComponent } from './components/lancamento-dialog/lancamento-dialog.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PlanilhaanualComponent } from './components/planilhaanual/planilhaanual.component';
@@ -56,6 +55,7 @@ import { InterceptorService } from './services/interceptor.service';
 import { CheckComponent } from './shared/check/check.component';
 import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
+import { ModalComponent } from './shared/modal/modal.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
 
@@ -112,11 +112,11 @@ const routes: Routes = [
     AnaliseCategoriaComponent,
     ResumoExtratoComponent,
     CheckComponent,
-    LancamentoDialogComponent,
     SaldocontasComponent,
     AnaliseLimitesComponent,
     AnaliseAnualComponent,
-    PlanilhaanualComponent
+    PlanilhaanualComponent,
+    ModalComponent
 
   ],
   imports: [
