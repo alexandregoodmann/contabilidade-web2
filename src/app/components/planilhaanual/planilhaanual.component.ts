@@ -23,8 +23,6 @@ export class PlanilhaanualComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log('conteudo', this.conteudo);
-    
     this.planilhaService.planilhaSelecionada.subscribe(data => {
       this.planilhaSelecionada = data;
     });

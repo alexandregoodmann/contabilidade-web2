@@ -55,9 +55,9 @@ import { InterceptorService } from './services/interceptor.service';
 import { CheckComponent } from './shared/check/check.component';
 import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
-import { ModalComponent } from './shared/modal/modal.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
+import { CargaAnualComponent } from './components/carga-anual/carga-anual.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -116,7 +116,7 @@ const routes: Routes = [
     AnaliseLimitesComponent,
     AnaliseAnualComponent,
     PlanilhaanualComponent,
-    ModalComponent
+    CargaAnualComponent
 
   ],
   imports: [

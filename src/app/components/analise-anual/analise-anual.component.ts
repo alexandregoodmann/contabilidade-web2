@@ -3,7 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { PlanilhaAnual } from 'src/app/models/analise-categoria';
 import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.service';
-import { ModalComponent } from 'src/app/shared/modal/modal.component';
+import { CargaAnualComponent } from '../carga-anual/carga-anual.component';
+import { PlanilhaanualComponent } from '../planilhaanual/planilhaanual.component';
 import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
@@ -106,21 +107,11 @@ export class AnaliseAnualComponent implements OnInit {
   }
 
   novaPlanilha() {
-    const dialogRef = this.dialog.open(ModalComponent, {
-      data: {
-        titulo: 'Planilha',
-        componente: { nome: 'planilhaanual', conteudo: 'nova_planilha' }
-      }
-    });
+    const dialogRef = this.dialog.open(PlanilhaanualComponent);
   }
 
   upload() {
-    const dialogRef = this.dialog.open(ModalComponent, {
-      data: {
-        titulo: 'Upload File',
-        componente: { nome: 'carga' }
-      }
-    });
+    const dialogRef = this.dialog.open(CargaAnualComponent, { data: this.planilhaSelecionada });
   }
 
 }

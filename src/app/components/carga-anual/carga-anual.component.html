@@ -1,0 +1,33 @@
+<div style="display: flex;width: 100%;">
+    <div style="width: 90%;">
+        <h2 mat-dialog-title style="margin-left: 20px;">Lançamento</h2>
+    </div>
+    <div style="float: right; text-align: right; width: 10%; padding-right: 20px;">
+        <mat-icon mat-dialog-close class="icon">close</mat-icon>
+    </div>
+</div>
+
+<mat-dialog-content class="mat-typography">
+    <form #form [formGroup]="group" autocomplete="off">
+        <div class="chips-container">
+            <label class="mini-label" style="margin-left: 10px;">Selecione o mês</label>
+            <mat-chip-list #chipList selectable formControlName="mes">
+                <mat-chip #c="matChip" (click)="setMes(c)" *ngFor="let mes of meses" [value]="mes">
+                    {{mes.descricao}}
+                </mat-chip>
+            </mat-chip-list>
+        </div>
+        <div class="w3-display-container" style="margin-bottom: 20px;">
+            <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+            <div class="file-upload">
+                <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+                {{fileName || "Selecione um arquivo para carga"}}
+            </div>
+        </div>
+
+        <button mat-raised-button color="primary" type="button" (click)="enviar()">Enviar</button>
+    </form>
+
+</mat-dialog-content>
