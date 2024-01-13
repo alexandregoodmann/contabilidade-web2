@@ -35,6 +35,7 @@
         <table class="table-analise" matSort (matSortChange)="sortData($event)">
             <!-- HEADER -->
             <tr class="header">
+                <th mat-sort-header="data">Data</th>
                 <th mat-sort-header="conta">Conta</th>
                 <th mat-sort-header="descricao">Descrição</th>
                 <th mat-sort-header="fixo">Fixo</th>
@@ -58,6 +59,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td>{{totais[0] | number: '1.2-2'}}</td>
                 <td>{{totais[1] | number: '1.2-2'}}</td>
                 <td>{{totais[2] | number: '1.2-2'}}</td>
@@ -77,6 +79,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td>{{total_acumulado[0] | number: '1.2-2'}}</td>
                 <td>{{total_acumulado[1] | number: '1.2-2'}}</td>
                 <td>{{total_acumulado[2] | number: '1.2-2'}}</td>
@@ -91,6 +94,7 @@
                 <td>{{total_acumulado[11] | number: '1.2-2'}}</td>
             </tr>
             <tr *ngFor="let item of datasourceTable">
+                <td>{{item.data  | date:'dd/MM'}}</td>
                 <td style="text-align: left;">{{item.conta}}</td>
                 <td style="text-align: left;">{{item.descricao}}</td>
                 <td><span *ngIf="item.fixo">Sim</span></td>

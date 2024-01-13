@@ -62,6 +62,8 @@ export class AnaliseAnualComponent implements OnInit {
       const isAsc = sort.direction === 'asc';
       let i = sort.active as unknown as number;
       switch (sort.active) {
+        case 'data':
+          return compare(a.data, b.data, isAsc);
         case 'conta':
           return compare(a.conta, b.conta, isAsc);
         case 'descricao':
