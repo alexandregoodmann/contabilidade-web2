@@ -4,6 +4,7 @@ import { Sort } from '@angular/material/sort';
 import { PlanilhaAnual } from 'src/app/models/analise-categoria';
 import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.service';
 import { CargaAnualComponent } from '../carga-anual/carga-anual.component';
+import { LancamentoAnualComponent } from '../lancamento-anual/lancamento-anual.component';
 import { PlanilhaanualComponent } from '../planilhaanual/planilhaanual.component';
 import { compare } from '../resumo-extrato/resumo-extrato.component';
 
@@ -14,7 +15,7 @@ import { compare } from '../resumo-extrato/resumo-extrato.component';
 })
 export class AnaliseAnualComponent implements OnInit {
 
-  listPlanilhas = [];
+  listPlanilhas: string[] = [];
   planilhaSelecionada!: string;
   datasourceTable: PlanilhaAnual[] = [];
   totais: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -26,7 +27,7 @@ export class AnaliseAnualComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.planilhaAnualService.findAll().subscribe(data => {
+    this.planilhaAnualService.getPlanilhas().subscribe(data => {
       this.planilhaAnualService.planilhasBehavior.next(data);
     });
     this.planilhaAnualService.planilhas.subscribe(data => {
@@ -97,8 +98,8 @@ export class AnaliseAnualComponent implements OnInit {
   }
 
   delete() {
-    this.planilhaAnualService.delete(this.planilhaSelecionada).subscribe(() => {
-      this.planilhaAnualService.findAll().subscribe(data => {
+    this.planilhaAnualService.deletePlanilhaAnual(this.planilhaSelecionada).subscribe(() => {
+      this.planilhaAnualService.getPlanilhas().subscribe(data => {
         this.planilhaAnualService.planilhasBehavior.next(data);
         this.planilhaSelecionada = '';
         this.datasourceTable = [];
@@ -110,6 +111,10 @@ export class AnaliseAnualComponent implements OnInit {
 
   novaPlanilha() {
     const dialogRef = this.dialog.open(PlanilhaanualComponent);
+  }
+
+  lancamento() {
+    const dialogRef = this.dialog.open(LancamentoAnualComponent, { data: this.planilhaSelecionada });
   }
 
   upload() {

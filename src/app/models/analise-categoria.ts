@@ -18,4 +18,5 @@ export class PlanilhaAnual {
     tipoLancamento!: string;
     valor!: number;
     listValores!: number[];
+    mes!: number;
 }

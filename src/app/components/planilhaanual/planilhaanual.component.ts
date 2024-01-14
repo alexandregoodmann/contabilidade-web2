@@ -37,7 +37,7 @@ export class PlanilhaanualComponent implements OnInit {
     dto.idPlanilha = this.planilhaSelecionada.id;
     dto.titulo = this.group.get('descricao')?.value;
     this.planilhaAnualService.criarPlanilhaAnual(dto).subscribe(() => {
-      this.planilhaAnualService.findAll().subscribe(data => {
+      this.planilhaAnualService.getPlanilhas().subscribe(data => {
         this.planilhaAnualService.planilhasBehavior.next(data);
       })
     });

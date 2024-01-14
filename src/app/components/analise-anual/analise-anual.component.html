@@ -16,11 +16,9 @@
                 <mat-button-toggle (click)="novaPlanilha()">
                     <mat-icon>feed</mat-icon>
                 </mat-button-toggle>
-                <!--
-                    <mat-button-toggle>
-                        <mat-icon>add_shopping_cart</mat-icon>
-                    </mat-button-toggle>
-                -->
+                <mat-button-toggle (click)="lancamento()">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                </mat-button-toggle>
                 <mat-button-toggle (click)="delete()">
                     <mat-icon>delete</mat-icon>
                 </mat-button-toggle>
@@ -94,7 +92,7 @@
                 <td>{{total_acumulado[11] | number: '1.2-2'}}</td>
             </tr>
             <tr *ngFor="let item of datasourceTable">
-                <td>{{item.data  | date:'dd/MM'}}</td>
+                <td>{{item.data | date:'dd/MM'}}</td>
                 <td style="text-align: left;">{{item.conta}}</td>
                 <td style="text-align: left;">{{item.descricao}}</td>
                 <td><span *ngIf="item.fixo">Sim</span></td>

@@ -58,6 +58,7 @@ import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.comp
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
 import { CargaAnualComponent } from './components/carga-anual/carga-anual.component';
+import { LancamentoAnualComponent } from './components/lancamento-anual/lancamento-anual.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -116,7 +117,8 @@ const routes: Routes = [
     AnaliseLimitesComponent,
     AnaliseAnualComponent,
     PlanilhaanualComponent,
-    CargaAnualComponent
+    CargaAnualComponent,
+    LancamentoAnualComponent
 
   ],
   imports: [
