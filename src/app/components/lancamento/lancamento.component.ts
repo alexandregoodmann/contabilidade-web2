@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Conta } from 'src/app/models/conta';
 import { Label } from 'src/app/models/label';
@@ -21,7 +22,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LancamentoComponent implements OnInit {
 
-  @Input() idLancamento: number | undefined = 0;
+  @ViewChild(ChipsComponent) chips!: ChipsComponent;
 
   group!: FormGroup;
   contas!: Array<Conta>;
@@ -30,9 +31,8 @@ export class LancamentoComponent implements OnInit {
   planilhaSelecionada!: Planilha;
   backto!: string | null;
 
-  @ViewChild(ChipsComponent) chips!: ChipsComponent;
-
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
     private contaService: ContaService,
     private labelService: LabelService,
@@ -70,8 +70,8 @@ export class LancamentoComponent implements OnInit {
       this.planilhaSelecionada = data;
     });
 
-    if (this.idLancamento) {
-      this.lancamentoService.findById(this.idLancamento).subscribe(data => {
+    if (this.data.idLancamento > 0) {
+      this.lancamentoService.findById(this.data.idLancamento).subscribe(data => {
         this.lancamento = data as Lancamento;
         this.group?.patchValue(this.lancamento);
         this.group?.get('data')?.setValue(new Date(this.lancamento.data));

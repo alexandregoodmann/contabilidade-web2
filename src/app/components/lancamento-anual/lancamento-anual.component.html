@@ -1,0 +1,59 @@
+<div style="display: flex;width: 100%;">
+    <div style="width: 90%;">
+        <h2 mat-dialog-title style="margin-left: 20px;">Lançamento</h2>
+    </div>
+    <div style="float: right; text-align: right; width: 10%; padding-right: 20px;">
+        <mat-icon mat-dialog-close class="icon">close</mat-icon>
+    </div>
+</div>
+
+<mat-dialog-content class="mat-typography">
+
+    <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
+
+        <div class="chips-container">
+            <label class="mini-label" style="margin-left: 10px;">Selecione a Conta Corrente</label>
+            <mat-chip-list #chipList selectable formControlName="conta">
+                <mat-chip #c="matChip" (click)="setConta(c)" *ngFor="let conta of contas" [value]="conta">
+                    {{conta.descricao}}
+                </mat-chip>
+            </mat-chip-list>
+        </div>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Data</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="data">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="descricao" minlength="3">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Valor</mat-label>
+            <input currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' , align: 'left'}" matInput
+                formControlName="valor" type="tel">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Parcelas</mat-label>
+            <input matInput formControlName="parcelas" type="tel">
+        </mat-form-field>
+
+        <mat-slide-toggle formControlName="fixo">Fixo</mat-slide-toggle>
+
+        <div class="w3-display-container" style="height: 40px;">
+            <div class="w3-display-left">
+                <button mat-raised-button mat-dialog-close color="primary" type="submit"
+                    [disabled]="group.invalid">Salvar</button>
+            </div>
+            <div class="w3-display-right">
+                <button mat-stroked-button mat-dialog-close type="button" [disabled]="!data.id" (click)="delete()">Apagar</button>
+            </div>
+        </div>
+        
+    </form>
+</mat-dialog-content>

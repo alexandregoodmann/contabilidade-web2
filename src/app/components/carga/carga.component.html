@@ -1,13 +1,7 @@
-<app-top-bar titulo="Carga C6"></app-top-bar>
-
+<app-top-bar titulo="Extrato"></app-top-bar>
+<app-select-planilha></app-select-planilha>
 <div class="form">
-
-    <div class="select-container">
-        <app-link-planilha></app-link-planilha>
-    </div>
-
     <form #form [formGroup]="group" autocomplete="off">
-
         <div class="chips-container">
             <label class="mini-label" style="margin-left: 10px;">Selecione a conta</label>
             <mat-chip-list #chipList selectable formControlName="conta">
@@ -29,6 +23,5 @@
 
         <button mat-raised-button color="primary" type="button" (click)="confirmarCarga(form)"
             [disabled]="group.invalid">Enviar</button>
-
     </form>
 </div>

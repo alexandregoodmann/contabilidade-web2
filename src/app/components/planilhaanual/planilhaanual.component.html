@@ -1,11 +1,22 @@
-<div class="form">
-    <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
-        <mat-form-field appearance="fill">
-            <mat-label>Descrição</mat-label>
-            <input matInput formControlName="descricao" minlength="3">
-        </mat-form-field>
-
-        <button mat-raised-button mat-dialog-close color="primary" type="submit"
-            [disabled]="group.invalid">Salvar</button>
-    </form>
+<div style="display: flex;width: 100%;">
+    <div style="width: 90%;">
+        <h2 mat-dialog-title style="margin-left: 20px;">Lançamento</h2>
+    </div>
+    <div style="float: right; text-align: right; width: 10%; padding-right: 20px;">
+        <mat-icon mat-dialog-close class="icon">close</mat-icon>
+    </div>
 </div>
+
+<mat-dialog-content class="mat-typography">
+    <div class="form" style="width: 400px;">
+        <form #form [formGroup]="group" (ngSubmit)="salvar(); form.reset();" autocomplete="off">
+            <mat-form-field appearance="fill">
+                <mat-label>Descrição</mat-label>
+                <input matInput formControlName="descricao" minlength="3">
+            </mat-form-field>
+
+            <button mat-raised-button mat-dialog-close color="primary" type="submit"
+                [disabled]="group.invalid">Salvar</button>
+        </form>
+    </div>
+</mat-dialog-content>

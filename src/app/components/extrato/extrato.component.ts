@@ -8,7 +8,7 @@ import { Planilha } from 'src/app/models/planilha';
 import { ExtratoService } from 'src/app/services/extrato.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
-import { LancamentoDialogComponent } from '../lancamento-dialog/lancamento-dialog.component';
+import { LancamentoComponent } from '../lancamento/lancamento.component';
 
 @Component({
   selector: 'app-extrato',
@@ -130,11 +130,9 @@ export class ExtratoComponent implements OnInit {
   }
 
   openLancamento(idLancamento: number) {
-    const dialogRef = this.dialog.open(LancamentoDialogComponent, {
+    const dialogRef = this.dialog.open(LancamentoComponent, {
       data: {
-        idLancamento: idLancamento,
-        titulo: 'Lançamento',
-        conteudo: 'lancamento'
+        idLancamento: idLancamento
       }
     });
   }

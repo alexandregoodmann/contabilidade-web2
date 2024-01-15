@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
@@ -44,9 +45,9 @@ import { CargaComponent } from './components/carga/carga.component';
 import { ContaComponent } from './components/conta/conta.component';
 import { ExtratoComponent } from './components/extrato/extrato.component';
 import { LabelComponent } from './components/label/label.component';
-import { LancamentoDialogComponent } from './components/lancamento-dialog/lancamento-dialog.component';
 import { LancamentoComponent } from './components/lancamento/lancamento.component';
 import { PlanilhaComponent } from './components/planilha/planilha.component';
+import { PlanilhaanualComponent } from './components/planilhaanual/planilhaanual.component';
 import { PrincipalComponent } from './components/principal/principal.component';
 import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
 import { SaldocontasComponent } from './components/saldocontas/saldocontas.component';
@@ -56,7 +57,8 @@ import { ChipsComponent } from './shared/chips/chips.component';
 import { LinkPlanilhaComponent } from './shared/link-planilha/link-planilha.component';
 import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilha.component';
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
-import { PlanilhaanualComponent } from './components/planilhaanual/planilhaanual.component';
+import { CargaAnualComponent } from './components/carga-anual/carga-anual.component';
+import { LancamentoAnualComponent } from './components/lancamento-anual/lancamento-anual.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -111,11 +113,12 @@ const routes: Routes = [
     AnaliseCategoriaComponent,
     ResumoExtratoComponent,
     CheckComponent,
-    LancamentoDialogComponent,
     SaldocontasComponent,
     AnaliseLimitesComponent,
     AnaliseAnualComponent,
-    PlanilhaanualComponent
+    PlanilhaanualComponent,
+    CargaAnualComponent,
+    LancamentoAnualComponent
 
   ],
   imports: [
@@ -158,7 +161,8 @@ const routes: Routes = [
     MatDividerModule,
     MatListModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonToggleModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },
