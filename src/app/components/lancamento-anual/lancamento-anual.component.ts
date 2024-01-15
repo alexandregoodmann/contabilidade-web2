@@ -33,18 +33,36 @@ export class LancamentoAnualComponent implements OnInit {
       valor: [null, [Validators.required]],
       parcelas: [],
     });
+
     this.contaService.findAll().subscribe(data => { this.contas = data }, (err) => { }, () => {
     });
+
+    if (this.data.id) {
+      this.planilhaanualService.findById(this.data.id).subscribe(data => {
+        this.group.patchValue(data);
+
+        let c = this.contas.find(o => o.descricao == data.conta);
+        this.group.get('conta')?.setValue(c);
+        this.group.get('data')?.setValue(new Date(data.data));
+      });
+    }
   }
 
   salvar() {
-    debugger
-    console.log(this.group.value);
-    let obj: PlanilhaAnual = this.group.value;
-    let conta: Conta = this.group.value.conta;
-    obj.titulo = this.data;
-    obj.conta = conta.descricao;
-    this.planilhaanualService.create(obj).subscribe();
+    if (this.data.id) { //edit
+      let obj: PlanilhaAnual = this.group.value;
+      let conta: Conta = this.group.value.conta;
+      obj.conta = conta.descricao;
+      obj.titulo = this.data.planilha;
+      obj.id = this.data.id;
+      this.planilhaanualService.update(obj).subscribe();
+    } else { //new
+      let obj: PlanilhaAnual = this.group.value;
+      let conta: Conta = this.group.value.conta;
+      obj.conta = conta.descricao;
+      obj.titulo = this.data.planilha;
+      this.planilhaanualService.create(obj).subscribe();
+    }
   }
 
   setConta(chip: MatChip) {
@@ -52,4 +70,7 @@ export class LancamentoAnualComponent implements OnInit {
     this.group?.get('conta')?.setValue(chip.value);
   }
 
+  delete() {
+    this.planilhaanualService.delete(this.data.id).subscribe();
+  }
 }

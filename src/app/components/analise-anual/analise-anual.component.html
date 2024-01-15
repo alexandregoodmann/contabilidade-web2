@@ -94,7 +94,7 @@
             <tr *ngFor="let item of datasourceTable">
                 <td>{{item.data | date:'dd/MM'}}</td>
                 <td style="text-align: left;">{{item.conta}}</td>
-                <td style="text-align: left;">{{item.descricao}}</td>
+                <td style="text-align: left;" (click)="lancamento(item.id)">{{item.descricao}}</td>
                 <td><span *ngIf="item.fixo">Sim</span></td>
                 <td>{{item.tipoLancamento}}</td>
                 <td *ngFor="let valor of item.listValores">

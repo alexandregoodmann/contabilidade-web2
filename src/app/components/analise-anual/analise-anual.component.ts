@@ -113,8 +113,8 @@ export class AnaliseAnualComponent implements OnInit {
     const dialogRef = this.dialog.open(PlanilhaanualComponent);
   }
 
-  lancamento() {
-    const dialogRef = this.dialog.open(LancamentoAnualComponent, { data: this.planilhaSelecionada });
+  lancamento(id?: number) {
+    const dialogRef = this.dialog.open(LancamentoAnualComponent, { data: { id: id, planilha: this.planilhaSelecionada } });
   }
 
   upload() {

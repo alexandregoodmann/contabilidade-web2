@@ -51,7 +51,7 @@
                     [disabled]="group.invalid">Salvar</button>
             </div>
             <div class="w3-display-right">
-                <button mat-stroked-button mat-dialog-close type="button">Apagar</button>
+                <button mat-stroked-button mat-dialog-close type="button" [disabled]="!data.id" (click)="delete()">Apagar</button>
             </div>
         </div>
         
