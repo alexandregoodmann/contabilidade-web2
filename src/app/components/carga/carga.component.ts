@@ -35,9 +35,11 @@ export class CargaComponent implements OnInit {
     this.contaService.findAll().subscribe(data => {
       this.contas = data;
     });
+
     this.group = this.fb.group({
       conta: [null, [Validators.required]],
-      cargaArquivo: [null, [Validators.required]]
+      cargaArquivo: [null, [Validators.required]],
+      limpar: [null]
     });
   }
 
@@ -55,8 +57,11 @@ export class CargaComponent implements OnInit {
   enviar(form: any) {
 
     if (this.file) {
+      debugger
       const formData = new FormData();
       let conta: Conta = this.group.get('conta')?.value;
+      let limpar: Boolean = this.group.get('limpar')?.value;
+      formData.append("limpar", limpar.toString());
       formData.append("idConta", conta.id.toString());
       formData.append("idPlanilha", this.planilhaSelecionada.id.toString());
       formData.append("file", this.file);

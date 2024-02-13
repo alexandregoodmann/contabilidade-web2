@@ -2,6 +2,11 @@
 <app-select-planilha></app-select-planilha>
 <div class="form">
     <form #form [formGroup]="group" autocomplete="off">
+
+        <div style="margin-bottom: 10px;">
+            <mat-slide-toggle formControlName="limpar">Limpar lançamentos</mat-slide-toggle>
+        </div>
+
         <div class="chips-container">
             <label class="mini-label" style="margin-left: 10px;">Selecione a conta</label>
             <mat-chip-list #chipList selectable formControlName="conta">
