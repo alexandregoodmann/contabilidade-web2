@@ -110,7 +110,7 @@ export class AnaliseAnualComponent implements OnInit {
   }
 
   novaPlanilha() {
-    const dialogRef = this.dialog.open(PlanilhaanualComponent);
+    const dialogRef = this.dialog.open(PlanilhaanualComponent, { data: { titulo: 'Nova Planilha' } });
   }
 
   lancamento(id?: number) {

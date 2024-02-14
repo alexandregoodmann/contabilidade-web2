@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Planilha } from 'src/app/models/planilha';
 import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
@@ -11,11 +12,11 @@ import { PlanilhaService } from 'src/app/services/planilha.service';
 })
 export class PlanilhaanualComponent implements OnInit {
 
-  @Input() conteudo!: string;
   planilhaSelecionada!: Planilha;
   group!: FormGroup;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
     private planilhaService: PlanilhaService,
     private planilhaAnualService: PlanilhaanualService
