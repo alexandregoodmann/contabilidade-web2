@@ -49,15 +49,14 @@ export class LancamentoAnualComponent implements OnInit {
   }
 
   salvar() {
+    let obj: PlanilhaAnual = this.group.value;
     if (this.data.id) { //edit
-      let obj: PlanilhaAnual = this.group.value;
       let conta: Conta = this.group.value.conta;
       obj.conta = conta.descricao;
       obj.titulo = this.data.planilha;
       obj.id = this.data.id;
       this.planilhaanualService.update(obj).subscribe();
     } else { //new
-      let obj: PlanilhaAnual = this.group.value;
       let conta: Conta = this.group.value.conta;
       obj.conta = conta.descricao;
       obj.titulo = this.data.planilha;

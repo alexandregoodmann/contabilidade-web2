@@ -27,11 +27,15 @@ export class AnaliseAnualComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.planilhaAnualService.getPlanilhas().subscribe(data => {
-      this.planilhaAnualService.planilhasBehavior.next(data);
-    });
+    this.getPlanilhas();
     this.planilhaAnualService.planilhas.subscribe(data => {
       this.listPlanilhas = data;
+    });
+  }
+
+  getPlanilhas() {
+    this.planilhaAnualService.getPlanilhas().subscribe(data => {
+      this.planilhaAnualService.planilhasBehavior.next(data);
     });
   }
 
@@ -94,18 +98,15 @@ export class AnaliseAnualComponent implements OnInit {
 
   duplicar() {
     this.planilhaAnualService.duplicar(this.planilhaSelecionada).subscribe(() => {
+      this.getPlanilhas();
+      this.limpar();
     });
   }
 
   delete() {
     this.planilhaAnualService.deletePlanilhaAnual(this.planilhaSelecionada).subscribe(() => {
-      this.planilhaAnualService.getPlanilhas().subscribe(data => {
-        this.planilhaAnualService.planilhasBehavior.next(data);
-        this.planilhaSelecionada = '';
-        this.datasourceTable = [];
-        this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      })
+      this.getPlanilhas();
+      this.limpar();
     });
   }
 
@@ -121,4 +122,10 @@ export class AnaliseAnualComponent implements OnInit {
     const dialogRef = this.dialog.open(CargaAnualComponent, { data: this.planilhaSelecionada });
   }
 
+  limpar() {
+    this.planilhaSelecionada = '';
+    this.datasourceTable = [];
+    this.totais = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.total_acumulado = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  }
 }

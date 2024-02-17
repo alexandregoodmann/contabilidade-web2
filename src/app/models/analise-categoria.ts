@@ -13,7 +13,7 @@ export class PlanilhaAnual {
     conta!: string;
     descricao!: string;
     fixo!: string;
-    parcelas!: string;
+    parcelas!: string | null;
     tipoConta!: string;
     tipoLancamento!: string;
     valor!: number;
