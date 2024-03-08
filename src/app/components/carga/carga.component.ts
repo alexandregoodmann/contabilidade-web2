@@ -57,10 +57,10 @@ export class CargaComponent implements OnInit {
   enviar(form: any) {
 
     if (this.file) {
-      debugger
+
       const formData = new FormData();
       let conta: Conta = this.group.get('conta')?.value;
-      let limpar: Boolean = this.group.get('limpar')?.value;
+      let limpar: Boolean = (this.group.get('limpar')?.value == null) ? false : this.group.get('limpar')?.value;
       formData.append("limpar", limpar.toString());
       formData.append("idConta", conta.id.toString());
       formData.append("idPlanilha", this.planilhaSelecionada.id.toString());
