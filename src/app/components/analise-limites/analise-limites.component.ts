@@ -30,4 +30,5 @@ export class AnaliseLimitesComponent implements OnInit {
       bars: 'horizontal' // Required for Material Bar Charts.
     }
   };
+  
 }

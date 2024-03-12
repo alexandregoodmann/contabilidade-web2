@@ -59,6 +59,7 @@ import { SelectPlanilhaComponent } from './shared/select-planilha/select-planilh
 import { TopBarComponent } from './shared/top-bar/top-bar.component';
 import { CargaAnualComponent } from './components/carga-anual/carga-anual.component';
 import { LancamentoAnualComponent } from './components/lancamento-anual/lancamento-anual.component';
+import { SaldoDiarioComponent } from './components/saldo-diario/saldo-diario.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -118,7 +119,8 @@ const routes: Routes = [
     AnaliseAnualComponent,
     PlanilhaanualComponent,
     CargaAnualComponent,
-    LancamentoAnualComponent
+    LancamentoAnualComponent,
+    SaldoDiarioComponent
 
   ],
   imports: [
