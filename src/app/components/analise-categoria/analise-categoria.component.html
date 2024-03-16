@@ -3,7 +3,7 @@
         <div class="w3-col l6">
             <google-chart #chart [title]="graficoPizza.title" [type]="graficoPizza.type"
                 [data]="graficoPizza.datasource" [columns]="graficoPizza.columnNames" [options]="graficoPizza.options"
-                (select)="filter($event)" [height]="350">
+                (select)="filter($event)" [height]="300">
             </google-chart>
         </div>
         <div class="w3-col l6" style="padding-left: 20px;">
