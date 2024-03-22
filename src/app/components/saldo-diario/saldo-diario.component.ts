@@ -20,7 +20,6 @@ export class SaldoDiarioComponent implements OnInit {
   ngOnInit(): void {
     this.extratoService.extrato.subscribe(data => {
       this.extrato = data;
-      console.log(this.extrato);
       this.processDataSource();
     });
   }

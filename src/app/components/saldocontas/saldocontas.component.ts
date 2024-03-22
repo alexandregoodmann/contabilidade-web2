@@ -36,6 +36,8 @@ export class SaldocontasComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.extratoService.getSaldoContas(planilha.id).subscribe(saldos => {
+        console.log(saldos);
+        
         this.datasource = [];
         saldos.forEach(d => {
           if (d.saldo != null)
