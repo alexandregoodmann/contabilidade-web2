@@ -74,8 +74,9 @@ export class LabelComponent implements OnInit {
   }
 
   edit(obj: Label) {
-    if (obj.chaves)
+    if (obj.chaves) {
       obj.chaves.split(';').forEach(e => { this.chaves.add(e) });
+    }
     this.categoria = obj;
     this.group.patchValue(obj);
   }
