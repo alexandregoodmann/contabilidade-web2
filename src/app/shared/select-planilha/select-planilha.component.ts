@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Planilha } from 'src/app/models/planilha';
 import { PlanilhasAno } from 'src/app/models/planilhasano';
 import { PlanilhaService } from '../../services/planilha.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-select-planilha',
@@ -10,6 +11,9 @@ import { PlanilhaService } from '../../services/planilha.service';
   styleUrls: ['./select-planilha.component.scss']
 })
 export class SelectPlanilhaComponent implements OnInit {
+
+  @Input()
+  titulo: string = '';
 
   group = new FormGroup({
     ano: new FormControl(''),
@@ -22,7 +26,7 @@ export class SelectPlanilhaComponent implements OnInit {
 
   constructor(
     private planilhaService: PlanilhaService,
-    private fb: FormBuilder
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -38,6 +42,10 @@ export class SelectPlanilhaComponent implements OnInit {
   setPlanilhaMes(mes: Planilha) {
     this.planilhaService.setPlanilhaSelecionada(mes);
     this.expanded = false;
+  }
+
+  voltar() {
+    this.router.navigate(['/home']);
   }
 
 }

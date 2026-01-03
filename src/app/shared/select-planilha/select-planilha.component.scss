@@ -18,7 +18,7 @@
 }
 
 .mat-expansion-panel-header {
-    height: 80px !important;
+    height: 60px !important;
     padding-left: 10px !important;
 }
 
@@ -31,4 +31,19 @@
     height: 50px;
     width: 50px;
     overflow: hidden;
+}
+
+.voltar-icon {
+    .mat-icon {
+        vertical-align: text-top !important;
+        font-size: xx-large !important;
+    }
+}
+
+.container-linkplanilha {
+    padding: 5px 20px 5px 20px;
+    border-left: solid 1px #d3d3d3;
+    border-right: solid 1px #d3d3d3;
+    margin: 0px 20px 0px 20px;
+    font-size: 20px;
 }

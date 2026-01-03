@@ -4,6 +4,7 @@
     </button>
     <span class="titulo">{{titulo}}</span>
 </mat-toolbar>
+
 <div *ngIf="loader.isLoading | async">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>

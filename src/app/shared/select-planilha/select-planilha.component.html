@@ -1,28 +1,27 @@
-<div style="margin: 10px;">
-    <mat-accordion>
-        <mat-expansion-panel [expanded]="expanded" (opened)="expanded = true">
+<mat-accordion>
+    <mat-expansion-panel [expanded]="expanded" (opened)="expanded = true">
 
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    <div class="banner-botton">
-                        <mat-icon class="banner-icon">calendar_month</mat-icon>
-                    </div>
-                    <div style="padding-top: 10px; padding-left: 10px;">
-                        <app-link-planilha></app-link-planilha>
-                    </div>
-                </mat-panel-title>
-            </mat-expansion-panel-header>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <button mat-icon-button class="voltar-icon" (click)="voltar()" type="button">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <div class="container-linkplanilha">
+                    <span class="titulo">{{titulo}}</span>
+                </div>
+                <app-link-planilha></app-link-planilha>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
 
-            <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-            <div class="content-panel" *ngFor="let ano of planilhasAno; let i = index">
-                <button mat-button>{{ano.ano}}</button>
-                <span class="material-icons md-24">chevron_right</span>
-                <button *ngFor="let mes of ano.planilhas" mat-button
-                    (click)="setPlanilhaMes(mes)">{{mes.descricao}}</button>
-                <mat-divider *ngIf="i < (planilhasAno.length - 1)"></mat-divider>
-            </div>
+        <div class="content-panel" *ngFor="let ano of planilhasAno; let i = index">
+            <button mat-button>{{ano.ano}}</button>
+            <span class="material-icons md-24">chevron_right</span>
+            <button *ngFor="let mes of ano.planilhas" mat-button
+                (click)="setPlanilhaMes(mes)">{{mes.descricao}}</button>
+            <mat-divider *ngIf="i < (planilhasAno.length - 1)"></mat-divider>
+        </div>
 
-        </mat-expansion-panel>
-    </mat-accordion>
-</div>
+    </mat-expansion-panel>
+</mat-accordion>
