@@ -1,23 +1,16 @@
 <div class="extrato-content">
 
-    <app-select-planilha tituxlo="Extrato"></app-select-planilha>
+    <app-select-planilha titulo="Extrato"></app-select-planilha>
 
-    <div class="w3-row">
-        <div class="w3-col l6" style="height: 100%;">
+    <div class="w3-row" style="margin-top: 10px;">
+        <div class="w3-col l6">
             <mat-card>
-
                 <!-- button bar -->
                 <mat-card-actions>
                     <div class="w3-row" style="margin: 0px 10px 0 10px;">
-                        <div class="w3-col l6" style="display: flex;">
-                            <div class="button" matTooltip="Reload" (click)="reload()">
-                                <mat-icon class="icon">refresh</mat-icon>
-                            </div>
+                        <div class="w3-col" style="display: flex;">
                             <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                                 <mat-icon class="icon">add_shopping_cart</mat-icon>
-                            </div>
-                            <div class="button" matTooltip="Processar labels" (click)="processarLabels()">
-                                <mat-icon class="icon">label</mat-icon>
                             </div>
                             <div class="button" matTooltip="Filtrar sem labels"
                                 (click)="group.get('semLabel')?.setValue(true)">
@@ -31,22 +24,8 @@
                                 <mat-icon class="icon">done</mat-icon>
                             </div>
                         </div>
-                        <div class="w3-col l3">
-                            <div class="saldo">
-                                <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
-                                <span class="label">Saldo Atual</span>
-                            </div>
-                        </div>
-                        <div class="w3-col l3">
-                            <div class="saldo">
-                                <span class="valor">R$ {{saldoPrevisto | number: '1.2-2'}}</span>
-                                <span class="label">Saldo Previsto</span>
-                            </div>
-                        </div>
-                     </div>
-                    <form class="form" #form [formGroup]="group" autocomplete="off">
-                        <div class="w3-row">
-                            <div class="w3-col l6">
+                        <form class="form" #form [formGroup]="group" autocomplete="off">
+                            <div class="w3-col l4">
                                 <mat-form-field>
                                     <mat-label>Filtrar pela conta</mat-label>
                                     <mat-select formControlName="conta">
@@ -57,17 +36,31 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="w3-col l6">
+                            <div class="w3-col l4">
                                 <mat-form-field style="margin-left: 10px;">
                                     <mat-label>Filtrar pela descrição</mat-label>
                                     <input matInput formControlName="descricao" #input>
                                 </mat-form-field>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                        <!--
+                            <div class="w3-col l3">
+                                <div class="saldo">
+                                    <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
+                                    <span class="label">Saldo Atual</span>
+                                </div>
+                            </div>
+                            <div class="w3-col l3">
+                                <div class="saldo">
+                                    <span class="valor">R$ {{saldoPrevisto | number: '1.2-2'}}</span>
+                                    <span class="label">Saldo Previsto</span>
+                                </div>
+                            </div>
+                        -->
+                    </div>
                 </mat-card-actions>
 
-                <mat-card-content style="overflow-y: auto">
+                <mat-card-content>
                     <table style="width: 100%;" matSort (matSortChange)="sortData($event)">
                         <tr>
                             <th mat-sort-header="data">Data</th>
@@ -81,11 +74,8 @@
                             <td (click)="openLancamento(lancamento.id)">{{lancamento.data | date:'dd/MM'}}</td>
                             <td (click)="openLancamento(lancamento.id)">{{lancamento.conta.descricao}}</td>
                             <td (click)="openLancamento(lancamento.id)">
-                                {{lancamento.descricao}}
+                                {{lancamento.descricao}} {{lancamento.parcelas}}
                                 <span class="appLabel" *ngFor="let label of lancamento.labels">{{label}}</span>
-                                <!--
-                                    <span *ngFor="let label of lancamento.labels" class="appLabel" [ngStyle]="{'background-color': label.cor}"> {{i}} </span>
-                                -->
                             </td>
                             <td style="text-align: center;">
                                 <app-check (click)="update('fixo',lancamento)" icon="chevron_right"
@@ -103,27 +93,10 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="w3-col l6" style="height: 100%;">
-            <div style="margin: 0px 10px 10px 10px">
-                <app-saldo-diario></app-saldo-diario>
-            </div>
-            <div style="margin: 0px 10px 10px 10px">
-                <app-analise-categoria></app-analise-categoria>
-            </div>
-            <div style="margin: 0px 10px 0px 10px">
-
-                <div class="w3-row">
-                    <div class="w3-col l6">
-                        <app-saldocontas></app-saldocontas>
-                    </div>
-                    <div class="w3-col l6">
-                        <app-analise-limites></app-analise-limites>
-                    </div>
-                </div>
-                <!--
-                    <app-resumo-extrato></app-resumo-extrato>
-                -->
-            </div>
+        <div class="w3-col l6" style="padding-left: 10px; display: grid; gap: 10px;">
+            <app-saldo-diario></app-saldo-diario>
+            <app-analise-categoria></app-analise-categoria>
+            <app-saldocontas></app-saldocontas>
         </div>
     </div>
 </div>

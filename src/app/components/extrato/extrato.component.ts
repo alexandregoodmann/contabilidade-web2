@@ -55,6 +55,8 @@ export class ExtratoComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
+        console.log(lancamentos);
+        
         this.getContas(lancamentos);
         this.extrato = lancamentos;
         this.calcularTotais(this.extrato);

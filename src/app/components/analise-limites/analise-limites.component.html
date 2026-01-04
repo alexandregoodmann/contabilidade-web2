@@ -1,10 +1,7 @@
-<div style="margin-left: 10px;">
-    <mat-card>
-        <mat-card-content>
-            <google-chart #chart [type]="graficoBarra.type" [data]="graficoBarra.datasource"
-                [title]="graficoBarra.title" [options]="graficoBarra.options" [width]="400" [height]="200"
-                [columns]="graficoBarra.columnNames">
-            </google-chart>
-        </mat-card-content>
-    </mat-card>
-</div>
+<mat-card>
+    <mat-card-content>
+        <google-chart #chart [type]="graficoBarra.type" [data]="graficoBarra.datasource" [title]="graficoBarra.title"
+            [options]="graficoBarra.options" [width]="400" [height]="200" [columns]="graficoBarra.columnNames">
+        </google-chart>
+    </mat-card-content>
+</mat-card>
