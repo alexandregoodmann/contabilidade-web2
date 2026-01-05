@@ -12,9 +12,36 @@
                             <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                                 <mat-icon class="icon">add_shopping_cart</mat-icon>
                             </div>
-                            <div class="button" matTooltip="Filtrar sem labels"
-                                (click)="group.get('semLabel')?.setValue(true)">
-                                <mat-icon class="icon">filter_list</mat-icon>
+                            <div class="button" matTooltip="Filtrar pela Conta">
+                                <button mat-icon-button [matMenuTriggerFor]="menu">
+                                    <mat-icon>account_balance</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="group.get('conta')?.setValue('')">
+                                        <span>Nenhuma</span>
+                                    </button>
+                                    <button mat-menu-item *ngFor="let conta of contas"
+                                        (click)="group.get('conta')?.setValue(conta)">
+                                        <span>{{conta.descricao}}</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                            <div class="button" matTooltip="Filtrar pela Label">
+                                <button mat-icon-button [matMenuTriggerFor]="menuLabel">
+                                    <mat-icon>label</mat-icon>
+                                </button>
+                                <mat-menu #menuLabel="matMenu">
+                                    <button mat-menu-item (click)="group.get('label')?.setValue('')">
+                                        <span>Todas</span>
+                                    </button>
+                                    <button mat-menu-item (click)="group.get('semLabel')?.setValue(true)">
+                                        <span>Sem labels</span>
+                                    </button>
+                                    <button mat-menu-item *ngFor="let label of labels"
+                                        (click)="group.get('label')?.setValue(label)">
+                                        <span>{{label.descricao}}</span>
+                                    </button>
+                                </mat-menu>
                             </div>
                             <div class="button" matTooltip="Filtrar fixos" (click)="group.get('fixo')?.setValue(true)">
                                 <mat-icon class="icon">chevron_right</mat-icon>
@@ -23,26 +50,18 @@
                                 (click)="group.get('concluido')?.setValue(true)">
                                 <mat-icon class="icon">done</mat-icon>
                             </div>
-                        </div>
-                        <form class="form" #form [formGroup]="group" autocomplete="off">
-                            <div class="w3-col l4">
-                                <mat-form-field>
-                                    <mat-label>Filtrar pela conta</mat-label>
-                                    <mat-select formControlName="conta">
-                                        <mat-option value="">Nenhum</mat-option>
-                                        <mat-option *ngFor="let conta of contas" [value]="conta">
-                                            {{conta.descricao}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+
+                            <div class="button" matTooltip="Limpar Filtros" (click)="group.reset()">
+                                <mat-icon class="icon">close_small</mat-icon>
                             </div>
-                            <div class="w3-col l4">
+                            <form class="form" #form [formGroup]="group" autocomplete="off"
+                                style="margin: 0px !important; padding: 0px !important;">
                                 <mat-form-field style="margin-left: 10px;">
                                     <mat-label>Filtrar pela descrição</mat-label>
                                     <input matInput formControlName="descricao" #input>
                                 </mat-form-field>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                         <!--
                             <div class="w3-col l3">
                                 <div class="saldo">

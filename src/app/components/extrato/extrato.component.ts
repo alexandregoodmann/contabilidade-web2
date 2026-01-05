@@ -9,6 +9,8 @@ import { ExtratoService } from 'src/app/services/extrato.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { LancamentoComponent } from '../lancamento/lancamento.component';
+import { LabelService } from 'src/app/services/label.service';
+import { Label } from 'src/app/models/label';
 
 @Component({
   selector: 'app-extrato',
@@ -28,12 +30,15 @@ export class ExtratoComponent implements OnInit {
   group!: FormGroup;
   sort!: Sort;
 
+  labels: Label[] = [];
+
   constructor(
     private fb: FormBuilder,
     private lancamentoService: LancamentoService,
     private extratoService: ExtratoService,
     private dialog: MatDialog,
     private planilhaService: PlanilhaService,
+    private labelService: LabelService
   ) { }
 
   ngOnInit() {
@@ -43,7 +48,8 @@ export class ExtratoComponent implements OnInit {
       descricao: [null],
       semLabel: [false],
       fixo: [false],
-      concluido: [false]
+      concluido: [false],
+      label: [null]
     });
 
     //aplicar filtros do extrato
@@ -55,8 +61,6 @@ export class ExtratoComponent implements OnInit {
     this.planilhaService.planilhaSelecionada.subscribe(planilha => {
       this.planilhaSelecionada = planilha;
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
-        console.log(lancamentos);
-        
         this.getContas(lancamentos);
         this.extrato = lancamentos;
         this.calcularTotais(this.extrato);
@@ -71,6 +75,10 @@ export class ExtratoComponent implements OnInit {
       if (this.sort != null) {
         this.sortData(this.sort);
       }
+    });
+
+    this.labelService.findAll().subscribe(data => {
+      this.labels = data.sort((a, b) => a.descricao.localeCompare(b.descricao));
     });
 
   }
@@ -139,16 +147,6 @@ export class ExtratoComponent implements OnInit {
     });
   }
 
-  processarLabels() {
-    let cc: any = this.group.get('conta')?.value;
-    if (cc == null || cc == '') {
-      alert('Informe a conta')
-      return;
-    }
-    let conta = this.contas.find(o => o.id === cc.id);
-    let dto = { idPlanilha: this.planilhaSelecionada.id, idConta: conta?.id };
-    this.lancamentoService.processarLabels(dto).subscribe(() => { this.reload() });
-  }
 }
 
 export function sortColumn(a: any, b: any, coluna: string, isAsc: boolean) {

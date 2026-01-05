@@ -34,7 +34,7 @@ export class ExtratoService {
   }
 
   filtrarExtrato() {
-    
+
     let data = [... new Set(this.datasource)];
 
     if (this.filtro.conta != null && this.filtro.conta != '')
@@ -51,6 +51,10 @@ export class ExtratoService {
 
     if (this.filtro.concluido)
       data = [...data.filter(l => l.concluido == true)];
+
+    if (this.filtro.label) {
+      data = [...data.filter(l => l.labels.includes(this.filtro.label.descricao))];
+    }
 
     this.datasourceBehavior.next(data);
   }
