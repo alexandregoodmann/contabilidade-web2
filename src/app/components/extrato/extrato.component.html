@@ -8,7 +8,7 @@
                 <!-- button bar -->
                 <mat-card-actions>
                     <div class="w3-row" style="margin: 0px 10px 0 10px;">
-                        <div class="w3-col" style="display: flex;">
+                        <div class="w3-col l8" style="display: flex;">
                             <div class="button" matTooltip="Lançamento" (click)="openLancamento(0)">
                                 <mat-icon class="icon">add_shopping_cart</mat-icon>
                             </div>
@@ -62,20 +62,18 @@
                                 </mat-form-field>
                             </form>
                         </div>
-                        <!--
-                            <div class="w3-col l3">
-                                <div class="saldo">
-                                    <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
-                                    <span class="label">Saldo Atual</span>
-                                </div>
+                        <div class="w3-col l2">
+                            <div class="saldo">
+                                <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
+                                <span class="label">Saldo Atual</span>
                             </div>
-                            <div class="w3-col l3">
-                                <div class="saldo">
-                                    <span class="valor">R$ {{saldoPrevisto | number: '1.2-2'}}</span>
-                                    <span class="label">Saldo Previsto</span>
-                                </div>
+                        </div>
+                        <div class="w3-col l2">
+                            <div class="saldo">
+                                <span class="valor">R$ {{saldoPrevisto | number: '1.2-2'}}</span>
+                                <span class="label">Saldo Previsto</span>
                             </div>
-                        -->
+                        </div>
                     </div>
                 </mat-card-actions>
 
