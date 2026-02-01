@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AnaliseCategoria } from '../models/analise-categoria';
 import { Lancamento } from '../models/lancamento';
-import { SaldoContas } from '../models/resumo-extrato';
+import { SaldoContas, Saldos } from '../models/saldo';
 import { PlanilhaService } from './planilha.service';
 
 @Injectable({
@@ -59,6 +59,30 @@ export class ExtratoService {
     this.datasourceBehavior.next(data);
   }
 
+  calcularTotais(lancamentos: Lancamento[]): Saldos {
+
+    let saldos = new Saldos();
+    let lancamentoCC = lancamentos.filter(p => p.conta.tipo == 'CC')
+    let concluidos = lancamentoCC.filter(o => o.concluido);
+
+    saldos.saldoPrevisto = lancamentoCC.map(o => o.valor).reduce((a, b) => (a + b));
+    if (concluidos.length > 0) {
+      saldos.saldoAtual = concluidos.map(o => o.valor).reduce((a, b) => (a + b));
+      
+      //entradas
+      let entradas = concluidos.filter(o => o.valor > 0)
+      if (entradas.length > 0)
+        saldos.entradas = entradas.map(o => o.valor).reduce((a, b) => (a + b));
+      
+      // saidas
+      let saidas = concluidos.filter(o => o.valor < 0)
+      if (saidas.length > 0)
+        saldos.saidas = saidas.map(o => o.valor).reduce((a, b) => (a + b));
+    }
+    return saldos
+  }
+
+  // Chamadas para API
   getAnaliseCategoria(ano: number, mes: number): Observable<AnaliseCategoria[]> {
     return this.http.get<AnaliseCategoria[]>(`${environment.url}/analise/categoria/${ano}/${mes}`);
   }
@@ -66,6 +90,7 @@ export class ExtratoService {
   getSaldoContas(idPlanilha: number): Observable<SaldoContas[]> {
     return this.http.get<SaldoContas[]>(`${environment.url}/analise/saldocontas/${idPlanilha}`);
   }
+
 
   filtrarExtratoPorCategoria(label: string) {
     let labels = this.datasource.filter(lancamento => lancamento.labels.includes(label));

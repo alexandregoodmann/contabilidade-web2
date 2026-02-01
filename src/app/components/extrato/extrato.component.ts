@@ -3,14 +3,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { Conta } from 'src/app/models/conta';
+import { Label } from 'src/app/models/label';
 import { Lancamento } from 'src/app/models/lancamento';
 import { Planilha } from 'src/app/models/planilha';
+import { Saldos } from 'src/app/models/saldo';
 import { ExtratoService } from 'src/app/services/extrato.service';
+import { LabelService } from 'src/app/services/label.service';
 import { LancamentoService } from 'src/app/services/lancamento.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
 import { LancamentoComponent } from '../lancamento/lancamento.component';
-import { LabelService } from 'src/app/services/label.service';
-import { Label } from 'src/app/models/label';
 
 @Component({
   selector: 'app-extrato',
@@ -21,10 +22,7 @@ export class ExtratoComponent implements OnInit {
 
   displayedColumns: string[] = ['data', 'descricao', 'valor', 'fixo', 'concluido'];
   extrato: Lancamento[] = [];
-
-  saldoPrevisto: number = 0;
-  saldoAtual: number = 0;
-
+  saldos!: Saldos;
   planilhaSelecionada!: Planilha;
   contas!: Conta[];
   group!: FormGroup;
@@ -63,14 +61,14 @@ export class ExtratoComponent implements OnInit {
       this.planilhaService.getLancamentos(planilha.id).subscribe(lancamentos => {
         this.getContas(lancamentos);
         this.extrato = lancamentos;
-        this.calcularTotais(this.extrato);
+        this.saldos = this.extratoService.calcularTotais(this.extrato);
         this.extratoService.datasource = lancamentos;
       });
     });
 
     this.extratoService.extrato.subscribe(data => {
       this.extrato = data;
-      this.calcularTotais(data);
+      this.saldos = this.extratoService.calcularTotais(data);
 
       if (this.sort != null) {
         this.sortData(this.sort);
@@ -103,7 +101,7 @@ export class ExtratoComponent implements OnInit {
 
   reload() {
     this.extratoService.updateDatasource();
-    this.calcularTotais(this.extrato);
+    this.saldos = this.extratoService.calcularTotais(this.extrato);
     this.group.reset();
   }
 
@@ -114,21 +112,8 @@ export class ExtratoComponent implements OnInit {
       item.concluido = !item.concluido;
     }
     this.lancamentoService.update(item).subscribe(() => {
-      this.calcularTotais(this.extrato);
+      this.saldos = this.extratoService.calcularTotais(this.extrato);
     });
-  }
-
-  calcularTotais(lancamentos: Lancamento[]) {
-    this.saldoAtual = 0;
-    this.saldoPrevisto = 0;
-
-    if (lancamentos.length >= 1) {
-      this.saldoPrevisto = lancamentos.filter(p => p.conta.tipo == 'CC').map(o => o.valor).reduce((a, b) => (a + b));
-
-      let concluidos = lancamentos.filter(o => o.concluido && o.conta.tipo == 'CC');
-      if (concluidos.length > 0)
-        this.saldoAtual = concluidos.map(o => o.valor).reduce((a, b) => (a + b));
-    }
   }
 
   sortData(sort: Sort) {

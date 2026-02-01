@@ -103,19 +103,19 @@
                 <mat-card-content style="display: flex; gap: 10px;">
                     <div class="saldo">
                         <span class="label">Entradas</span>
-                        <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
+                        <span class="valor">R$ {{ saldos.entradas | number:'1.2-2'}}</span>
                     </div>
                     <div class="saldo">
                         <span class="label">Saídas</span>
-                        <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
+                        <span class="valor">R$ {{saldos.saidas| number: '1.2-2'}}</span>
                     </div>
                     <div class="saldo">
                         <span class="label">Saldo Atual</span>
-                        <span class="valor">R$ {{saldoAtual | number: '1.2-2'}}</span>
+                        <span class="valor">R$ {{saldos.saldoAtual| number: '1.2-2'}}</span>
                     </div>
                     <div class="saldo">
                         <span class="label">Saldo Previsto</span>
-                        <span class="valor">R$ {{saldoPrevisto | number: '1.2-2'}}</span>
+                        <span class="valor">R$ {{saldos.saldoPrevisto| number: '1.2-2'}}</span>
                     </div>
                 </mat-card-content>
             </mat-card>
