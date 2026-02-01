@@ -4,8 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AnaliseCategoria } from '../models/analise-categoria';
 import { Lancamento } from '../models/lancamento';
-import { SaldoContas, Saldos } from '../models/saldo';
 import { PlanilhaService } from './planilha.service';
+import { SaldoContas, Saldos } from '../models/saldo';
 
 @Injectable({
   providedIn: 'root'
