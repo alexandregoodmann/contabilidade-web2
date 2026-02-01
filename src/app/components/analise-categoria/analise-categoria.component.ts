@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { ChartType } from 'angular-google-charts';
 import { AnaliseCategoria } from 'src/app/models/analise-categoria';
-import { ExtratoService } from 'src/app/services/extrato.service';
+import { compare, ExtratoService } from 'src/app/services/extrato.service';
 import { PlanilhaService } from 'src/app/services/planilha.service';
-import { compare } from '../resumo-extrato/resumo-extrato.component';
 
 @Component({
   selector: 'app-analise-categoria',

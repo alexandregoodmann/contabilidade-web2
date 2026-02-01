@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AnaliseCategoria } from '../models/analise-categoria';
 import { Lancamento } from '../models/lancamento';
-import { ResumoExtrato, SaldoContas } from '../models/resumo-extrato';
+import { SaldoContas } from '../models/resumo-extrato';
 import { PlanilhaService } from './planilha.service';
 
 @Injectable({
@@ -63,10 +63,6 @@ export class ExtratoService {
     return this.http.get<AnaliseCategoria[]>(`${environment.url}/analise/categoria/${ano}/${mes}`);
   }
 
-  getResumoExtrato(ano: number, mes: number): Observable<ResumoExtrato[]> {
-    return this.http.get<ResumoExtrato[]>(`${environment.url}/analise/resumoextrato/${ano}/${mes}`);
-  }
-
   getSaldoContas(idPlanilha: number): Observable<SaldoContas[]> {
     return this.http.get<SaldoContas[]>(`${environment.url}/analise/saldocontas/${idPlanilha}`);
   }
@@ -76,4 +72,8 @@ export class ExtratoService {
     this.datasourceBehavior.next(labels);
   }
 
+}
+
+export function compare(a: number | string | Date | boolean, b: number | string | Date | boolean, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

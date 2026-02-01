@@ -49,7 +49,6 @@ import { LancamentoComponent } from './components/lancamento/lancamento.componen
 import { PlanilhaComponent } from './components/planilha/planilha.component';
 import { PlanilhaanualComponent } from './components/planilhaanual/planilhaanual.component';
 import { PrincipalComponent } from './components/principal/principal.component';
-import { ResumoExtratoComponent } from './components/resumo-extrato/resumo-extrato.component';
 import { SaldocontasComponent } from './components/saldocontas/saldocontas.component';
 import { InterceptorService } from './services/interceptor.service';
 import { CheckComponent } from './shared/check/check.component';
@@ -112,7 +111,6 @@ const routes: Routes = [
     CargaComponent,
     ChipsComponent,
     AnaliseCategoriaComponent,
-    ResumoExtratoComponent,
     CheckComponent,
     SaldocontasComponent,
     AnaliseLimitesComponent,

@@ -6,7 +6,7 @@ import { PlanilhaAnualDTO, PlanilhaanualService } from 'src/app/planilhaanual.se
 import { CargaAnualComponent } from '../carga-anual/carga-anual.component';
 import { LancamentoAnualComponent } from '../lancamento-anual/lancamento-anual.component';
 import { PlanilhaanualComponent } from '../planilhaanual/planilhaanual.component';
-import { compare } from '../resumo-extrato/resumo-extrato.component';
+import { compare } from 'src/app/services/extrato.service';
 
 @Component({
   selector: 'app-analise-anual',
