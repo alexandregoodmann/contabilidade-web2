@@ -55,7 +55,6 @@ export class SaldoDiarioComponent implements OnInit {
     type: ChartType.ColumnChart,
     datasource: [[1, 1000, '#3366cc']],
     options: {
-      width: 600,
       legend: { position: "none" }
     }
   };
