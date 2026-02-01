@@ -15,7 +15,7 @@ export class ContaComponent implements OnInit {
   bancos!: Banco[];
   bancoFiltro!: string[];
   contas!: Conta[];
-  displayedColumns: string[] = ['banco', 'descricao', 'tipo', 'carga', 'delete'];
+  displayedColumns: string[] = ['descricao', 'banco', 'tipo', 'carga', 'delete'];
 
   constructor(
     private fb: FormBuilder,

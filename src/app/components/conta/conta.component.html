@@ -41,14 +41,14 @@
 <div class="content-table">
     <table mat-table [dataSource]="contas" class="mat-elevation-z8">
 
-        <ng-container matColumnDef="banco">
-            <th mat-header-cell *matHeaderCellDef> Banco </th>
-            <td mat-cell *matCellDef="let item"> {{item.banco.nomeReduzido}} </td>
-        </ng-container>
-
         <ng-container matColumnDef="descricao">
             <th mat-header-cell *matHeaderCellDef> Descrição </th>
             <td mat-cell *matCellDef="let item"> {{item.descricao}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="banco">
+            <th mat-header-cell *matHeaderCellDef> Banco </th>
+            <td mat-cell *matCellDef="let item"> {{item.banco.nomeReduzido}} </td>
         </ng-container>
 
         <ng-container matColumnDef="tipo">
